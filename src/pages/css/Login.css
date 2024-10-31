@@ -1,0 +1,34 @@
+/* src/pages/Home.css */
+.login-background {
+  background-color: #ffffff; /* White background for the main area */
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 20px;
+}
+
+.login-title {
+  margin-bottom: 20px;
+  font-size: 24px;
+  text-align: center;
+  color: #c00; /* Dark red color */
+}
+
+ion-item {
+  margin: 10px 0; /* Space between items */
+}
+
+.login-button {
+  margin-top: 20px; /* Space above the login button */
+  background-color: #c00; /* Red button color */
+  color: white; /* Button text color */
+}
+
+.login-button:hover {
+  background-color: #a00; /* Darker red on hover */
+}

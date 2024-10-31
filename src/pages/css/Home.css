@@ -1,0 +1,36 @@
+/* src/pages/Home.css */
+.home-background {
+  background-color: var(--ion-background-color); /* White background */
+  color: var(--ion-text-color); /* Black text */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.home-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.home-title {
+  margin-bottom: 20px;
+  font-size: 32px;
+  color: #c00; /* Dark red color */
+}
+
+.home-description {
+  margin-bottom: 20px;
+  font-size: 18px;
+  color: #333; /* Dark gray for description */
+}
+
+.home-button {
+  margin: 10px 0; /* Space between buttons */
+  background-color: #c00; /* Red button color */
+  color: white; /* Button text color */
+}
+
+.home-button:hover {
+  background-color: #a00; /* Darker red on hover */
+}
