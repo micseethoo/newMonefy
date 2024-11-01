@@ -1,6 +1,6 @@
 /* src/pages/SignUp.css */
-.signup-background {
-  background-color: #ffffff; /* White background for the main area */
+/*.signup-background {
+  background-color: #ffffff; /* White background for the main area *//*
 }
 
 .signup-container {
@@ -16,25 +16,80 @@
   margin-bottom: 20px;
   font-size: 24px;
   text-align: center;
-  color: #c00; /* Dark red color */
+  color: #c00; /* Dark red color *//*
 }
 
 ion-item {
-  margin: 10px 0; /* Space between items */
+  margin: 10px 0; /* Space between items *//*
 }
 
 .signup-button {
-  margin-top: 20px; /* Space above the signup button */
-  background-color: #c00; /* Red button color */
-  color: white; /* Button text color */
+  margin-top: 20px; /* Space above the signup button *//*
+  background-color: #c00; /* Red button color *//*
+  color: white; /* Button text color *//*
 }
 
 .signup-button:hover {
-  background-color: #a00; /* Darker red on hover */
+  background-color: #a00; /* Darker red on hover *//*
 }
 
 .signup-background {
-  background-color: #ffffff; /* White background */
-  --ion-color-background: #ffffff; /* Ionic specific for consistency */
-  color: #000; /* Text color */
+  background-color: #ffffff; /* White background *//*
+  --ion-color-background: #ffffff; /* Ionic specific for consistency *//*
+  color: #000; /* Text color *//*
+}
+
+*/
+
+/* src/pages/SignUp.css */
+.signup-background {
+  background-color: #f9f9f9; /* Light grey background for better contrast */
+}
+
+.app-title {
+  text-align: center;
+  font-size: 28px;
+  color: #3333ff; /* Bright blue for the title */
+  margin-top: 60px;
+  font-weight: bold;
+}
+
+.signup-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 20px;
+}
+
+.signup-heading {
+  margin-bottom: 20px;
+  font-size: 22px;
+  color: #000; /* Black color for heading */
+}
+
+.input-item {
+  margin: 10px 0; /* Space between input items */
+  width: 90%; /* Full width of the container */
+  max-width: 400px;
+}
+
+.button-container {
+  width: 90%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.signup-button, .back-button {
+  width: 48%;
+  background-color: #3333ff; /* Bright blue button color */
+  color: white; /* Button text color */
+}
+
+.signup-button:hover, .back-button:hover {
+  background-color: #2a2aff; /* Darker blue on hover */
 }
