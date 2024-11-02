@@ -1,0 +1,38 @@
+/* src/pages/css/Home.css */
+.home-content {
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  .home-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .balance-card, .income-card, .expense-card {
+    text-align: center;
+    margin: 10px 0;
+    padding: 20px;
+  }
+  
+  .balance-card {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .income-card {
+    background-color: #2196F3;
+    color: white;
+  }
+  
+  .expense-card {
+    background-color: #F44336;
+    color: white;
+  }
+  
+  .balance-amount, .income-amount, .expense-amount {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
