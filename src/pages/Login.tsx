@@ -102,6 +102,10 @@ const Home: React.FC = () => {
             <IonButton expand="full" routerLink="/signup" className="signup-button">
               Sign Up
             </IonButton>
+
+            <IonButton expand="full" routerLink="/homeTest" className="test-button">
+              Go to HomeTest Page
+            </IonButton>
           </div>
         </div>
       </IonContent>
