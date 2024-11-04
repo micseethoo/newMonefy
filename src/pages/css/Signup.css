@@ -1,100 +1,6 @@
 /* src/pages/SignUp.css */
-/*.signup-background {
-  background-color: #ffffff; /* White background for the main area *//*
-}
 
-.signup-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding: 20px;
-}
-
-.signup-title {
-  margin-bottom: 20px;
-  font-size: 24px;
-  text-align: center;
-  color: #c00; /* Dark red color *//*
-}
-
-ion-item {
-  margin: 10px 0; /* Space between items *//*
-}
-
-.signup-button {
-  margin-top: 20px; /* Space above the signup button *//*
-  background-color: #c00; /* Red button color *//*
-  color: white; /* Button text color *//*
-}
-
-.signup-button:hover {
-  background-color: #a00; /* Darker red on hover *//*
-}
-
-.signup-background {
-  background-color: #ffffff; /* White background *//*
-  --ion-color-background: #ffffff; /* Ionic specific for consistency *//*
-  color: #000; /* Text color *//*
-}
-
-*/
-
-/* src/pages/SignUp.css *//*
-.signup-background {
-  background-color: #f9f9f9; /* Light grey background for better contrast *//*
-}
-
-.app-title {
-  text-align: center;
-  font-size: 28px;
-  color: #3333ff; /* Bright blue for the title *//*
-  margin-top: 60px;
-  font-weight: bold;
-}
-
-.signup-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding: 20px;
-}
-
-.signup-heading {
-  margin-bottom: 20px;
-  font-size: 22px;
-  color: #000; /* Black color for heading *//*
-}
-
-.input-item {
-  margin: 10px 0; /* Space between input items *//*
-  width: 90%; /* Full width of the container *//*
-  max-width: 400px;
-}
-
-.button-container {
-  width: 90%;
-  max-width: 400px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.signup-button, .back-button {
-  width: 48%;
-  background-color: #3333ff; /* Bright blue button color *//*
-  color: white; /* Button text color *//*
-}
-
-.signup-button:hover, .back-button:hover {
-  background-color: #2a2aff; /* Darker blue on hover *//*
-}*/
-
-/* src/pages/SignUp.css */
+/* Base styles for light mode */
 .signup-background {
   background-color: #f9f9f9; /* Light grey background for better contrast */
 }
@@ -162,3 +68,42 @@ ion-item {
   text-decoration: underline;
 }
 
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  .signup-background {
+    background-color: #1a1a1a; /* Dark background for dark mode */
+  }
+
+  .app-title {
+    color: #ffffff; /* White color for title in dark mode */
+  }
+
+  .signup-heading {
+    color: #ffffff; /* White color for heading in dark mode */
+  }
+
+  .input-item {
+    background-color: #333333; /* Darker background for input items */
+    color: #ffffff; /* White text color for input items */
+  }
+
+  .signup-button {
+    background-color: #007bff; /* Different blue color for buttons in dark mode */
+  }
+
+  .signup-button:hover {
+    background-color: #0056b3; /* Darker blue on hover in dark mode */
+  }
+
+  .login-link {
+    color: #ffffff; /* White color for login link in dark mode */
+  }
+
+  .login-link a {
+    color: #007bff; /* Blue color for links in dark mode */
+  }
+
+  .login-link a:hover {
+    text-decoration: underline;
+  }
+}
