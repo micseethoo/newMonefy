@@ -126,6 +126,14 @@ const SignUp: React.FC = () => {
           </IonItem>
           <IonItem className="input-item">
             <IonInput
+              value={email}
+              placeholder="Email"
+              onIonChange={e => setEmail(e.detail.value!)}
+              required
+            />
+          </IonItem>
+          <IonItem className="input-item">
+            <IonInput
               type="password"
               value={password}
               placeholder="Password"
@@ -142,14 +150,7 @@ const SignUp: React.FC = () => {
               required
             />
           </IonItem>
-          <IonItem className="input-item">
-            <IonInput
-              value={email}
-              placeholder="Email"
-              onIonChange={e => setEmail(e.detail.value!)}
-              required
-            />
-          </IonItem>
+
           <div className="button-container">
             <IonButton expand="full" onClick={handleSignUp} className="signup-button">
               Register

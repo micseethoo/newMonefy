@@ -100,7 +100,7 @@ const Home: React.FC = () => {
           <IonItem className="input-item">
             <IonInput
               value={email}
-              placeholder="Username"
+              placeholder="Email"
               onIonChange={e => setEmail(e.detail.value!)}
               required
             />
