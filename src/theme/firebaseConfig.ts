@@ -4,13 +4,13 @@ import { getFirestore, collection, doc, setDoc } from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBAkfZNwrNZNIc1p84iX1mdpakMMZQpMuc",
-  authDomain: "testing-for-monefy.firebaseapp.com",
-  projectId: "testing-for-monefy",
-  storageBucket: "testing-for-monefy.firebasestorage.app",
-  messagingSenderId: "611640356066",
-  appId: "1:611640356066:web:a0e6d6ff18fd208f0082bb",
-  measurementId: "G-CZ1XNH3HSS"
+  apiKey: "AIzaSyA_QoDQIaxeQ6VRjnUx7sqxdhiIJNENGX8",
+  authDomain: "monefy-16fb6.firebaseapp.com",
+  projectId: "monefy-16fb6",
+  storageBucket: "monefy-16fb6.firebasestorage.app",
+  messagingSenderId: "328791518843",
+  appId: "1:328791518843:web:47b970a78db0d5e2f53cde",
+  measurementId: "G-YKRGWB9CVB"
 };
 
 // Initialize Firebase app and services
