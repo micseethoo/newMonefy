@@ -41,6 +41,59 @@ ion-item {
 
 */
 
+/* src/pages/SignUp.css *//*
+.signup-background {
+  background-color: #f9f9f9; /* Light grey background for better contrast *//*
+}
+
+.app-title {
+  text-align: center;
+  font-size: 28px;
+  color: #3333ff; /* Bright blue for the title *//*
+  margin-top: 60px;
+  font-weight: bold;
+}
+
+.signup-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 20px;
+}
+
+.signup-heading {
+  margin-bottom: 20px;
+  font-size: 22px;
+  color: #000; /* Black color for heading *//*
+}
+
+.input-item {
+  margin: 10px 0; /* Space between input items *//*
+  width: 90%; /* Full width of the container *//*
+  max-width: 400px;
+}
+
+.button-container {
+  width: 90%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.signup-button, .back-button {
+  width: 48%;
+  background-color: #3333ff; /* Bright blue button color *//*
+  color: white; /* Button text color *//*
+}
+
+.signup-button:hover, .back-button:hover {
+  background-color: #2a2aff; /* Darker blue on hover *//*
+}*/
+
 /* src/pages/SignUp.css */
 .signup-background {
   background-color: #f9f9f9; /* Light grey background for better contrast */
@@ -50,7 +103,7 @@ ion-item {
   text-align: center;
   font-size: 28px;
   color: #3333ff; /* Bright blue for the title */
-  margin-top: 60px;
+  margin-top: 40px;
   font-weight: bold;
 }
 
@@ -80,16 +133,32 @@ ion-item {
   max-width: 400px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   margin-top: 20px;
 }
 
-.signup-button, .back-button {
+.signup-button {
   width: 48%;
   background-color: #3333ff; /* Bright blue button color */
   color: white; /* Button text color */
 }
 
-.signup-button:hover, .back-button:hover {
+.signup-button:hover {
   background-color: #2a2aff; /* Darker blue on hover */
 }
+
+.login-link {
+  margin-top: 20px;
+  text-align: center;
+  color: #000; /* Black color for visibility */
+}
+
+.login-link a {
+  text-decoration: none;
+  color: #3333ff; /* Match the color of the title or the button */
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
