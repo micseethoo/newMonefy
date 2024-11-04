@@ -73,23 +73,23 @@ ion-item {
   max-width: 400px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   margin-top: 20px;
 }
 
-.login-button, .signup-button {
+.login-button,{
   width: 48%;
   background-color: #3333ff; /* Bright blue button color */
   color: white; /* Button text color */
 }
 
-.login-button:hover, .signup-button:hover {
+.login-button:hover{
   background-color: #2a2aff; /* Darker blue on hover */
 }
 .signup-link {
   margin-top: 20px;
   text-align: center;
-  color: #3333ff; /* Bright blue color for visibility */
+  color: #000ff; /* Bright blue color for visibility */
 }
 
 .signup-link a {
