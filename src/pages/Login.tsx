@@ -90,17 +90,20 @@ const Home: React.FC = () => {
 
       // Simplified error messages
       switch (err.code) {
-        case 'auth/user-not-found':
-          setError('Account not found. Please sign up.');
-          break;
-        case 'auth/wrong-password':
-          setError('Incorrect password. Try again.');
-          break;
-        case 'auth/invalid-email':
-          setError('Invalid email. Check your input.');
-          break;
+//         case 'auth/user-not-found':
+//             setError('Account not found. Please sign up.');
+//             break;
+//         case 'auth/wrong-password':
+//             setError('Incorrect password. Try again.');
+//             break;
+//         case 'auth/invalid-email':
+//             setError('Invalid email. Check your input.');
+//             break;
+        case 'auth/invalid-credential':
+            setError('Invalid email or password. Please try again.');
+            break;
         default:
-          setError('Something went wrong. Please try again.');
+            setError('Something went wrong. Please try again.');
       }
     }
   };

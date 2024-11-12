@@ -7,6 +7,8 @@ import Signup from './pages/Signup'; // Sign Up page
 import Login from './pages/Login'; // Reuse Home as Login
 import UserHome from './pages/UserHome';
 import Savings from './pages/Savings';
+import HomeTest from './pages/HomeTest';
+import MainMenu from './pages/MainMenu';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -44,8 +46,11 @@ const App: React.FC = () => (
         <Route exact path="/savings">
           <Savings />
         </Route>
+        <Route exact path="/mainmenu">
+          <MainMenu />
+        </Route>
         <Route exact path="/">
-          <Redirect to="/home" />
+          <MainMenu />
         </Route>
         <Route path="/userhome" component={UserHome} exact={true} />
       </IonRouterOutlet>
