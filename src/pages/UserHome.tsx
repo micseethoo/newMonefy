@@ -1,48 +1,58 @@
 // src/pages/Home.tsx
 import React, { useEffect, useState } from 'react';
-import { IonPage, IonContent, IonHeader, IonToolbar, IonTitle, IonGrid, IonRow, IonCol, IonCard, IonCardContent } from '@ionic/react';
+import { IonPage, IonContent, IonHeader, IonToolbar, IonTitle, IonGrid, IonRow, IonCol, IonCard, IonCardContent, IonInput, IonButton, IonItem } from '@ionic/react';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, doc, onSnapshot, collection, getDocs } from 'firebase/firestore';
+import { addExpense } from '../theme/firebaseConfig';
+import { db } from '../theme/firebaseConfig';
+import { collection, onSnapshot, doc } from 'firebase/firestore';
 import './css/UserHome.css';
 
 const Home: React.FC = () => {
   const [balance, setBalance] = useState(0);
-  const [totalIncome, setTotalIncome] = useState(0);
   const [totalExpenses, setTotalExpenses] = useState(0);
 
+  const [title, setTitle] = useState('');
+  const [amount, setAmount] = useState<number>(0);
+  const [tag, setTag] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('');
+
   const auth = getAuth();
-  const db = getFirestore();
+  const user = auth.currentUser;
 
-  const userId = auth.currentUser?.uid; // Ensure the user is logged in
-  const userRef = doc(db, 'users', userId || '');
-
-  // Fetch data for total income and total expenses
+  // Fetch total expenses in real-time
   useEffect(() => {
-    if (!userId) return;
+    if (!user) return;
 
-    const incomeRef = collection(userRef, 'income');
-    const expensesRef = collection(userRef, 'expenses');
-
-    // Listen for real-time updates
-    const unsubscribeIncome = onSnapshot(incomeRef, (snapshot) => {
-      const incomeSum = snapshot.docs.reduce((total, doc) => total + (doc.data().amount || 0), 0);
-      setTotalIncome(incomeSum);
-    });
+    const expensesRef = collection(doc(db, 'users', user.uid), 'expenses');
 
     const unsubscribeExpenses = onSnapshot(expensesRef, (snapshot) => {
-      const expensesSum = snapshot.docs.reduce((total, doc) => total + (doc.data().amount || 0), 0);
+      let expensesSum = 0;
+
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        expensesSum += data.amount;
+      });
+
       setTotalExpenses(expensesSum);
+      setBalance(-expensesSum); // Assuming balance is just total expenses as a negative value
     });
 
-    // Set balance based on income and expenses
-    setBalance(totalIncome - totalExpenses);
+    // Cleanup listener on component unmount
+    return () => unsubscribeExpenses();
+  }, [user]);
 
-    // Clean up listeners
-    return () => {
-      unsubscribeIncome();
-      unsubscribeExpenses();
-    };
-  }, [userId, totalIncome, totalExpenses]);
+  // Add new expense
+  const handleAddExpense = async () => {
+    if (!title || !amount || !tag || !paymentMethod) {
+      alert('Please fill all fields');
+      return;
+    }
+    await addExpense(title, amount, tag, paymentMethod);
+    setTitle('');
+    setAmount(0);
+    setTag('');
+    setPaymentMethod('');
+  };
 
   return (
     <IonPage>
@@ -65,20 +75,30 @@ const Home: React.FC = () => {
           </IonRow>
           <IonRow>
             <IonCol size="6">
-              <IonCard className="income-card">
-                <IonCardContent>
-                  <h3>Total Income</h3>
-                  <p className="income-amount">${totalIncome.toFixed(2)}</p>
-                </IonCardContent>
-              </IonCard>
-            </IonCol>
-            <IonCol size="6">
               <IonCard className="expense-card">
                 <IonCardContent>
                   <h3>Total Expenses</h3>
                   <p className="expense-amount">${totalExpenses.toFixed(2)}</p>
                 </IonCardContent>
               </IonCard>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol size="12">
+              <h3>Record Expense</h3>
+              <IonItem>
+                <IonInput placeholder="Title" value={title} onIonChange={(e) => setTitle(e.detail.value!)} />
+              </IonItem>
+              <IonItem>
+                <IonInput placeholder="Amount" type="number" value={amount} onIonChange={(e) => setAmount(parseFloat(e.detail.value!))} />
+              </IonItem>
+              <IonItem>
+                <IonInput placeholder="Tag" value={tag} onIonChange={(e) => setTag(e.detail.value!)} />
+              </IonItem>
+              <IonItem>
+                <IonInput placeholder="Payment Method" value={paymentMethod} onIonChange={(e) => setPaymentMethod(e.detail.value!)} />
+              </IonItem>
+              <IonButton expand="full" onClick={handleAddExpense}>Add Expense</IonButton>
             </IonCol>
           </IonRow>
         </IonGrid>
