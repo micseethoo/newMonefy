@@ -1,57 +1,68 @@
-// src/pages/Home.tsx
 import React, { useEffect, useState } from 'react';
-import { IonPage, IonContent, IonHeader, IonToolbar, IonTitle, IonGrid, IonRow, IonCol, IonCard, IonCardContent, IonInput, IonButton, IonItem } from '@ionic/react';
+import { IonPage, IonContent, IonHeader, IonToolbar, IonTitle, IonGrid, IonRow, IonCol, IonCard, IonCardContent, IonItem, IonInput, IonButton } from '@ionic/react';
 import { getAuth } from 'firebase/auth';
-import { addExpense } from '../theme/firebaseConfig';
-import { db } from '../theme/firebaseConfig';
-import { collection, onSnapshot, doc } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, onSnapshot } from 'firebase/firestore';
 import './css/UserHome.css';
 
-const Home: React.FC = () => {
-  const [balance, setBalance] = useState(0);
+const UserHome: React.FC = () => {
   const [totalExpenses, setTotalExpenses] = useState(0);
-
+  const [transactions, setTransactions] = useState<any[]>([]);
   const [title, setTitle] = useState('');
-  const [amount, setAmount] = useState<number>(0);
+  const [amount, setAmount] = useState<number | ''>('');
   const [tag, setTag] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('');
-
+  
   const auth = getAuth();
-  const user = auth.currentUser;
+  const db = getFirestore();
+  const userId = auth.currentUser?.uid; // Ensure the user is logged in
 
-  // Fetch total expenses in real-time
   useEffect(() => {
-    if (!user) return;
+    if (!userId) return;
 
-    const expensesRef = collection(doc(db, 'users', user.uid), 'expenses');
+    const expensesRef = collection(db, `users/${userId}/expenses`);
 
-    const unsubscribeExpenses = onSnapshot(expensesRef, (snapshot) => {
+    // Set up a real-time listener for the expenses collection
+    const unsubscribe = onSnapshot(expensesRef, (snapshot) => {
       let expensesSum = 0;
-
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        expensesSum += data.amount;
+      const expenseList: any[] = [];
+      
+      snapshot.docs.forEach((doc) => {
+        const expenseData = doc.data();
+        if (expenseData.amount) {
+          expensesSum += expenseData.amount;
+        }
+        expenseList.push({ id: doc.id, ...expenseData });
       });
-
+      
       setTotalExpenses(expensesSum);
-      setBalance(-expensesSum); // Assuming balance is just total expenses as a negative value
+      setTransactions(expenseList);
     });
 
-    // Cleanup listener on component unmount
-    return () => unsubscribeExpenses();
-  }, [user]);
+    return () => unsubscribe();
+  }, [userId]);
 
-  // Add new expense
+  // Function to add a new expense
   const handleAddExpense = async () => {
-    if (!title || !amount || !tag || !paymentMethod) {
-      alert('Please fill all fields');
-      return;
+    if (!userId || amount === '' || title === '' || tag === '' || paymentMethod === '') return;
+
+    const expensesRef = collection(db, `users/${userId}/expenses`);
+
+    try {
+      await addDoc(expensesRef, {
+        title,
+        amount: Number(amount),
+        tag,
+        paymentMethod,
+        date: new Date().toISOString()
+      });
+      // Clear input fields after adding
+      setTitle('');
+      setAmount('');
+      setTag('');
+      setPaymentMethod('');
+    } catch (error) {
+      console.error("Error adding expense:", error);
     }
-    await addExpense(title, amount, tag, paymentMethod);
-    setTitle('');
-    setAmount(0);
-    setTag('');
-    setPaymentMethod('');
   };
 
   return (
@@ -67,38 +78,83 @@ const Home: React.FC = () => {
             <IonCol size="12">
               <IonCard className="balance-card">
                 <IonCardContent>
-                  <h2>Balance</h2>
-                  <p className="balance-amount">${balance.toFixed(2)}</p>
+                  <h2>Total Expenses</h2>
+                  <p className="balance-amount">${totalExpenses.toFixed(2)}</p>
                 </IonCardContent>
               </IonCard>
             </IonCol>
           </IonRow>
-          <IonRow>
-            <IonCol size="6">
-              <IonCard className="expense-card">
-                <IonCardContent>
-                  <h3>Total Expenses</h3>
-                  <p className="expense-amount">${totalExpenses.toFixed(2)}</p>
-                </IonCardContent>
-              </IonCard>
-            </IonCol>
-          </IonRow>
+
+          {/* Expense Form */}
           <IonRow>
             <IonCol size="12">
-              <h3>Record Expense</h3>
-              <IonItem>
-                <IonInput placeholder="Title" value={title} onIonChange={(e) => setTitle(e.detail.value!)} />
-              </IonItem>
-              <IonItem>
-                <IonInput placeholder="Amount" type="number" value={amount} onIonChange={(e) => setAmount(parseFloat(e.detail.value!))} />
-              </IonItem>
-              <IonItem>
-                <IonInput placeholder="Tag" value={tag} onIonChange={(e) => setTag(e.detail.value!)} />
-              </IonItem>
-              <IonItem>
-                <IonInput placeholder="Payment Method" value={paymentMethod} onIonChange={(e) => setPaymentMethod(e.detail.value!)} />
-              </IonItem>
-              <IonButton expand="full" onClick={handleAddExpense}>Add Expense</IonButton>
+              <IonCard>
+                <IonCardContent>
+                  <h3>Add New Expense</h3>
+                  <IonItem>
+                    <IonInput
+                      value={title}
+                      placeholder="Title"
+                      onIonChange={(e) => setTitle(e.detail.value!)}
+                      required
+                    />
+                  </IonItem>
+                  <IonItem>
+                    <IonInput
+                      type="number"
+                      value={amount}
+                      placeholder="Amount"
+                      onIonChange={(e) => setAmount(parseFloat(e.detail.value!))}
+                      required
+                    />
+                  </IonItem>
+                  <IonItem>
+                    <IonInput
+                      value={tag}
+                      placeholder="Tag"
+                      onIonChange={(e) => setTag(e.detail.value!)}
+                      required
+                    />
+                  </IonItem>
+                  <IonItem>
+                    <IonInput
+                      value={paymentMethod}
+                      placeholder="Payment Method"
+                      onIonChange={(e) => setPaymentMethod(e.detail.value!)}
+                      required
+                    />
+                  </IonItem>
+                  <IonButton expand="full" onClick={handleAddExpense}>
+                    Add Expense
+                  </IonButton>
+                </IonCardContent>
+              </IonCard>
+            </IonCol>
+          </IonRow>
+
+          {/* Display Transactions */}
+          <IonRow>
+            <IonCol size="12">
+              <IonCard className="transactions-card">
+                <IonCardContent>
+                  <h3>Transaction History</h3>
+                  {transactions.length > 0 ? (
+                    transactions.map((transaction) => (
+                      <IonItem key={transaction.id}>
+                        <div>
+                          <h4>{transaction.title}</h4>
+                          <p>Amount: ${transaction.amount}</p>
+                          <p>Tag: {transaction.tag}</p>
+                          <p>Payment Method: {transaction.paymentMethod}</p>
+                          <p>Date: {new Date(transaction.date).toLocaleDateString()}</p>
+                        </div>
+                      </IonItem>
+                    ))
+                  ) : (
+                    <p>No transactions recorded.</p>
+                  )}
+                </IonCardContent>
+              </IonCard>
             </IonCol>
           </IonRow>
         </IonGrid>
@@ -107,4 +163,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default UserHome;
