@@ -1,0 +1,11 @@
+h3, p {
+  text-align: center;
+}
+
+.savings-goal-container {
+  width: 90%;
+  border: 1px solid #000; /* Black border, you can change the color or width */
+  border-radius: 20px;
+  margin: 10px auto; /* Optional: To center the container horizontally */
+  box-sizing: border-box; /* Ensures padding is included in the width */
+}
