@@ -1,8 +1,8 @@
+// firebaseConfig.ts
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { getFirestore, collection, doc, setDoc } from 'firebase/firestore';
+import { getFirestore, collection, doc, addDoc, onSnapshot, setDoc } from 'firebase/firestore';
 
-// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyA_QoDQIaxeQ6VRjnUx7sqxdhiIJNENGX8",
   authDomain: "monefy-16fb6.firebaseapp.com",
@@ -13,10 +13,34 @@ const firebaseConfig = {
   measurementId: "G-YKRGWB9CVB"
 };
 
-// Initialize Firebase app and services
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
+export const addExpense = async (
+  title: string,
+  amount: number,
+  tag: string,
+  paymentMethod: string
+) => {
+  const user = auth.currentUser;
+  if (!user) throw new Error("User is not logged in");
+
+  try {
+    const expensesRef = collection(doc(db, 'users', user.uid), 'expenses');
+    await addDoc(expensesRef, {
+      title,
+      amount,
+      tag,
+      paymentMethod,
+      date: new Date().toISOString()
+    });
+    console.log("Expense added successfully");
+  } catch (error) {
+    console.error("Error adding expense: ", error);
+    throw error;
+  }
+};
 
 // Sign up with email function
 export const signUpWithEmail = async (email: string, password: string, username: string): Promise<void> => {
@@ -47,3 +71,24 @@ export const signInWithEmail = async (email: string, password: string): Promise<
     throw error;
   }
 };
+
+export const addTransaction = async (amount: number, type: 'income' | 'expense', description: string, date: Date) => {
+  const user = auth.currentUser;
+  if (!user) throw new Error("User is not logged in");
+
+  try {
+    const transactionRef = collection(doc(db, 'users', user.uid), 'transactions');
+    await addDoc(transactionRef, {
+      amount,
+      type,
+      description,
+      date: date.toISOString()
+    });
+    console.log("Transaction added successfully");
+  } catch (error) {
+    console.error("Error adding transaction: ", error);
+    throw error;
+  }
+};   
+
+export { auth, db };
