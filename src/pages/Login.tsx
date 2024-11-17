@@ -1,4 +1,4 @@
-import { IonContent, IonPage, IonButton, IonInput, IonItem } from '@ionic/react';
+/*import { IonContent, IonPage, IonButton, IonInput, IonItem } from '@ionic/react';
 import React, { useState } from 'react';
 import './css/Login.css'; // Optional CSS for styling
 import { signInWithEmail } from '../theme/firebaseConfig'; // Import your Firebase sign-in function
@@ -30,7 +30,7 @@ const Home: React.FC = () => {
         <div className="login-container">
           <h1 className="app-title">Monefy!</h1>
           <h3 className="login-heading">Login</h3>
-          {error && <p className="error-message">{error}</p>} {/* Display error message */}
+          {error && <p className="error-message">{error}</p>} {/* Display error message *//*}
           <IonItem className="input-item">
             <IonInput
               value={email}
@@ -63,4 +63,83 @@ const Home: React.FC = () => {
   );
 };
 
+export default Home;*/
+
+import { IonContent, IonPage, IonButton, IonInput, IonItem, IonIcon } from '@ionic/react';
+import React, { useState } from 'react';
+import './css/Login.css'; // Optional CSS for styling
+import { signInWithEmail } from '../theme/firebaseConfig'; // Import your Firebase sign-in function
+import { useHistory } from 'react-router-dom'; // Import useHistory for navigation
+import { eyeOutline, eyeOffOutline } from 'ionicons/icons'; // Icons for toggling visibility
+
+const Home: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false); // Password visibility state
+  const [error, setError] = useState<string | null>(null);
+  const history = useHistory(); // Initialize useHistory
+
+  const handleLogin = async () => {
+    try {
+      setError(null); // Clear any previous errors
+      await signInWithEmail(email, password);
+      console.log('User logged in successfully');
+
+      // Redirect to HomeUserPage upon successful login
+      history.push('/userhome'); // Ensure this path matches your routing configuration
+    } catch (err: any) {
+      console.error('Login failed:', err.message);
+      setError(err.message); // Display error to user
+    }
+  };
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible((prev) => !prev);
+  };
+
+  return (
+    <IonPage>
+      <IonContent fullscreen className="login-background">
+        <div className="login-container">
+          <h1 className="app-title">Monefy!</h1>
+          <h3 className="login-heading">Login</h3>
+          {error && <p className="error-message">{error}</p>} {/* Display error message */}
+          <IonItem className="input-item">
+            <IonInput
+              value={email}
+              placeholder="Email"
+              onIonChange={(e) => setEmail(e.detail.value!)}
+              required
+            />
+          </IonItem>
+          <IonItem className="input-item">
+            <IonInput
+              type={isPasswordVisible ? 'text' : 'password'} // Toggle password visibility
+              value={password}
+              placeholder="Password"
+              onIonChange={(e) => setPassword(e.detail.value!)}
+              required
+            />
+            <IonIcon
+              icon={isPasswordVisible ? eyeOffOutline : eyeOutline} // Change icon based on visibility
+              slot="end"
+              onClick={togglePasswordVisibility} // Toggle visibility on click
+              style={{ cursor: 'pointer' }} // Make the icon clickable
+            />
+          </IonItem>
+          <div className="button-container">
+            <IonButton expand="full" onClick={handleLogin} className="login-button">
+              Login
+            </IonButton>
+          </div>
+          <div className="signup-link">
+            Not registered yet? <a href="/signup">Sign up</a>
+          </div>
+        </div>
+      </IonContent>
+    </IonPage>
+  );
+};
+
 export default Home;
+
