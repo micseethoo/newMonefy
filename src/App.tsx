@@ -2,11 +2,12 @@
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import Home from './pages/Home'; // Home acts as the Login page
-import Signup from './pages/Signup'; // Sign Up page
-import Login from './pages/Login'; // Reuse Home as Login
+import Home from './pages/Home';
+import Signup from './pages/Signup';
+import Login from './pages/Login';
 import UserHome from './pages/UserHome';
 import Savings from './pages/Savings';
+import Budgeting from './pages/Budgeting'; // Import Budgeting
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -36,7 +37,7 @@ const App: React.FC = () => (
           <Home />
         </Route>
         <Route exact path="/login">
-          <Login /> {/* Reusing Home for login */}
+          <Login />
         </Route>
         <Route exact path="/signup">
           <Signup />
@@ -44,13 +45,17 @@ const App: React.FC = () => (
         <Route exact path="/savings">
           <Savings />
         </Route>
+        <Route exact path="/budgeting"> {/* Add Budgeting route */}
+          <Budgeting />
+        </Route>
+        <Route path="/userhome" component={UserHome} exact={true} />
         <Route exact path="/">
           <Redirect to="/home" />
         </Route>
-        <Route path="/userhome" component={UserHome} exact={true} />
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
 );
 
 export default App;
+
