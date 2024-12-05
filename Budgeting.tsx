@@ -94,7 +94,7 @@ const Budgeting: React.FC = () => {
         </IonCard>
 
         <IonGrid>
-          {/* 菜单按钮 */}
+          {/* Menu Buttons */}
           <IonRow>
             {['Food', 'Transport', 'Entertainment', 'Bills', 'Other'].map((category) => (
               <IonCol size="6" key={category}>
@@ -108,7 +108,7 @@ const Budgeting: React.FC = () => {
             ))}
           </IonRow>
 
-          {/* 动态显示设置的预算 */}
+          {/* Dynamically Display Budgets */}
           <IonRow>
             {Object.keys(categoryBudgets).map((category) => (
               <IonCol size="12" key={category}>
@@ -141,7 +141,7 @@ const Budgeting: React.FC = () => {
         />
       </IonItem>
       <IonRow>
-        {/* 确定按钮 */}
+        {/* Save Button */}
         <IonCol>
           <IonButton
             expand="full"
@@ -150,7 +150,7 @@ const Budgeting: React.FC = () => {
             Save
           </IonButton>
         </IonCol>
-        {/* 关闭按钮 */}
+        {/* Close Button */}
         <IonCol>
           <IonButton
             expand="full"
