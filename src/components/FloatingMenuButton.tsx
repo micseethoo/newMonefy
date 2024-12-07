@@ -87,9 +87,6 @@ const FloatingMenuButton: React.FC = () => {
           <IonButton color="primary" onClick={() => handleOptionClick('Expense')}>
             Expenses
           </IonButton>
-//           <IonButton color="primary" onClick={toggleMenu}>
-//             Back
-//           </IonButton>
         </div>
       )}
 
