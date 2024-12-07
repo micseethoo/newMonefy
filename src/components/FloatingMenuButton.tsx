@@ -4,6 +4,10 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import './FloatingMenuButton.css';
 
+import { IonIcon } from '@ionic/react';
+import { arrowUpOutline, addOutline } from 'ionicons/icons'; // Import icons
+import caretUpImage from '/src/img/caretarrow.png'; // Path to your caret-up arrow image
+
 const FloatingMenuButton: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null); // To track the selected option
@@ -76,8 +80,10 @@ const FloatingMenuButton: React.FC = () => {
   return (
     <div className="floating-button-container">
       <IonButton onClick={toggleMenu} className="floating-button" color="primary" shape="round">
-        +
-      </IonButton>
+              <span style={{ textTransform: 'none' }}>
+                {isMenuOpen && !selectedOption ? 'x' : selectedOption ? '<' : '+'}
+              </span>
+            </IonButton>
 
       {isMenuOpen && (
         <div className="floating-menu">
