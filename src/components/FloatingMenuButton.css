@@ -33,3 +33,33 @@
   background-color: #3880ff;
   font-size: 14px;
 }
+
+.expense-form-container {
+  position: absolute;
+  bottom: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  padding: 5px;
+}
+
+.expense-form-container .ion-row {
+  margin: 0; /* Remove margin to ensure the content aligns properly */
+}
+
+.income-form-container {
+  position: absolute;
+  bottom: 70px;
+left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  padding: 5px;
+  min-width: 300px;
+}
+
+.income-form-container .ion-row {
+  margin: 0; /* Remove margin to ensure the content aligns properly */
+}
+
