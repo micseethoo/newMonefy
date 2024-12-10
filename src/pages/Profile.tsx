@@ -197,23 +197,222 @@
 //
 // export default Profile;
 
-import { IonContent, IonPage, IonSpinner, IonIcon } from '@ionic/react';
+// import { IonContent, IonPage, IonSpinner, IonIcon } from '@ionic/react';
+// import React, { useEffect, useState } from 'react';
+// import './css/Profile.css';
+// import { getAuth, onAuthStateChanged } from 'firebase/auth';
+// import { getFirestore, doc, getDoc, collection, getDocs, addDoc, updateDoc } from 'firebase/firestore';
+// import { useHistory } from 'react-router-dom';
+// import { refreshOutline } from 'ionicons/icons';
+// import NavBar from '../components/NavBar';
+//
+// const Profile: React.FC = () => {
+//   const [username, setUserName] = useState<string>('Loading...');
+//   const [email, setEmail] = useState<string>('Loading...');
+//   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+//   const [isLoading, setIsLoading] = useState(true);
+//   const [imageUrlInput, setImageUrlInput] = useState<string>('');
+//   const [isEditMode, setIsEditMode] = useState(false);
+//   const [newUsername, setNewUsername] = useState<string>('');
+//
+//   const auth = getAuth();
+//   const db = getFirestore();
+//   const history = useHistory();
+//
+//   useEffect(() => {
+//     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+//       if (currentUser) {
+//         try {
+//           setIsLoading(true);
+//           const userRef = doc(db, 'users', currentUser.uid);
+//           const userSnap = await getDoc(userRef);
+//           if (userSnap.exists()) {
+//             const userData = userSnap.data();
+//             setUserName(userData.username || 'No name available');
+//             setNewUsername(userData.username || ''); // Pre-fill the input field in edit mode
+//             setEmail(userData.email || 'No email available');
+//
+//             const profileImagesRef = collection(db, 'users', currentUser.uid, 'profileImages');
+//             const profileImagesSnap = await getDocs(profileImagesRef);
+//             if (!profileImagesSnap.empty) {
+//               const latestProfileImage = profileImagesSnap.docs[profileImagesSnap.docs.length - 1].data();
+//               setProfileImageUrl(latestProfileImage.profileImageUrl);
+//             }
+//           }
+//         } catch (error) {
+//           console.error('Error fetching user data:', error);
+//         } finally {
+//           setIsLoading(false);
+//         }
+//       } else {
+//         history.push('/login');
+//       }
+//     });
+//
+//     return () => unsubscribe();
+//   }, [auth, db, history]);
+//
+//   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+//     setImageUrlInput(event.target.value);
+//   };
+//
+//   const handleUrlSubmit = async () => {
+//     if (imageUrlInput) {
+//       try {
+//         setIsLoading(true);
+//         const currentUser = auth.currentUser;
+//         if (currentUser) {
+//           const profileImagesRef = collection(db, 'users', currentUser.uid, 'profileImages');
+//           const profileImagesSnap = await getDocs(profileImagesRef);
+//
+//           if (!profileImagesSnap.empty) {
+//             const latestProfileImageDoc = profileImagesSnap.docs[0];
+//             await updateDoc(latestProfileImageDoc.ref, {
+//               profileImageUrl: imageUrlInput,
+//               updatedAt: new Date().toISOString(),
+//             });
+//           } else {
+//             await addDoc(profileImagesRef, {
+//               profileImageUrl: imageUrlInput,
+//               updatedAt: new Date().toISOString(),
+//             });
+//           }
+//
+//           setProfileImageUrl(imageUrlInput);
+//           setImageUrlInput('');
+//         }
+//       } catch (error) {
+//         console.error('Error updating profile picture URL:', error);
+//       } finally {
+//         setIsLoading(false);
+//       }
+//     }
+//   };
+//
+//   const handleEditToggle = () => {
+//     setIsEditMode(!isEditMode);
+//   };
+//
+//   const handleSave = async () => {
+//     try {
+//       setIsLoading(true);
+//       const currentUser = auth.currentUser;
+//       if (currentUser) {
+//         const userRef = doc(db, 'users', currentUser.uid);
+//         await updateDoc(userRef, { username: newUsername });
+//         setUserName(newUsername);
+//         setIsEditMode(false);
+//       }
+//     } catch (error) {
+//       console.error('Error updating username:', error);
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   };
+//
+//   const handleImageUrl = (url: string) => {
+//     if (url.startsWith('https://drive.google.com/file/d/')) {
+//       return `https://drive.google.com/uc?id=${url.split('/d/')[1].split('/')[0]}`;
+//     }
+//     return url;
+//   };
+//
+//   return (
+//     <IonPage>
+//       <IonContent fullscreen className="profile-background">
+//         {isLoading ? (
+//           <div className="loading-container">
+//             <IonSpinner name="crescent" />
+//             <p>Loading user data...</p>
+//           </div>
+//         ) : (
+//           <div className="profile-container">
+//             <div className="profile-header">
+//               <h3 className="profile-heading">Profile</h3>
+//               <IonIcon icon={refreshOutline} className="refresh-icon" />
+//             </div>
+//             <div className="profile-picture">
+//               {profileImageUrl ? (
+//                 <img src={handleImageUrl(profileImageUrl)} alt="User Profile" className="profile-img" />
+//               ) : (
+//                 <div className="profile-img-placeholder">No Profile Picture</div>
+//               )}
+//               {isEditMode && (
+//                 <>
+//                   <input
+//                     type="text"
+//                     value={imageUrlInput}
+//                     onChange={handleUrlChange}
+//                     placeholder="Paste image URL here"
+//                   />
+//                   <div className="upload-container">
+//                     <button onClick={() => setIsUrlInputVisible(true)} className="upload-button">
+//                       Upload Image URL
+//                     </button>
+//                   </div>
+//
+//                 </>
+//               )}
+//             </div>
+//             <div className="profile-info">
+//               <div className="profile-item">
+//                 <h4>Full Name</h4>
+//                 {isEditMode ? (
+//                   <input
+//                     type="text"
+//                     value={newUsername}
+//                     onChange={(e) => setNewUsername(e.target.value)}
+//                   />
+//                 ) : (
+//                   <p>{username}</p>
+//                 )}
+//               </div>
+//               <div className="profile-item">
+//                 <h4>Email</h4>
+//                 <p>{email}</p>
+//               </div>
+//             </div>
+//             {isEditMode ? (
+//               <div className="profile-actions">
+//                 <button onClick={handleSave} className="save-button">
+//                   Save
+//                 </button>
+//                 <button onClick={handleEditToggle} className="cancel-button">
+//                   Cancel
+//                 </button>
+//               </div>
+//             ) : (
+//               <button onClick={handleEditToggle} className="edit-button">
+//                 Edit
+//               </button>
+//             )}
+//           </div>
+//         )}
+//       </IonContent>
+//       <NavBar />
+//     </IonPage>
+//   );
+// };
+//
+// export default Profile;
+
 import React, { useEffect, useState } from 'react';
-import './css/Profile.css';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, doc, getDoc, collection, getDocs, addDoc, updateDoc } from 'firebase/firestore';
+import { IonContent, IonPage, IonSpinner, IonIcon } from '@ionic/react';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import { getFirestore, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { useHistory } from 'react-router-dom';
 import { refreshOutline } from 'ionicons/icons';
 import NavBar from '../components/NavBar';
+import './css/Profile.css';
 
 const Profile: React.FC = () => {
-  const [username, setUserName] = useState<string>('Loading...');
+  const [username, setUsername] = useState<string>('Loading...');
   const [email, setEmail] = useState<string>('Loading...');
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [imageUrlInput, setImageUrlInput] = useState<string>('');
   const [isEditMode, setIsEditMode] = useState(false);
   const [newUsername, setNewUsername] = useState<string>('');
+  const [newProfileImageUrl, setNewProfileImageUrl] = useState<string>('');
 
   const auth = getAuth();
   const db = getFirestore();
@@ -228,16 +427,11 @@ const Profile: React.FC = () => {
           const userSnap = await getDoc(userRef);
           if (userSnap.exists()) {
             const userData = userSnap.data();
-            setUserName(userData.username || 'No name available');
-            setNewUsername(userData.username || ''); // Pre-fill the input field in edit mode
+            setUsername(userData.username || 'No name available');
+            setNewUsername(userData.username || '');
             setEmail(userData.email || 'No email available');
-
-            const profileImagesRef = collection(db, 'users', currentUser.uid, 'profileImages');
-            const profileImagesSnap = await getDocs(profileImagesRef);
-            if (!profileImagesSnap.empty) {
-              const latestProfileImage = profileImagesSnap.docs[profileImagesSnap.docs.length - 1].data();
-              setProfileImageUrl(latestProfileImage.profileImageUrl);
-            }
+            setProfileImageUrl(userData.profileImageUrl || null);
+            setNewProfileImageUrl(userData.profileImageUrl || '');
           }
         } catch (error) {
           console.error('Error fetching user data:', error);
@@ -252,40 +446,12 @@ const Profile: React.FC = () => {
     return () => unsubscribe();
   }, [auth, db, history]);
 
-  const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setImageUrlInput(event.target.value);
-  };
-
-  const handleUrlSubmit = async () => {
-    if (imageUrlInput) {
-      try {
-        setIsLoading(true);
-        const currentUser = auth.currentUser;
-        if (currentUser) {
-          const profileImagesRef = collection(db, 'users', currentUser.uid, 'profileImages');
-          const profileImagesSnap = await getDocs(profileImagesRef);
-
-          if (!profileImagesSnap.empty) {
-            const latestProfileImageDoc = profileImagesSnap.docs[0];
-            await updateDoc(latestProfileImageDoc.ref, {
-              profileImageUrl: imageUrlInput,
-              updatedAt: new Date().toISOString(),
-            });
-          } else {
-            await addDoc(profileImagesRef, {
-              profileImageUrl: imageUrlInput,
-              updatedAt: new Date().toISOString(),
-            });
-          }
-
-          setProfileImageUrl(imageUrlInput);
-          setImageUrlInput('');
-        }
-      } catch (error) {
-        console.error('Error updating profile picture URL:', error);
-      } finally {
-        setIsLoading(false);
-      }
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      history.push('/login');
+    } catch (error) {
+      console.error('Error signing out:', error);
     }
   };
 
@@ -299,22 +465,26 @@ const Profile: React.FC = () => {
       const currentUser = auth.currentUser;
       if (currentUser) {
         const userRef = doc(db, 'users', currentUser.uid);
-        await updateDoc(userRef, { username: newUsername });
-        setUserName(newUsername);
+
+        // Update username
+        if (newUsername !== username) {
+          await updateDoc(userRef, { username: newUsername });
+          setUsername(newUsername);
+        }
+
+        // Update profile picture URL
+        if (newProfileImageUrl !== profileImageUrl) {
+          await updateDoc(userRef, { profileImageUrl: newProfileImageUrl });
+          setProfileImageUrl(newProfileImageUrl);
+        }
+
         setIsEditMode(false);
       }
     } catch (error) {
-      console.error('Error updating username:', error);
+      console.error('Error updating profile:', error);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleImageUrl = (url: string) => {
-    if (url.startsWith('https://drive.google.com/file/d/')) {
-      return `https://drive.google.com/uc?id=${url.split('/d/')[1].split('/')[0]}`;
-    }
-    return url;
   };
 
   return (
@@ -332,26 +502,25 @@ const Profile: React.FC = () => {
               <IonIcon icon={refreshOutline} className="refresh-icon" />
             </div>
             <div className="profile-picture">
-              {profileImageUrl ? (
-                <img src={handleImageUrl(profileImageUrl)} alt="User Profile" className="profile-img" />
-              ) : (
-                <div className="profile-img-placeholder">No Profile Picture</div>
-              )}
-              {isEditMode && (
-                <>
+              {isEditMode ? (
+                <div>
+                  <img
+                    src={newProfileImageUrl || '/placeholder-image.jpg'}
+                    alt="User Profile"
+                    className="profile-img editable"
+                  />
                   <input
                     type="text"
-                    value={imageUrlInput}
-                    onChange={handleUrlChange}
                     placeholder="Paste image URL here"
+                    value={newProfileImageUrl}
+                    onChange={(e) => setNewProfileImageUrl(e.target.value)}
+                    className="profile-url-input"
                   />
-                  <div className="upload-container">
-                    <button onClick={() => setIsUrlInputVisible(true)} className="upload-button">
-                      Upload Image URL
-                    </button>
-                  </div>
-
-                </>
+                </div>
+              ) : profileImageUrl ? (
+                <img src={profileImageUrl} alt="User Profile" className="profile-img" />
+              ) : (
+                <div className="profile-img-placeholder">No Profile Picture</div>
               )}
             </div>
             <div className="profile-info">
@@ -386,6 +555,11 @@ const Profile: React.FC = () => {
                 Edit
               </button>
             )}
+            <div className="sign-out-container">
+              <button onClick={handleSignOut} className="sign-out-button">
+                Sign Out
+              </button>
+            </div>
           </div>
         )}
       </IonContent>

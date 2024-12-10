@@ -263,5 +263,33 @@
       transform: scale(0.95);
     }
 
+    .sign-out-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .sign-out-button {
+      background-color: #ff4d4f;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .sign-out-button:hover {
+      background-color: #d9363e;
+    }
+
+    .sign-out-button:active {
+      transform: scale(0.98);
+    }
+
+
+
 
 
