@@ -9,6 +9,7 @@ import UserHome from './pages/UserHome';
 import Savings from './pages/Savings';
 import Statistics from './pages/Statistics'; // Import Statistics
 import Budgeting from './pages/Budgeting'; // Import Budgeting
+import Profile from './pages/Profile'; // Import Profile Page
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -45,6 +46,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/savings">
           <Savings />
+        </Route>
+        <Route exact path="/profile">
+          <Profile />
         </Route>
         <Route exact path="/statistics">
            <Statistics />

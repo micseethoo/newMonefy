@@ -3,6 +3,8 @@ import { IonPage, IonContent, IonHeader, IonToolbar, IonTitle, IonGrid, IonRow, 
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from 'firebase/firestore';
 import './css/UserHome.css';
+import FloatingMenuButton from '../components/FloatingMenuButton';
+import NavBar from '../components/NavBar';
 
 const UserHome: React.FC = () => {
   const [totalExpenses, setTotalExpenses] = useState(0);
@@ -302,6 +304,8 @@ const UserHome: React.FC = () => {
           </IonRow>
         </IonGrid>
       </IonContent>
+      <FloatingMenuButton />
+      <NavBar />
     </IonPage>
   );
 };

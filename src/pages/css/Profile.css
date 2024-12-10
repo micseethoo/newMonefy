@@ -1,0 +1,295 @@
+    .profile-background {
+      background-color: #f9f9f9; /* Light grey background for better contrast */
+      padding: 20px;
+    }
+
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+    }
+
+    .loading-container p {
+      margin-top: 10px;
+      font-size: 18px;
+      color: #333;
+    }
+
+    .profile-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      margin-bottom: 100px; /* Adjust this value as needed */
+      padding-bottom: 10px; /* Optional */
+    }
+
+    .profile-header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      position: relative;
+    }
+
+    .profile-heading {
+      font-size: 28px;
+      color: #3333ff;
+      margin-bottom: 20px;
+      font-weight: bold;
+      text-align: center;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Adding shadow for text depth */
+    }
+
+    .refresh-icon {
+      position: absolute;
+      right: 0;
+      font-size: 24px;
+      cursor: pointer;
+      color: #3333ff;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .refresh-icon:hover {
+      transform: rotate(360deg);
+    }
+
+    .profile-picture {
+      margin-bottom: 20px;
+    }
+
+    .profile-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #3333ff; /* Adding a border around the profile image */
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Adding shadow for a lifted effect */
+    }
+
+    .profile-img-placeholder {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color: #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #666;
+    }
+
+    /* Styling for the image URL upload section */
+    .upload-picture {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .upload-picture input[type="text"] {
+      padding: 8px;
+      width: 80%;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .upload-button {
+      background-color: #3333ff;  /* Purple color for the button */
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s;
+      border: none;
+      margin-top: 10px;
+    }
+
+    .upload-button:hover {
+      background-color: #2a2aff;  /* Darker purple on hover */
+    }
+
+    /* Styling for the Enter button */
+    .upload-picture button {
+      padding: 10px 20px;
+      background-color: #3333ff;  /* Same purple color for Enter button */
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .upload-picture button:hover {
+      background-color: #2a2aff;  /* Darker purple on hover for Enter button */
+    }
+
+    .profile-info {
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 20px;
+    }
+
+    .profile-item {
+      background-color: #ffffff;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-item h4 {
+      margin: 0;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .profile-item p {
+      margin: 5px 0 0;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .profile-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .save-button,
+    .cancel-button {
+      flex: 1;
+      margin: 0 5px;
+      padding: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 25px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .save-button {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .cancel-button {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .save-button:hover,
+    .cancel-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .save-button:active,
+    .cancel-button:active {
+      transform: scale(0.95);
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 2px solid #ccc;
+      border-radius: 20px;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #007bff;
+      box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+    }
+
+    .upload-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .upload-button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 25px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .upload-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .upload-button:active {
+      transform: scale(0.95);
+    }
+
+    .edit-button {
+      background-color: #28a745; /* Green color */
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 25px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin: 10px 0;
+    }
+
+    .edit-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .edit-button:active {
+      transform: scale(0.95);
+    }
+
+    .sign-out-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .sign-out-button {
+      background-color: #ff4d4f;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .sign-out-button:hover {
+      background-color: #d9363e;
+    }
+
+    .sign-out-button:active {
+      transform: scale(0.98);
+    }
+
+
+
+
+
