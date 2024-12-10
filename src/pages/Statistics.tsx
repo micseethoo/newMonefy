@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonLabel } from '@ionic/react';
 import { Pie } from 'react-chartjs-2';
 import 'chart.js/auto';
 import { getAuth } from 'firebase/auth';
@@ -72,26 +73,39 @@ const Statistics: React.FC = () => {
   const tagTotals = calculateTagTotals();
 
   return (
-    <div>
-      <div className="statistics-container">
-        <h1>Monthly Spending</h1>
+    <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Monthly Spending</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+
+      <IonContent fullscreen className="statistics-container">
+        {/* Render Pie Chart */}
         <div className="chart-container">
           <Pie data={calculateData()} />
         </div>
+
+        {/* Render Spending by Tag */}
         <div className="tag-totals">
           <h2>Spending by Tag</h2>
-          <ul>
+          <IonList>
             {Object.entries(tagTotals).map(([tag, total]) => (
-              <li key={tag}>
-                <strong>{tag}:</strong> RM {total.toFixed(2)}
-              </li>
+              <IonItem key={tag}>
+                <IonLabel>
+                  <strong>{tag}:</strong> RM {total.toFixed(2)}
+                </IonLabel>
+              </IonItem>
             ))}
-          </ul>
+          </IonList>
         </div>
+
+        {/* Floating button */}
         <FloatingMenuButton />
-      </div>
+      </IonContent>
+
       <NavBar />
-    </div>
+    </IonPage>
   );
 };
 
