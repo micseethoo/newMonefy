@@ -199,7 +199,7 @@ const UserHome: React.FC = () => {
         </IonGrid>
 
         {/* Add a button to navigate to the TransactionHistory page */}
-        <IonRow className="ion-justify-content-center ion-align-items-center">
+        <IonRow className="center-button">
           <IonCol size="auto">
             <IonButton size="small" onClick={handleNavigateToTransactionHistory}>
               View Transaction History

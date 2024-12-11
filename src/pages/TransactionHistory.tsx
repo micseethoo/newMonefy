@@ -397,3 +397,5 @@
   };
 
   export default TransactionHistory;
+
+// Changes made (reroute navigation between home and transaction history (top left button))
