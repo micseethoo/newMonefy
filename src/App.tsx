@@ -10,6 +10,7 @@ import Savings from './pages/Savings';
 import Statistics from './pages/Statistics'; // Import Statistics
 import Budgeting from './pages/Budgeting'; // Import Budgeting
 import TransactionHistory from './pages/TransactionHistory';
+import Profile from './pages/Profile'; // Import Profile
 
 
 /* Core CSS required for Ionic components to work properly */
