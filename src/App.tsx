@@ -9,6 +9,7 @@ import UserHome from './pages/UserHome';
 import Savings from './pages/Savings';
 import Statistics from './pages/Statistics'; // Import Statistics
 import Budgeting from './pages/Budgeting'; // Import Budgeting
+import TransactionHistory from './pages/TransactionHistory';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -55,6 +56,9 @@ const App: React.FC = () => (
         <Route path="/userhome" component={UserHome} exact={true} />
         <Route exact path="/">
           <Redirect to="/home" />
+        </Route>
+        <Route exact path="/TransactionHistory"> {/* Add Budgeting route */}
+          <TransactionHistory />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>
