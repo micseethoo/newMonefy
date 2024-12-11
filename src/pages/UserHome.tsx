@@ -3,6 +3,8 @@ import { IonPage, IonContent, IonHeader, IonToolbar, IonTitle, IonGrid, IonRow, 
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from 'firebase/firestore';
 import './css/UserHome.css';
+import { useHistory } from 'react-router-dom'; // Import useHistory for navigation
+
 
 const UserHome: React.FC = () => {
   const [totalExpenses, setTotalExpenses] = useState(0);
@@ -16,6 +18,9 @@ const UserHome: React.FC = () => {
   const [incomeTitle, setIncomeTitle] = useState('');
   const [incomeAmount, setIncomeAmount] = useState<number | ''>('');
   const [incomeDescription, setIncomeDescription] = useState('');
+
+  const history = useHistory(); // Initialize useHistory
+  
 
   const auth = getAuth();
   const db = getFirestore();
@@ -300,6 +305,8 @@ const UserHome: React.FC = () => {
               </IonCard>
             </IonCol>
           </IonRow>
+
+          <IonButton  onClick={() => history.push('/TransactionHistory')}>Sign Up</IonButton>
         </IonGrid>
       </IonContent>
     </IonPage>
