@@ -11,7 +11,7 @@ const Home: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen className="home-background">
         <div className="home-container">
-          <h1 className="home-title">Welcome to Day!</h1>
+          <h1 className="home-title">Welcome to Monefy!</h1>
           <p className="home-description">Manage my finances easily.</p>
           <IonButton expand="full" className="home-button" routerLink="/login">
             Go to Login
