@@ -27,6 +27,7 @@
   import { getAuth, onAuthStateChanged } from 'firebase/auth';
   import { getFirestore, collection, getDocs } from 'firebase/firestore';
   import { funnelOutline, chevronBackOutline } from 'ionicons/icons'; // Icon for the filter button
+  import NavBar from '../components/NavBar';
   
   import './css/TransactionHistory.css';
 
@@ -218,7 +219,7 @@
           <IonToolbar>
           <IonTitle>Transaction History</IonTitle>
           <IonButtons slot="start">
-            <IonButton routerLink="/tabs/home">
+            <IonButton routerLink="userhome">
               <IonIcon icon={chevronBackOutline} />
             </IonButton>
           </IonButtons>
@@ -390,6 +391,7 @@
           transaction={selectedTransaction}
         />
         </IonContent>
+        <NavBar />
       </IonPage>
     );
   };
