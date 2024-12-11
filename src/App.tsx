@@ -55,6 +55,9 @@ const App: React.FC = () => (
         <Route exact path="/profile">
                    <Profile />
                 </Route>
+        <Route exact path="/transactionhistory">
+            <TransactionHistory />
+        </Route>
         <Route exact path="/budgeting"> {/* Add Budgeting route */}
           <Budgeting />
         </Route>

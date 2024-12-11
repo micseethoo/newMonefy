@@ -31,6 +31,9 @@
 
   import TransactionDetails from './TransactionDetails';
 
+import { swapVerticalOutline,walletOutline,calendarOutline, funnelOutline, chevronBackOutline, chevronUpOutline, chevronDownOutline } from 'ionicons/icons'; // Icon for the filter button
+import NavBar from '../components/NavBar';
+
 
   const TransactionHistory: React.FC = () => {
 
