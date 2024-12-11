@@ -25,7 +25,7 @@
   import { tagIcons } from './TransactionIcons';
   import { getAuth, onAuthStateChanged } from 'firebase/auth';
   import { getFirestore, collection, getDocs } from 'firebase/firestore';
-  import { swapVerticalOutline,walletOutline,calendarOutline, funnelOutline, chevronBackOutline, chevronUpOutline, chevronDownOutline } from 'ionicons/icons'; // Icon for the filter button
+
   
   import './css/TransactionHistory.css';
 
@@ -541,8 +541,11 @@
           transaction={selectedTransaction}
         />
         </IonContent>
+        <NavBar />
       </IonPage>
     );
   };
 
   export default TransactionHistory;
+
+// Changes made (reroute navigation between home and transaction history (top left button))
