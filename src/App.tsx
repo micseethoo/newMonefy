@@ -10,7 +10,7 @@ import Savings from './pages/Savings';
 import Statistics from './pages/Statistics'; // Import Statistics
 import Budgeting from './pages/Budgeting'; // Import Budgeting
 import TransactionHistory from './pages/TransactionHistory';
-import Profile from './pages/Profile';
+
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -62,11 +62,6 @@ const App: React.FC = () => (
           <Redirect to="/home" />
         </Route>
 
-        <Route exact path="/TransactionHistory">
-          <TransactionHistory />
-        </Route>
-
-       
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>

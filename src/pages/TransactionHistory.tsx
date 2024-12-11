@@ -23,11 +23,9 @@
     IonSelectOption,
   } from '@ionic/react';
   import { tagIcons } from './TransactionIcons';
-  import { calendarOutline } from 'ionicons/icons';
   import { getAuth, onAuthStateChanged } from 'firebase/auth';
   import { getFirestore, collection, getDocs } from 'firebase/firestore';
-  import { funnelOutline, chevronBackOutline } from 'ionicons/icons'; // Icon for the filter button
-  import NavBar from '../components/NavBar';
+
   
   import './css/TransactionHistory.css';
 
@@ -35,6 +33,24 @@
 
 
   const TransactionHistory: React.FC = () => {
+
+     // Fetch predefined filters (categories and payment methods)
+  const fetchPredefinedFilters = async () => {
+    try {
+      const filtersRef = collection(db, 'filters');
+
+      const paymentMethodsSnapshot = await getDocs(collection(filtersRef, 'paymentMethods'));
+      const tagsSnapshot = await getDocs(collection(filtersRef, 'tags'));
+
+      const paymentMethodsList = paymentMethodsSnapshot.docs.map((doc) => doc.data().name);
+      const tagsList = tagsSnapshot.docs.map((doc) => doc.data().name);
+
+      setPaymentMethods(['all', ...paymentMethodsList]);
+      setTags(['all', ...tagsList]);
+    } catch (error) {
+      console.error('Error fetching predefined filters:', error);
+    }
+  };
 
     const [selectedTransaction, setSelectedTransaction] = useState<any | null>(null);
 
@@ -61,13 +77,15 @@
   const [paymentMethods, setPaymentMethods] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
     const types = ['all', 'Income', 'Expense'];
+    const [netAmount, setNetAmount] = useState<number>(0); // Net transaction amount
+    const [showNetAmount, setShowNetAmount] = useState(true);
 
     const auth = getAuth();
     const db = getFirestore();
     const [userId, setUserId] = useState<string | null>(null); // Track userId separately
 
-  // Fetch transactions and unique payment methods and tags
-  const fetchTransactionsAndFilters = async (userId: string) => {
+   // Fetch transactions and unique payment methods and tags
+   const fetchTransactions = async (userId: string) => {
     setIsLoading(true);
     try {
       const expensesRef = collection(db, `users/${userId}/expenses`);
@@ -84,6 +102,7 @@
         type: 'Expense',
         paymentMethod: doc.data().paymentMethod || 'N/A',
         tag: doc.data().tag || 'N/A',
+        amount: doc.data().amount || 0, // Default amount to 0 if missing
       }));
 
       const incomes = incomesSnapshot.docs.map((doc) => ({
@@ -92,26 +111,51 @@
         type: 'Income',
         paymentMethod: doc.data().paymentMethod || 'N/A',
         tag: doc.data().tag || 'N/A',
+        amount: doc.data().amount || 0, // Default amount to 0 if missing
       }));
+
+      
 
       const allTransactions = [...expenses, ...incomes];
 
+      // Sort transactions by date (newest to oldest)
+      allTransactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+      setTransactions(allTransactions);
+      setFilteredTransactions(allTransactions);
+
       // Extract unique payment methods and tags
-      const uniquePaymentMethods = Array.from(
-        new Set(allTransactions.map((t) => t.paymentMethod || 'N/A'))
-      );
-      const uniqueTags = Array.from(new Set(allTransactions.map((t) => t.tag || 'N/A')));
+        // Extract unique payment methods and tags from both incomes and expenses
+        const uniquePaymentMethods = Array.from(new Set(allTransactions.map((t) => t.paymentMethod)));
+        const uniqueTags = Array.from(new Set(allTransactions.map((t) => t.tag)));
 
       setTransactions(allTransactions);
       setFilteredTransactions(allTransactions);
       setPaymentMethods(['all', ...uniquePaymentMethods]); // Add 'all' option for filtering
       setTags(['all', ...uniqueTags]); // Add 'all' option for filtering
+
+      // Calculate net transaction amount
+      calculateNetAmount(allTransactions);
     } catch (error) {
       console.error('Error fetching transactions:', error);
     } finally {
       setIsLoading(false);
     }
   };
+
+  // Calculate the net amount
+  const calculateNetAmount = (transactions: any[]) => {
+    const totalIncome = transactions
+      .filter((t) => t.type === 'Income')
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    const totalExpenses = transactions
+      .filter((t) => t.type === 'Expense')
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    setNetAmount(totalIncome - totalExpenses); // Set the net amount
+  };
+
 
     
      // Ensure userId is available and fetch data on load
@@ -127,10 +171,19 @@
     return () => unsubscribe();
   }, [auth]);
 
+  
+  // Fetch all data (transactions and filters)
+  const fetchAllData = async () => {
+    if (userId) {
+      await Promise.all([fetchPredefinedFilters(), fetchTransactions(userId)]);
+    }
+  };
+
+
   // Fetch transactions whenever userId changes
   useEffect(() => {
     if (userId) {
-      fetchTransactionsAndFilters(userId);
+      fetchAllData();
     }
   }, [userId]);
 
@@ -166,6 +219,20 @@
 
     setFilteredTransactions(filtered);
   }, [startDate, endDate, transactions, selectedPaymentMethod, selectedTag, selectedType]);
+
+  const handleClearFilters = () => {
+    // Reset all filters to their default values
+    setSelectedPaymentMethod('all');
+    setSelectedTag('all');
+    setSelectedType('all');
+    setStartDate(null);
+    setEndDate(null);
+  };
+
+  // Recalculate net amount when filteredTransactions change
+  useEffect(() => {
+    calculateNetAmount(filteredTransactions);
+  }, [filteredTransactions]);
 
     // Handle Refresh Function
     const handleRefresh = async (event: CustomEvent) => {
@@ -239,51 +306,134 @@
         </IonToolbar>
 
          {/* Filter Section */}
-         <div className={`filter-section ${showFilters ? 'show' : ''}`}>
-          <IonList>
-            <IonItem>
-              <IonLabel>Payment Method</IonLabel>
-              <IonSelect
-                value={selectedPaymentMethod}
-                onIonChange={e => setSelectedPaymentMethod(e.detail.value)}
-              >
-                {paymentMethods.map(method => (
-                  <IonSelectOption key={method} value={method}>
-                    {method === 'all' ? 'All Payment Methods' : method}
-                  </IonSelectOption>
-                ))}
-              </IonSelect>
-            </IonItem>
+<div className={`filter-section ${showFilters ? 'show' : ''}`}>
+  <div className="filter-container">
+    <div className="filter-header">
+      <h3>Filter Transactions</h3>
+      <button className="clear-filters" onClick={handleClearFilters}>
+        Clear All
+      </button>
+    </div>
+    
+    <div className="filters-grid">
+      {/* Payment Method Filter */}
+      <div className="filter-item">
+        <label className="filter-label">
+          Payment Method
+        </label>
+        <IonSelect
+          className="custom-select"
+          value={selectedPaymentMethod}
+          onIonChange={e => setSelectedPaymentMethod(e.detail.value)}
+          interface="popover"
+        >
+          {paymentMethods.map(method => (
+            <IonSelectOption key={method} value={method}>
+              {method === 'all' ? 'All Payment Methods' : method}
+            </IonSelectOption>
+          ))}
+        </IonSelect>
+      </div>
 
-            <IonItem>
-              <IonLabel>Category</IonLabel>
-              <IonSelect
-                value={selectedTag}
-                onIonChange={e => setSelectedTag(e.detail.value)}
-              >
-                {tags.map(tag => (
-                  <IonSelectOption key={tag} value={tag}>
-                    {tag === 'all' ? 'All Categories' : tag}
-                  </IonSelectOption>
-                ))}
-              </IonSelect>
-            </IonItem>
+      {/* Category Filter */}
+      <div className="filter-item">
+        <label className="filter-label">
+          Category
+        </label>
+        <IonSelect
+          className="custom-select"
+          value={selectedTag}
+          onIonChange={e => setSelectedTag(e.detail.value)}
+          interface="popover"
+        >
+          {tags.map(tag => (
+            <IonSelectOption key={tag} value={tag}>
+              {tag === 'all' ? 'All Categories' : tag}
+            </IonSelectOption>
+          ))}
+        </IonSelect>
+      </div>
 
-            <IonItem>
-              <IonLabel>Type</IonLabel>
-              <IonSelect
-                value={selectedType}
-                onIonChange={e => setSelectedType(e.detail.value)}
-              >
-                {types.map(type => (
-                  <IonSelectOption key={type} value={type}>
-                    {type === 'all' ? 'All Types' : type}
-                  </IonSelectOption>
-                ))}
-              </IonSelect>
-            </IonItem>
-          </IonList>
+      {/* Type Filter */}
+      <div className="filter-item">
+        <label className="filter-label">
+          Type
+        </label>
+        <IonSelect
+          className="custom-select"
+          value={selectedType}
+          onIonChange={e => setSelectedType(e.detail.value)}
+          interface="popover"
+        >
+          {types.map(type => (
+            <IonSelectOption key={type} value={type}>
+              {type === 'all' ? 'All Types' : type}
+            </IonSelectOption>
+          ))}
+        </IonSelect>
+      </div>
+    </div>
+
+    {/* Active Filters Display */}
+    <div className="active-filters">
+      {(selectedPaymentMethod !== 'all' || selectedTag !== 'all' || selectedType !== 'all') && (
+        <div className="active-filters-container">
+          {selectedPaymentMethod !== 'all' && (
+            <span className="filter-tag">
+              {selectedPaymentMethod}
+              <button onClick={() => setSelectedPaymentMethod('all')}>×</button>
+            </span>
+          )}
+          {selectedTag !== 'all' && (
+            <span className="filter-tag">
+              {selectedTag}
+              <button onClick={() => setSelectedTag('all')}>×</button>
+            </span>
+          )}
+          {selectedType !== 'all' && (
+            <span className="filter-tag">
+              {selectedType}
+              <button onClick={() => setSelectedType('all')}>×</button>
+            </span>
+          )}
         </div>
+      )}
+    </div>
+  </div>
+</div>
+
+    
+{/* Net Transaction Amount with Show/Hide Buttons */}
+<div className="net-amount-container">
+  <button 
+    className="net-amount-toggle-btn" 
+    onClick={() => setShowNetAmount(!showNetAmount)}
+    aria-expanded={showNetAmount}
+    aria-controls="net-amount-content"
+  >
+    <span className="btn-text">{showNetAmount ? 'Hide' : 'Show'} Net Amount</span>
+    <span className={`btn-icon ${showNetAmount ? 'rotate' : ''}`}>
+      ▼
+    </span>
+  </button>
+
+  <div 
+    id="net-amount-content"
+    className={`net-amount ${showNetAmount ? 'show' : 'hide'} ${netAmount >= 0 ? 'positive' : 'negative'}`}
+  >
+    <div className="net-amount-content">
+      <div className="amount-label">Net Transaction Amount</div>
+      <div className="amount-value">
+        <span className="currency">RM</span>
+        <span className="value">{Math.abs(netAmount).toFixed(2)}</span>
+        <span className="indicator">{netAmount >= 0 ? '▲' : '▼'}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+        
       </IonHeader>
 
       <IonContent>
@@ -333,11 +483,11 @@
       <div className="transaction-content">
         <div className="transaction-left">
           <h3 className="transaction-title">{transaction.title}</h3>
-          <span className="transaction-payment">{transaction.paymentMethod}</span>
           <span className="transaction-date">{formatDate(transaction.date)}</span>
         </div>
         
         <div className="transaction-right">
+        <span className="transaction-payment">{transaction.paymentMethod}</span>
           <span className={`transaction-amount ${
             transaction.type === 'Income' ? 'positive' : 'negative'
           }`}>
