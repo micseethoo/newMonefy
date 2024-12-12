@@ -10,6 +10,7 @@ const SignUp: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState(''); // State for phone number
   const [passwordVisible, setPasswordVisible] = useState(false); // State for password visibility
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false); // State for confirm password visibility
 
@@ -53,6 +54,14 @@ const SignUp: React.FC = () => {
               required
             />
           </IonItem>
+          <IonItem className="input-item">
+                      <IonInput
+                        value={phoneNumber}
+                        placeholder="Phone Number" // New field
+                        onIonChange={(e) => setPhoneNumber(e.detail.value!)}
+                        required
+                      />
+                    </IonItem>
           <IonItem className="input-item">
             <IonInput
               type={passwordVisible ? 'text' : 'password'} // Toggle password visibility
