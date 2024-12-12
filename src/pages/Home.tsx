@@ -23,12 +23,12 @@ import {
   briefcaseOutline,
   shieldOutline,
   peopleOutline,
-  menuOutline, 
-  arrowForward, 
+  menuOutline,
+  arrowForward,
   rocketOutline,
-  logoFacebook, 
-  logoTwitter, 
-  logoInstagram, 
+  logoFacebook,
+  logoTwitter,
+  logoInstagram,
   logoLinkedin,
 } from 'ionicons/icons';
 
@@ -44,21 +44,21 @@ const Home: React.FC = () => {
     const button = event.currentTarget;
     const ripple = document.createElement('span');
     const rect = button.getBoundingClientRect();
-    
+
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
-    
+
     ripple.style.left = x + 'px';
     ripple.style.top = y + 'px';
     ripple.className = 'ripple';
-    
+
     button.appendChild(ripple);
-    
+
     setTimeout(() => {
       ripple.remove();
     }, 600);
   };
-  
+
   // Add the onClick handler to the button
   <button className="learn-more-btn" onClick={addRippleEffect}>
     <span>Learn More</span>
@@ -76,7 +76,7 @@ const Home: React.FC = () => {
   const trackSectionRef = useRef<HTMLDivElement>(null);
   const budgetSectionRef = useRef<HTMLDivElement>(null);
   const savingSectionRef = useRef<HTMLDivElement>(null);
-  
+
   // Separate state for each section
   const [isTrackVisible, setIsTrackVisible] = useState(false);
   const [isBudgetVisible, setIsBudgetVisible] = useState(false);
@@ -191,7 +191,7 @@ const Home: React.FC = () => {
                 <div className="cta-button-container">
                   <IonButton onClick={() => history.push('/SignUp')}
                     className="get-started-btn"
-                    size="large" 
+                    size="large"
                   >
                     <img src="/assets/Monefy.png" alt="Monefy Logo" className='image-logo' />
                      Get Started
@@ -204,16 +204,16 @@ const Home: React.FC = () => {
   {/* Floating Image */}
 <div className="floating-image-container">
 
-  <img 
-    src="/assets/FloatingImage.png" 
-    alt="Feature Preview" 
+  <img
+    src="/assets/FloatingImage.png"
+    alt="Feature Preview"
     className="floating-image"
   />
 </div>
-          
+
 
           {/* Track Your Income & Expenses Section */}
-          
+
           <section ref={trackSectionRef} id="track" className="feature-section-start">
           <div className={`section-content animate-children ${isTrackVisible ? "is-visible" : ""}`}>
     <div className="content-wrapper">
@@ -280,7 +280,7 @@ const Home: React.FC = () => {
   </div>
           </section>
 
-          
+
              {/* Footer Section */}
 <footer className="footer">
   <div className="footer-content">
