@@ -10,6 +10,7 @@ import Savings from './pages/Savings';
 import Statistics from './pages/Statistics'; // Import Statistics
 import Budgeting from './pages/Budgeting'; // Import Budgeting
 import Profile from './pages/Profile'; // Import Profile Page
+import SavingsGoal from './pages/SavingsGoal';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -50,6 +51,11 @@ const App: React.FC = () => (
         <Route exact path="/profile">
           <Profile />
         </Route>
+        <Route exact path="/savingsgoal">
+          <SavingsGoal />
+        </Route>
+        {/* Define a route for SavingsGoal with a dynamic goalId */}
+        <Route path="/savingsGoal/:goalId" component={SavingsGoal} exact />
         <Route exact path="/statistics">
            <Statistics />
         </Route>

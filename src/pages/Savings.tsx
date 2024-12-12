@@ -36,16 +36,16 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, onSnapshot, getDocs, addDoc } from 'firebase/firestore';
 import './css/Savings.css';
 import NavBar from '../components/NavBar';
-import SavingsGoalDiv from '../components/SavingsGoalDiv'; // Import SavingsGoalDiv component
+import SavingsGoalDiv from '../components/SavingsGoalDiv';
 
 const Savings: React.FC = () => {
   const [savingsGoals, setSavingsGoals] = useState<any[]>([]);
-  const [collectionExists, setCollectionExists] = useState<boolean>(false); // State to track collection existence
+  const [collectionExists, setCollectionExists] = useState<boolean>(false);
   const [goalName, setGoalName] = useState<string>('');
   const [goalValue, setGoalValue] = useState<number>(0);
   const [currentSavings, setCurrentSavings] = useState<number>(0);
-  const [showToast, setShowToast] = useState<boolean>(false); // State to control toast visibility
-  const [toastMessage, setToastMessage] = useState<string>(''); // State for toast message
+  const [showToast, setShowToast] = useState<boolean>(false);
+  const [toastMessage, setToastMessage] = useState<string>('');
 
   const auth = getAuth();
   const db = getFirestore();
@@ -106,10 +106,10 @@ const Savings: React.FC = () => {
         const goalData = doc.data();
         goalsList.push({ id: doc.id, ...goalData });
       });
-      setSavingsGoals(goalsList); // This updates the savingsGoals state with new data
+      setSavingsGoals(goalsList);
     });
 
-    return () => unsubscribe(); // Cleanup listener on component unmount
+    return () => unsubscribe();
   }, [userId]);
 
   return (
@@ -125,12 +125,12 @@ const Savings: React.FC = () => {
             <IonRow>
               {savingsGoals.length > 0 ? (
                 savingsGoals.map((goal) => (
-                  <IonCol size="12" size-md="6" size-lg="4" key={goal.id} className="savings-goal-container">
+                  <IonCol size="12" size-md="6" size-lg="4" key={goal.id} className="savings-goal">
                     <SavingsGoalDiv
                       goalName={goal.goalName}
                       goalValue={goal.goalValue}
                       currentSavings={goal.currentSavings}
-                      goalId={goal.id}
+                      goalId={goal.id} // Pass the goalId to the SavingsGoalDiv
                     />
                   </IonCol>
                 ))
@@ -198,6 +198,7 @@ const Savings: React.FC = () => {
 };
 
 export default Savings;
+
 
 
 

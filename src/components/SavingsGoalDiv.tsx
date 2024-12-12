@@ -7,10 +7,10 @@ interface SavingsGoalDivProps {
   goalValue: number;
   currentSavings: number;
   goalName: string;
-  detailsPage: string; // Path to navigate when the card is clicked
+  goalId: string; // The ID of the goal
 }
 
-const SavingsGoalDiv: React.FC<SavingsGoalDivProps> = ({ goalValue, currentSavings, goalName, detailsPage }) => {
+const SavingsGoalDiv: React.FC<SavingsGoalDivProps> = ({ goalValue, currentSavings, goalName, goalId }) => {
   // Calculate progress as a fraction (0 to 1) for IonProgressBar
   const progress = currentSavings / goalValue;
 
@@ -21,7 +21,7 @@ const SavingsGoalDiv: React.FC<SavingsGoalDivProps> = ({ goalValue, currentSavin
     <IonCard
       className="savings-goal-container"
       button
-      routerLink={detailsPage} // Navigate to the specified details page
+      routerLink={`/savingsGoal/${goalId}`} // Dynamically navigate to the goal's details page
     >
       <IonCardHeader>
         <div className="header-container">
