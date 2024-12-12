@@ -1,0 +1,29 @@
+.spending-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.category {
+  font-weight: bold;
+}
+
+.amount {
+  font-size: 16px;
+  color: #333;
+}
+
+.spending-list {
+  margin-top: 20px;
+}
+
+/* Piechart CSS */
+.piechart {
+  height: 20vh;             /* Set the height of the pie chart */
+  width: 100%;              /* Make the container take the full width */
+  display: flex;            /* Use Flexbox for alignment */
+  justify-content: center;  /* Center the pie chart horizontally */
+  align-items: center;      /* Center the pie chart vertically */
+}

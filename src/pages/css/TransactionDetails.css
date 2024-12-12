@@ -1,0 +1,66 @@
+/* TransactionDetailsModal.css */
+.transaction-details-container {
+    padding: 16px;
+  }
+  
+  .amount-section {
+    text-align: center;
+    padding: 32px 16px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    margin-bottom: 24px;
+  }
+  
+  .amount-section .amount {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .amount-section .amount.positive {
+    color: var(--ion-color-success);
+  }
+  
+  .amount-section .amount.negative {
+    color: var(--ion-color-danger);
+  }
+  
+  .amount-section .transaction-type {
+    color: var(--ion-color-medium);
+    margin: 8px 0 0 0;
+    font-size: 1.1rem;
+  }
+  
+  .details-list ion-item {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    margin-bottom: 8px;
+  }
+  
+  .details-list ion-label h3 {
+    color: var(--ion-color-medium);
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+  }
+  
+  .details-list ion-label p {
+    color: var(--ion-color-dark);
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  .transaction-details-container {
+    animation: slideUp 0.3s ease-out;
+  }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }

@@ -1,40 +1,6 @@
 /* src/pages/Home.css */
-/*.login-background {
-  background-color: #ffffff; /* White background for the main area *//*
-}
 
-.login-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding: 20px;
-}
-
-.login-title {
-  margin-bottom: 20px;
-  font-size: 24px;
-  text-align: center;
-  color: #c00; /* Dark red color *//*
-}
-
-ion-item {
-  margin: 10px 0; /* Space between items *//*
-}
-
-.login-button {
-  margin-top: 20px; /* Space above the login button *//*
-  background-color: #c00; /* Red button color *//*
-  color: white; /* Button text color *//*
-}
-
-.login-button:hover {
-  background-color: #a00; /* Darker red on hover *//*
-}
-*/
-
-/* src/pages/Home.css */
+/* Base styles for light mode */
 .login-background {
   background-color: #f9f9f9; /* Light grey background for better contrast */
 }
@@ -77,19 +43,20 @@ ion-item {
   margin-top: 20px;
 }
 
-.login-button,{
+.login-button {
   width: 48%;
   background-color: #3333ff; /* Bright blue button color */
   color: white; /* Button text color */
 }
 
-.login-button:hover{
+.login-button:hover {
   background-color: #2a2aff; /* Darker blue on hover */
 }
+
 .signup-link {
   margin-top: 20px;
   text-align: center;
-  color: #000ff; /* Bright blue color for visibility */
+  color: #000; /* Black color for visibility */
 }
 
 .signup-link a {
@@ -100,3 +67,40 @@ ion-item {
 .signup-link a:hover {
   text-decoration: underline;
 }
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  .login-background {
+    background-color: #1a1a1a; /* Dark background for dark mode */
+  }
+
+  .login-heading {
+    color: #ffffff; /* White color for heading in dark mode */
+  }
+
+  .input-item {
+    background-color: #333332; /* Darker background for input items */
+    color: #ffffff; /* White text color for input items */
+  }
+
+  .login-button {
+    background-color: #007bff; /* Different blue color for buttons in dark mode */
+  }
+
+  .login-button:hover {
+    background-color: #0056b3; /* Darker blue on hover in dark mode */
+  }
+
+  .signup-link {
+    color: #ffffff; /* White color for signup link in dark mode */
+  }
+
+  .signup-link a {
+    color: #007bff; /* Blue color for links in dark mode */
+  }
+
+  .signup-link a:hover {
+    text-decoration: underline;
+  }
+}
+

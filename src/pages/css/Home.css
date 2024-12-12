@@ -1,36 +1,699 @@
-/* src/pages/Home.css */
-.home-background {
-  background-color: var(--ion-background-color); /* White background */
-  color: var(--ion-text-color); /* Black text */
+/* Home.css */
+.title{
+  color: #3333ff;
+  font-size: 24px;
+
+}
+
+.Nav-Toolbar {
+  --background: #1f1f1f; /* Sleek dark background */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  padding: 0 16px; /* Ensure proper spacing */
+}
+
+.title {
+  font-family: 'Inter', sans-serif;
+  font-size: 30px;
+  font-weight: 600;
+  color: #4a90e2;
+  margin-bottom: 2px;
+}
+
+.Hamburger-btn {
+  color: #ffffff;
+  font-size: 30px;
+  transition: transform 0.3s ease;
+}
+
+.Hamburger-btn:hover {
+  transform: scale(1.1);
+}
+
+.nav-button {
+  font-weight: 500;
+  text-transform: capitalize;
+  font-size: 20px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  margin: 0 8px;
+  transition: all 0.3s ease;
+}
+
+.nav-button.login-button {
+  background: transparent;
+  color: #4a90e2;
+}
+
+.nav-button.login-button:hover {
+  background: #357abd;
+  box-shadow: 0 6px 12px rgba(74, 144, 226, 0.3);
+  border: 2px solid #4a90e2;
+}
+
+.nav-button.signup-button {
+  background: transparent;
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 4px 8px rgba(74, 144, 226, 0.2);
+  white-space: nowrap; /* Prevents text wrapping */
+  padding: 8px 16px; /* Adjust padding for single-line text */
+  border-radius: 8px;
+  margin-left: 12px; /* Space between buttons */
+}
+
+.nav-button.signup-button:hover {
+  background: #357abd;
+  box-shadow: 0 6px 12px rgba(74, 144, 226, 0.3);
+  border: 2px solid #4a90e2;
+}
+
+
+/* Hero Section Styles */
+.hero-container {
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-}
-
-.home-container {
   text-align: center;
-  padding: 20px;
+  padding: 0 20px;
+  background: linear-gradient(135deg, #4a90e2, #000000); /* Smoother gradient */
 }
 
-.home-title {
-  margin-bottom: 20px;
-  font-size: 32px;
-  color: #c00; /* Dark red color */
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  border-radius: 16px;
 }
 
-.home-description {
-  margin-bottom: 20px;
-  font-size: 18px;
-  color: #333; /* Dark gray for description */
+.text-container {
+  margin-bottom: 2rem;
 }
 
-.home-button {
-  margin: 10px 0; /* Space between buttons */
-  background-color: #c00; /* Red button color */
-  color: white; /* Button text color */
+.hero-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Adds depth */
 }
 
-.home-button:hover {
-  background-color: #a00; /* Darker red on hover */
+.hero-subtitle {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.cta-button-container {
+  display: flex;
+  justify-content: center;
+}
+
+/* Get Started Button */
+.get-started-btn {
+  --background: #ffffff; /* White background */
+  --background-hover: rgba(255, 255, 255, 0.9); /* Slightly dimmed white on hover */
+  --color: #4a90e2; /* Blue text color for contrast */
+  --border-radius: 16px; /* More rounded corners */
+  --padding-start: 48px; /* Increased padding for width */
+  --padding-end: 48px;
+  height: 64px; /* Taller button */
+  font-size: 1.25rem; /* Bigger text */
+  font-weight: bold; /* Emphasized text */
+  text-transform: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.get-started-btn:hover {
+  transform: translateY(-4px); /* Elevation effect */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+}
+
+.image-logo {
+  height: 40px; /* Slightly larger logo */
+  width: 40px;
+  margin-right: 12px; /* Add space between the logo and the text */
+}
+
+
+
+/* Remove animations from sections */
+.feature-section,
+.feature-section-start {
+  padding: 5rem 2rem;
+  scroll-margin-top: 56px;
+}
+
+.section-subtitle{
+  line-height: 1cm;
+}
+
+/* Content wrapper styles */
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* Title container and underline animation */
+
+.section-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+
+/* More dynamic version with scale transform */
+.title-underline {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 80%; /* Set initial width */
+  height: 4px;
+  background: #4a90e2;
+  transform: translateX(-50%) scaleX(0); /* Center and scale to 0 */
+  transform-origin: center;
+  transition: transform 0.3s ease-in-out;
+  border-radius: 2px;
+}
+
+.content-wrapper:hover .title-underline {
+  transform: translateX(-50%) scaleX(1); /* Expand from center */
+}
+
+
+
+/* Button wrapper for centering */
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+/* Learn More Button Styles */
+.learn-more-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 60px;
+  background: transparent;
+  border: 2px solid #4a90e2;
+  border-radius: 30px;
+  color: #4a90e2;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.learn-more-btn span {
+  position: absolute;
+  text-align: center;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.learn-more-btn ion-icon {
+  font-size: 1.2em;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+/* Button hover effects */
+.learn-more-btn:hover {
+  background: #4a90e2;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}
+
+.learn-more-btn:hover ion-icon {
+  transform: translateX(4px);
+}
+
+/* Button background slide effect */
+.learn-more-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #4a90e2;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+  z-index: 0;
+}
+
+.learn-more-btn:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Animation for section elements */
+.animate-children .title-container,
+.animate-children .section-subtitle,
+.animate-children .button-wrapper {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.animate-children.is-visible .title-container {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.2s;
+}
+
+.animate-children.is-visible .section-subtitle {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.4s;
+}
+
+.animate-children.is-visible .button-wrapper {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.6s;
+}
+
+/* Alternating section backgrounds */ 
+
+.feature-section-start
+{
+  background-color: #f5f7fa;
+  padding-top: 610px;
+
+}
+
+.feature-section:nth-child(odd) { background-color: #ffffff; }
+
+.feature-section:nth-child(even) { background-color: #f5f7fa; }
+
+/* Add animations to section content */
+.animate-children .section-title,
+.animate-children .section-subtitle,
+.animate-children .image-placeholder {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+/* Stagger the animations with different delays */
+.animate-children.is-visible .section-title {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.2s;
+}
+
+.animate-children.is-visible .section-subtitle {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.4s;
+}
+
+.animate-children.is-visible .image-placeholder {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.6s;
+}
+
+/* Optional: Add fade-in scale animation for images */
+.animate-children .image-placeholder img {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.animate-children.is-visible .image-placeholder img {
+  opacity: 1;
+  transform: scale(1);
+  transition-delay: 0.8s;
+}
+
+/* Add hover effects */
+.image-placeholder {
+  transition: transform 0.3s ease;
+}
+
+.image-placeholder:hover {
+  transform: translateY(-5px);
+}
+
+/*Add different animation variations */
+.animate-children .section-title {
+  transform: translateY(30px) scale(0.95);
+}
+
+.animate-children .section-subtitle {
+  transform: translateY(20px);
+}
+
+.animate-children .image-placeholder {
+  transform: translateY(40px);
+}
+
+/* Prevent animation on page load */
+.no-animation * {
+  transition: none !important;
+}
+
+
+
+.section-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 3rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.image-placeholder {
+  width: 50%;
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.image-placeholder:hover {
+  transform: translateY(1);
+}
+
+.image-placeholder img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Fade-In Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-image {
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+/* Floating Image Styles */
+.floating-image-container {
+  position: absolute;
+  left: 50%;
+  bottom: -700px; /* Adjust this value to control how much the image overlaps */
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 600px; /* Adjust based on your needs */
+  padding: 0 20px;
+  z-index: 2;
+}
+
+.floating-image {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  animation: floatingAnimation 3s ease-in-out infinite;
+  
+}
+
+/* Floating Animation */
+@keyframes floatingAnimation {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+
+
+
+
+/* Menu Styles */
+
+
+
+ion-menu ion-content {
+  --background: var(--ion-item-background, var(--ion-background-color, #fff));
+}
+
+ion-menu ion-item {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  margin: 8px;
+  border-radius: 8px;
+}
+
+ion-menu ion-item:hover {
+  --background: rgba(74, 144, 226, 0.1);
+}
+
+ion-menu ion-icon {
+  margin-right: 16px;
+  color: #4a90e2;
+}
+
+/* Footer Styles */
+.footer {
+  background: #2c3e50;
+  color: white;
+  padding: 64px 24px 24px;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+}
+
+.footer-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.footer-section h4 {
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+  color: #ffffff;
+}
+
+.newsletter-description {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Newsletter Form Styles */
+.newsletter-form {
+  margin-top: 16px;
+}
+
+.input-group {
+  display: flex;
+  gap: 12px;
+}
+
+.newsletter-input {
+  --background: rgba(255, 255, 255, 0.1);
+  --color: #ffffff;
+  --placeholder-color: rgba(255, 255, 255, 0.6);
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --border-radius: 8px;
+  --height: 48px;
+}
+
+.subscribe-btn {
+  --background: #4a90e2;
+  --background-hover: #357abd;
+  --color: #ffffff;
+  --border-radius: 8px;
+  --padding-start: 24px;
+  --padding-end: 24px;
+  height: 48px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.subscribe-btn:hover {
+  --background: #357abd;
+  transform: translateY(-2px);
+}
+
+/* Contact Info Styles */
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.contact-info p {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.contact-info ion-icon {
+  font-size: 20px;
+  color: #4a90e2;
+}
+
+/* Social Links Styles */
+.social-links {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.social-links ion-button {
+  --color: rgba(255, 255, 255, 0.8);
+  --background: rgba(255, 255, 255, 0.1);
+  --border-radius: 50%;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  height: 44px;
+  width: 44px;
+  transition: all 0.3s ease;
+}
+
+.social-links ion-button:hover {
+  --color: #4a90e2;
+  --background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 32px;
+  margin-top: 32px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+
+  .animate-children .section-title,
+  .animate-children .section-subtitle,
+  .animate-children .image-placeholder {
+    transition-delay: 0.1s; /* Faster animations on mobile */
+  }
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .section-title {
+    font-size: 1.75rem;
+  }
+
+  .section-subtitle {
+    font-size: 1rem;
+  }
+
+  .feature-section {
+    padding: 3rem 1rem;
+  }
+
+  .feature-section:first-of-type {
+    padding-top: 150px; /* Adjusted for mobile */
+  }
+}
+
+/* Add hover effect */
+
+
+  .button-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .button-container ion-button {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .input-group {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .newsletter-input {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .subscribe-btn {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .contact-info p {
+    justify-content: center;
+  }
+
+  .social-links {
+    justify-content: center;
+  }
+
+
+ 
+
+
+
 }
