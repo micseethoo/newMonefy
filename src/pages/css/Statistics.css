@@ -8,6 +8,9 @@
   width: 80%;
   max-width: 400px;
   max-height: 30vh;
+  display: flex; /* Enable flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
 }
 
 .tag-totals {
