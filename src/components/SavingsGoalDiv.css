@@ -9,3 +9,8 @@ h3, p {
   margin: 10px auto; /* Optional: To center the container horizontally */
   box-sizing: border-box; /* Ensures padding is included in the width */
 }
+
+.progress-percentage {
+  font-size: 1em;
+  color: var(--ion-color-medium); /* Matches Ionic's default text color */
+}
