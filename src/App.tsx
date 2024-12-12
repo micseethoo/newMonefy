@@ -6,6 +6,7 @@ import Home from './pages/Home'; // Home acts as the Login page
 import Signup from './pages/Signup'; // Sign Up page
 import Login from './pages/Login'; // Reuse Home as Login
 import UserHome from './pages/UserHome';
+import Profile from './pages/Profile';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -40,6 +41,9 @@ const App: React.FC = () => (
         <Route exact path="/signup">
           <Signup />
         </Route>
+        <Route exact path="/profile">
+                  <Profile />
+                </Route>
         <Route exact path="/">
           <Redirect to="/home" />
         </Route>
