@@ -1,19 +1,27 @@
-// import { IonContent, IonPage, IonSpinner, IonIcon } from '@ionic/react';
-// import React, { useEffect, useState } from 'react';
-// import './css/Profile.css';
-// import { getAuth, onAuthStateChanged } from 'firebase/auth';
-// import { getFirestore, doc, getDoc, collection, getDocs, addDoc, updateDoc } from 'firebase/firestore';
-// import { useHistory } from 'react-router-dom';
-// import { refreshOutline } from 'ionicons/icons';
-// import NavBar from '../components/NavBar';
+// import {
+//   IonContent,
+//   IonPage,
+//   IonSpinner,
+//   IonIcon,
+//   IonButton,
+// } from "@ionic/react";
+// import React, { useEffect, useState } from "react";
+// import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+// import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
+// import { useHistory } from "react-router-dom";
+// import { refreshOutline } from "ionicons/icons";
+// import "./css/Profile.css";
 //
 // const Profile: React.FC = () => {
-//   const [username, setUserName] = useState<string>('Loading...');
-//   const [email, setEmail] = useState<string>('Loading...');
+//   const [username, setUsername] = useState<string>("Loading...");
+//   const [email, setEmail] = useState<string>("Loading...");
+//   const [phoneNumber, setPhoneNumber] = useState<string>("Not provided");
 //   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
-//   const [isLoading, setIsLoading] = useState(true);
-//   const [imageUrlInput, setImageUrlInput] = useState<string>(''); // For storing the input URL
-//   const [isUrlInputVisible, setIsUrlInputVisible] = useState(false); // Toggle visibility of URL input
+//   const [isLoading, setIsLoading] = useState<boolean>(true);
+//   const [isEditing, setIsEditing] = useState<boolean>(false);
+//   const [newProfileImageUrl, setNewProfileImageUrl] = useState<string | null>(
+//     null
+//   );
 //
 //   const auth = getAuth();
 //   const db = getFirestore();
@@ -22,116 +30,76 @@
 //   useEffect(() => {
 //     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
 //       if (currentUser) {
-//         try {
-//           setIsLoading(true);
-//           const userRef = doc(db, 'users', currentUser.uid);
-//           const userSnap = await getDoc(userRef);
-//           if (userSnap.exists()) {
-//             const userData = userSnap.data();
-//             setUserName(userData.username || 'No name available');
-//             setEmail(userData.email || 'No email available');
-//
-//             // Fetch the most recent profile image URL from the profileImages subcollection
-//             const profileImagesRef = collection(db, 'users', currentUser.uid, 'profileImages');
-//             const profileImagesSnap = await getDocs(profileImagesRef);
-//             if (!profileImagesSnap.empty) {
-//               const latestProfileImage = profileImagesSnap.docs[profileImagesSnap.docs.length - 1].data();
-//               setProfileImageUrl(latestProfileImage.profileImageUrl);
-//             }
-//           }
-//         } catch (error) {
-//           console.error('Error fetching user data:', error);
-//         } finally {
-//           setIsLoading(false);
-//         }
+//         await fetchUserData(currentUser.uid);
 //       } else {
-//         history.push('/login');
+//         // If no user is logged in, redirect to login
+//         history.push("/login");
 //       }
 //     });
 //
 //     return () => unsubscribe();
-//   }, [auth, db, history]);
+//   }, [auth, history]);
 //
-//   // Handle URL input change
-//   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     setImageUrlInput(event.target.value);
-//   };
-//
-//   // Submit the URL to Firestore
-//   const handleUrlSubmit = async () => {
-//     if (imageUrlInput) {
-//       try {
-//         setIsLoading(true);
-//         const currentUser = auth.currentUser;
-//         if (currentUser) {
-//           // Reference to the profileImages subcollection
-//           const profileImagesRef = collection(db, 'users', currentUser.uid, 'profileImages');
-//           const profileImagesSnap = await getDocs(profileImagesRef);
-//
-//           // Check if any image exists, if so update the first one
-//           if (!profileImagesSnap.empty) {
-//             const latestProfileImageDoc = profileImagesSnap.docs[0]; // Use the first image found
-//             await updateDoc(latestProfileImageDoc.ref, {
-//               profileImageUrl: imageUrlInput,
-//               updatedAt: new Date().toISOString(),
-//             });
-//           } else {
-//             // If no images exist, add a new one
-//             await addDoc(profileImagesRef, {
-//               profileImageUrl: imageUrlInput,
-//               updatedAt: new Date().toISOString(),
-//             });
-//           }
-//
-//           // Update the local state to show the profile image immediately
-//           setProfileImageUrl(imageUrlInput);
-//           setIsUrlInputVisible(false); // Hide the URL input box after submission
-//           setImageUrlInput(''); // Clear the input field
-//         }
-//       } catch (error) {
-//         console.error('Error updating profile picture URL:', error);
-//       } finally {
-//         setIsLoading(false);
-//       }
-//     }
-//   };
-//
-//   // Refresh user data, including profile image URL
-//   const refreshUserData = async () => {
+//   const fetchUserData = async (uid: string) => {
 //     try {
 //       setIsLoading(true);
-//       const currentUser = auth.currentUser;
-//       if (currentUser) {
-//         const userRef = doc(db, 'users', currentUser.uid);
-//         const userSnap = await getDoc(userRef);
-//         if (userSnap.exists()) {
-//           const userData = userSnap.data();
-//           setUserName(userData.username || 'No name available');
-//           setEmail(userData.email || 'No email available');
+//       const userDocRef = doc(db, "users", uid);
+//       const userDocSnap = await getDoc(userDocRef);
 //
-//           // Fetch the most recent profile image URL from the profileImages subcollection
-//           const profileImagesRef = collection(db, 'users', currentUser.uid, 'profileImages');
-//           const profileImagesSnap = await getDocs(profileImagesRef);
-//           if (!profileImagesSnap.empty) {
-//             const latestProfileImage = profileImagesSnap.docs[profileImagesSnap.docs.length - 1].data();
-//             setProfileImageUrl(latestProfileImage.profileImageUrl);
-//           }
-//         }
+//       if (userDocSnap.exists()) {
+//         const userData = userDocSnap.data();
+//         setUsername(userData.username || "No name available");
+//         setEmail(userData.email || "No email available");
+//         setPhoneNumber(userData.phoneNumber || "Not provided");
+//         setProfileImageUrl(userData.profileImageUrl || null);
+//       } else {
+//         console.error("User data not found");
 //       }
 //     } catch (error) {
-//       console.error('Error refreshing user data:', error);
+//       console.error("Error fetching user data:", error);
 //     } finally {
 //       setIsLoading(false);
 //     }
 //   };
 //
-//   // Handle image URL for Google Drive and other formats
-//   const handleImageUrl = (url: string) => {
-//     // If the URL is a Google Drive link, modify it to be directly accessible
-//     if (url.startsWith('https://drive.google.com/file/d/')) {
-//       return `https://drive.google.com/uc?id=${url.split('/d/')[1].split('/')[0]}`;
+//   const handleSave = async () => {
+//     const currentUser = auth.currentUser;
+//     if (!currentUser) return;
+//
+//     try {
+//       setIsLoading(true);
+//       const userDocRef = doc(db, "users", currentUser.uid);
+//       await updateDoc(userDocRef, {
+//         username: username,
+//         phoneNumber: phoneNumber,
+//         profileImageUrl: newProfileImageUrl || profileImageUrl,
+//       });
+//       setProfileImageUrl(newProfileImageUrl || profileImageUrl);
+//       setNewProfileImageUrl(null);
+//       setIsEditing(false);
+//     } catch (error) {
+//       console.error("Error updating user data:", error);
+//     } finally {
+//       setIsLoading(false);
 //     }
-//     return url;
+//   };
+//
+//   const refreshUserData = async () => {
+//     const currentUser = auth.currentUser;
+//     if (currentUser) {
+//       await fetchUserData(currentUser.uid);
+//     }
+//   };
+//
+//   const handleLogout = () => {
+//     signOut(auth)
+//       .then(() => {
+//         // After logout, redirect to login page
+//         history.push("/login");
+//       })
+//       .catch((error) => {
+//         console.error("Error during logout:", error);
+//       });
 //   };
 //
 //   return (
@@ -146,222 +114,41 @@
 //           <div className="profile-container">
 //             <div className="profile-header">
 //               <h3 className="profile-heading">Profile</h3>
-//               <IonIcon icon={refreshOutline} className="refresh-icon" onClick={refreshUserData} />
+//               <IonIcon
+//                 icon={refreshOutline}
+//                 className="refresh-icon"
+//                 onClick={refreshUserData}
+//               />
 //             </div>
 //             <div className="profile-picture">
 //               {profileImageUrl ? (
 //                 <img
-//                   src={handleImageUrl(profileImageUrl)}  // Handle image URL
-//                   alt="User Profile"
+//                   src={profileImageUrl}
+//                   alt="Profile"
 //                   className="profile-img"
 //                 />
 //               ) : (
 //                 <div className="profile-img-placeholder">No Profile Picture</div>
 //               )}
-//             </div>
-//             <div className="upload-picture">
-//               {isUrlInputVisible ? (
-//                 <>
-//                   <input
-//                     type="text"
-//                     value={imageUrlInput}
-//                     onChange={handleUrlChange}
-//                     placeholder="Paste image URL here"
-//                   />
-//                   <button onClick={handleUrlSubmit}>Enter</button>
-//                 </>
-//               ) : (
-//                 <button onClick={() => setIsUrlInputVisible(true)} className="upload-button">
-//                   Upload Image URL
-//                 </button>
+//               {isEditing && (
+//                 <input
+//                   type="text"
+//                   placeholder="Paste new image URL"
+//                   value={newProfileImageUrl || ""}
+//                   onChange={(e) => setNewProfileImageUrl(e.target.value)}
+//                   className="profile-picture-input"
+//                 />
 //               )}
 //             </div>
 //             <div className="profile-info">
 //               <div className="profile-item">
 //                 <h4>Full Name</h4>
-//                 <p>{username}</p>
-//               </div>
-//               <div className="profile-item">
-//                 <h4>Email</h4>
-//                 <p>{email}</p>
-//               </div>
-//             </div>
-//           </div>
-//         )}
-//       </IonContent>
-//
-//       <NavBar />
-//     </IonPage>
-//   );
-// };
-//
-// export default Profile;
-
-// import { IonContent, IonPage, IonSpinner, IonIcon } from '@ionic/react';
-// import React, { useEffect, useState } from 'react';
-// import './css/Profile.css';
-// import { getAuth, onAuthStateChanged } from 'firebase/auth';
-// import { getFirestore, doc, getDoc, collection, getDocs, addDoc, updateDoc } from 'firebase/firestore';
-// import { useHistory } from 'react-router-dom';
-// import { refreshOutline } from 'ionicons/icons';
-// import NavBar from '../components/NavBar';
-//
-// const Profile: React.FC = () => {
-//   const [username, setUserName] = useState<string>('Loading...');
-//   const [email, setEmail] = useState<string>('Loading...');
-//   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
-//   const [isLoading, setIsLoading] = useState(true);
-//   const [imageUrlInput, setImageUrlInput] = useState<string>('');
-//   const [isEditMode, setIsEditMode] = useState(false);
-//   const [newUsername, setNewUsername] = useState<string>('');
-//
-//   const auth = getAuth();
-//   const db = getFirestore();
-//   const history = useHistory();
-//
-//   useEffect(() => {
-//     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-//       if (currentUser) {
-//         try {
-//           setIsLoading(true);
-//           const userRef = doc(db, 'users', currentUser.uid);
-//           const userSnap = await getDoc(userRef);
-//           if (userSnap.exists()) {
-//             const userData = userSnap.data();
-//             setUserName(userData.username || 'No name available');
-//             setNewUsername(userData.username || ''); // Pre-fill the input field in edit mode
-//             setEmail(userData.email || 'No email available');
-//
-//             const profileImagesRef = collection(db, 'users', currentUser.uid, 'profileImages');
-//             const profileImagesSnap = await getDocs(profileImagesRef);
-//             if (!profileImagesSnap.empty) {
-//               const latestProfileImage = profileImagesSnap.docs[profileImagesSnap.docs.length - 1].data();
-//               setProfileImageUrl(latestProfileImage.profileImageUrl);
-//             }
-//           }
-//         } catch (error) {
-//           console.error('Error fetching user data:', error);
-//         } finally {
-//           setIsLoading(false);
-//         }
-//       } else {
-//         history.push('/login');
-//       }
-//     });
-//
-//     return () => unsubscribe();
-//   }, [auth, db, history]);
-//
-//   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     setImageUrlInput(event.target.value);
-//   };
-//
-//   const handleUrlSubmit = async () => {
-//     if (imageUrlInput) {
-//       try {
-//         setIsLoading(true);
-//         const currentUser = auth.currentUser;
-//         if (currentUser) {
-//           const profileImagesRef = collection(db, 'users', currentUser.uid, 'profileImages');
-//           const profileImagesSnap = await getDocs(profileImagesRef);
-//
-//           if (!profileImagesSnap.empty) {
-//             const latestProfileImageDoc = profileImagesSnap.docs[0];
-//             await updateDoc(latestProfileImageDoc.ref, {
-//               profileImageUrl: imageUrlInput,
-//               updatedAt: new Date().toISOString(),
-//             });
-//           } else {
-//             await addDoc(profileImagesRef, {
-//               profileImageUrl: imageUrlInput,
-//               updatedAt: new Date().toISOString(),
-//             });
-//           }
-//
-//           setProfileImageUrl(imageUrlInput);
-//           setImageUrlInput('');
-//         }
-//       } catch (error) {
-//         console.error('Error updating profile picture URL:', error);
-//       } finally {
-//         setIsLoading(false);
-//       }
-//     }
-//   };
-//
-//   const handleEditToggle = () => {
-//     setIsEditMode(!isEditMode);
-//   };
-//
-//   const handleSave = async () => {
-//     try {
-//       setIsLoading(true);
-//       const currentUser = auth.currentUser;
-//       if (currentUser) {
-//         const userRef = doc(db, 'users', currentUser.uid);
-//         await updateDoc(userRef, { username: newUsername });
-//         setUserName(newUsername);
-//         setIsEditMode(false);
-//       }
-//     } catch (error) {
-//       console.error('Error updating username:', error);
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   };
-//
-//   const handleImageUrl = (url: string) => {
-//     if (url.startsWith('https://drive.google.com/file/d/')) {
-//       return `https://drive.google.com/uc?id=${url.split('/d/')[1].split('/')[0]}`;
-//     }
-//     return url;
-//   };
-//
-//   return (
-//     <IonPage>
-//       <IonContent fullscreen className="profile-background">
-//         {isLoading ? (
-//           <div className="loading-container">
-//             <IonSpinner name="crescent" />
-//             <p>Loading user data...</p>
-//           </div>
-//         ) : (
-//           <div className="profile-container">
-//             <div className="profile-header">
-//               <h3 className="profile-heading">Profile</h3>
-//               <IonIcon icon={refreshOutline} className="refresh-icon" />
-//             </div>
-//             <div className="profile-picture">
-//               {profileImageUrl ? (
-//                 <img src={handleImageUrl(profileImageUrl)} alt="User Profile" className="profile-img" />
-//               ) : (
-//                 <div className="profile-img-placeholder">No Profile Picture</div>
-//               )}
-//               {isEditMode && (
-//                 <>
+//                 {isEditing ? (
 //                   <input
 //                     type="text"
-//                     value={imageUrlInput}
-//                     onChange={handleUrlChange}
-//                     placeholder="Paste image URL here"
-//                   />
-//                   <div className="upload-container">
-//                     <button onClick={() => setIsUrlInputVisible(true)} className="upload-button">
-//                       Upload Image URL
-//                     </button>
-//                   </div>
-//
-//                 </>
-//               )}
-//             </div>
-//             <div className="profile-info">
-//               <div className="profile-item">
-//                 <h4>Full Name</h4>
-//                 {isEditMode ? (
-//                   <input
-//                     type="text"
-//                     value={newUsername}
-//                     onChange={(e) => setNewUsername(e.target.value)}
+//                     value={username}
+//                     onChange={(e) => setUsername(e.target.value)}
+//                     placeholder="Enter your full name"
 //                   />
 //                 ) : (
 //                   <p>{username}</p>
@@ -371,48 +158,74 @@
 //                 <h4>Email</h4>
 //                 <p>{email}</p>
 //               </div>
-//             </div>
-//             {isEditMode ? (
-//               <div className="profile-actions">
-//                 <button onClick={handleSave} className="save-button">
-//                   Save
-//                 </button>
-//                 <button onClick={handleEditToggle} className="cancel-button">
-//                   Cancel
-//                 </button>
+//               <div className="profile-item">
+//                 <h4>Phone Number</h4>
+//                 {isEditing ? (
+//                   <input
+//                     type="text"
+//                     value={phoneNumber}
+//                     onChange={(e) => setPhoneNumber(e.target.value)}
+//                     placeholder="Enter your phone number"
+//                   />
+//                 ) : (
+//                   <p>{phoneNumber}</p>
+//                 )}
 //               </div>
-//             ) : (
-//               <button onClick={handleEditToggle} className="edit-button">
-//                 Edit
-//               </button>
-//             )}
+//             </div>
+//             <div className="profile-actions">
+//               {isEditing ? (
+//                 <div className="edit-actions">
+//                   <button onClick={handleSave} className="save-button">
+//                     Save
+//                   </button>
+//                   <button
+//                     onClick={() => setIsEditing(false)}
+//                     className="cancel-button"
+//                   >
+//                     Cancel
+//                   </button>
+//                 </div>
+//               ) : (
+//                 <button onClick={() => setIsEditing(true)} className="edit-button">
+//                   Edit
+//                 </button>
+//               )}
+//             </div>
+//             <IonButton expand="full" color="danger" className="logout-button" onClick={handleLogout}>
+//               Logout
+//             </IonButton>
 //           </div>
 //         )}
 //       </IonContent>
-//       <NavBar />
 //     </IonPage>
 //   );
 // };
 //
 // export default Profile;
 
-import React, { useEffect, useState } from 'react';
-import { IonContent, IonPage, IonSpinner, IonIcon } from '@ionic/react';
-import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
-import { getFirestore, doc, getDoc, updateDoc } from 'firebase/firestore';
-import { useHistory } from 'react-router-dom';
-import { refreshOutline } from 'ionicons/icons';
-import NavBar from '../components/NavBar';
-import './css/Profile.css';
+import {
+  IonContent,
+  IonPage,
+  IonSpinner,
+  IonIcon,
+  IonButton,
+} from "@ionic/react";
+import React, { useEffect, useState } from "react";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { getFirestore, doc, getDoc, updateDoc, collection, query, where, getDocs } from "firebase/firestore";
+import { useHistory } from "react-router-dom";
+import { refreshOutline } from "ionicons/icons";
+import "./css/Profile.css";
 
 const Profile: React.FC = () => {
-  const [username, setUsername] = useState<string>('Loading...');
-  const [email, setEmail] = useState<string>('Loading...');
+  const [username, setUsername] = useState<string>("Loading...");
+  const [email, setEmail] = useState<string>("Loading...");
+  const [phoneNumber, setPhoneNumber] = useState<string>("Not provided");
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [newUsername, setNewUsername] = useState<string>('');
-  const [newProfileImageUrl, setNewProfileImageUrl] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [newProfileImageUrl, setNewProfileImageUrl] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const auth = getAuth();
   const db = getFirestore();
@@ -421,70 +234,99 @@ const Profile: React.FC = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
-        try {
-          setIsLoading(true);
-          const userRef = doc(db, 'users', currentUser.uid);
-          const userSnap = await getDoc(userRef);
-          if (userSnap.exists()) {
-            const userData = userSnap.data();
-            setUsername(userData.username || 'No name available');
-            setNewUsername(userData.username || '');
-            setEmail(userData.email || 'No email available');
-            setProfileImageUrl(userData.profileImageUrl || null);
-            setNewProfileImageUrl(userData.profileImageUrl || '');
-          }
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-        } finally {
-          setIsLoading(false);
-        }
+        await fetchUserData(currentUser.uid);
       } else {
-        history.push('/login');
+        // If no user is logged in, redirect to login
+        history.push("/login");
       }
     });
 
     return () => unsubscribe();
-  }, [auth, db, history]);
+  }, [auth, history]);
 
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-      history.push('/login');
-    } catch (error) {
-      console.error('Error signing out:', error);
-    }
-  };
-
-  const handleEditToggle = () => {
-    setIsEditMode(!isEditMode);
-  };
-
-  const handleSave = async () => {
+  const fetchUserData = async (uid: string) => {
     try {
       setIsLoading(true);
-      const currentUser = auth.currentUser;
-      if (currentUser) {
-        const userRef = doc(db, 'users', currentUser.uid);
+      const userDocRef = doc(db, "users", uid);
+      const userDocSnap = await getDoc(userDocRef);
 
-        // Update username
-        if (newUsername !== username) {
-          await updateDoc(userRef, { username: newUsername });
-          setUsername(newUsername);
-        }
-
-        // Update profile picture URL
-        if (newProfileImageUrl !== profileImageUrl) {
-          await updateDoc(userRef, { profileImageUrl: newProfileImageUrl });
-          setProfileImageUrl(newProfileImageUrl);
-        }
-
-        setIsEditMode(false);
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        setUsername(userData.username || "No name available");
+        setEmail(userData.email || "No email available");
+        setPhoneNumber(userData.phoneNumber || "Not provided");
+        setProfileImageUrl(userData.profileImageUrl || null);
+      } else {
+        console.error("User data not found");
       }
     } catch (error) {
-      console.error('Error updating profile:', error);
+      console.error("Error fetching user data:", error);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleSave = async () => {
+    const currentUser = auth.currentUser;
+    if (!currentUser) return;
+
+    try {
+      setIsLoading(true);
+      setErrorMessage(""); // Clear previous error messages
+
+      // Check if the new phone number is unique
+      if (phoneNumber && phoneNumber !== "Not provided") {
+        const usersRef = collection(db, "users");
+        const phoneQuery = query(usersRef, where("phoneNumber", "==", phoneNumber));
+        const querySnapshot = await getDocs(phoneQuery);
+
+        // If a document exists with the same phone number and it's not the current user
+        if (!querySnapshot.empty) {
+          const existingUser = querySnapshot.docs.find(
+            (doc) => doc.id !== currentUser.uid
+          );
+          if (existingUser) {
+            setErrorMessage("Phone number is already in use by another user.");
+            setIsLoading(false);
+            return;
+          }
+        }
+      }
+
+      // Update the user's data
+      const userDocRef = doc(db, "users", currentUser.uid);
+      await updateDoc(userDocRef, {
+        username: username,
+        phoneNumber: phoneNumber,
+        profileImageUrl: newProfileImageUrl || profileImageUrl,
+      });
+      setProfileImageUrl(newProfileImageUrl || profileImageUrl);
+      setNewProfileImageUrl(null);
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Error updating user data:", error);
+      setErrorMessage("Failed to update user data. Please try again later.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const refreshUserData = async () => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      await fetchUserData(currentUser.uid);
+    }
+  };
+
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        // After logout, redirect to login page
+        history.push("/login");
+      })
+      .catch((error) => {
+        console.error("Error during logout:", error);
+      });
   };
 
   return (
@@ -499,38 +341,41 @@ const Profile: React.FC = () => {
           <div className="profile-container">
             <div className="profile-header">
               <h3 className="profile-heading">Profile</h3>
-              <IonIcon icon={refreshOutline} className="refresh-icon" />
+              <IonIcon
+                icon={refreshOutline}
+                className="refresh-icon"
+                onClick={refreshUserData}
+              />
             </div>
             <div className="profile-picture">
-              {isEditMode ? (
-                <div>
-                  <img
-                    src={newProfileImageUrl || '/placeholder-image.jpg'}
-                    alt="User Profile"
-                    className="profile-img editable"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Paste image URL here"
-                    value={newProfileImageUrl}
-                    onChange={(e) => setNewProfileImageUrl(e.target.value)}
-                    className="profile-url-input"
-                  />
-                </div>
-              ) : profileImageUrl ? (
-                <img src={profileImageUrl} alt="User Profile" className="profile-img" />
+              {profileImageUrl ? (
+                <img
+                  src={profileImageUrl}
+                  alt="Profile"
+                  className="profile-img"
+                />
               ) : (
                 <div className="profile-img-placeholder">No Profile Picture</div>
+              )}
+              {isEditing && (
+                <input
+                  type="text"
+                  placeholder="Paste new image URL"
+                  value={newProfileImageUrl || ""}
+                  onChange={(e) => setNewProfileImageUrl(e.target.value)}
+                  className="profile-picture-input"
+                />
               )}
             </div>
             <div className="profile-info">
               <div className="profile-item">
                 <h4>Full Name</h4>
-                {isEditMode ? (
+                {isEditing ? (
                   <input
                     type="text"
-                    value={newUsername}
-                    onChange={(e) => setNewUsername(e.target.value)}
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Enter your full name"
                   />
                 ) : (
                   <p>{username}</p>
@@ -540,30 +385,46 @@ const Profile: React.FC = () => {
                 <h4>Email</h4>
                 <p>{email}</p>
               </div>
-            </div>
-            {isEditMode ? (
-              <div className="profile-actions">
-                <button onClick={handleSave} className="save-button">
-                  Save
-                </button>
-                <button onClick={handleEditToggle} className="cancel-button">
-                  Cancel
-                </button>
+              <div className="profile-item">
+                <h4>Phone Number</h4>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    placeholder="Enter your phone number"
+                  />
+                ) : (
+                  <p>{phoneNumber}</p>
+                )}
               </div>
-            ) : (
-              <button onClick={handleEditToggle} className="edit-button">
-                Edit
-              </button>
-            )}
-            <div className="sign-out-container">
-              <button onClick={handleSignOut} className="sign-out-button">
-                Sign Out
-              </button>
             </div>
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
+            <div className="profile-actions">
+              {isEditing ? (
+                <div className="edit-actions">
+                  <button onClick={handleSave} className="save-button">
+                    Save
+                  </button>
+                  <button
+                    onClick={() => setIsEditing(false)}
+                    className="cancel-button"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <button onClick={() => setIsEditing(true)} className="edit-button">
+                  Edit
+                </button>
+              )}
+            </div>
+            <IonButton expand="full" color="danger" className="logout-button" onClick={handleLogout}>
+              Logout
+            </IonButton>
           </div>
         )}
       </IonContent>
-      <NavBar />
     </IonPage>
   );
 };
