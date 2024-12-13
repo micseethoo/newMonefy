@@ -357,3 +357,5 @@ const Budgeting: React.FC = () => {
 };
 
 export default Budgeting;
+
+// Moved this file to src/pages/Budgeting.tsx
