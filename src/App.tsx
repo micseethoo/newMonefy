@@ -2,11 +2,17 @@
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import Home from './pages/Home'; // Home acts as the Login page
-import Signup from './pages/Signup'; // Sign Up page
-import Login from './pages/Login'; // Reuse Home as Login
+import Home from './pages/Home';
+import Signup from './pages/Signup';
+import Login from './pages/Login';
 import UserHome from './pages/UserHome';
-import Profile from './pages/Profile';
+import Savings from './pages/Savings';
+import Statistics from './pages/Statistics'; // Import Statistics
+import Budgeting from './pages/Budgeting'; // Import Budgeting
+
+import Profile from './pages/Profile'; // Import Profile Page
+import SavingsGoal from './pages/SavingsGoal';
+import TransactionHistory from './pages/TransactionHistory';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -36,21 +42,40 @@ const App: React.FC = () => (
           <Home />
         </Route>
         <Route exact path="/login">
-          <Login /> {/* Reusing Home for login */}
+          <Login />
         </Route>
         <Route exact path="/signup">
           <Signup />
         </Route>
+        <Route exact path="/savings">
+          <Savings />
+        </Route>
+        <Route exact path="/savingsgoal">
+          <SavingsGoal />
+        </Route>
+        {/* Define a route for SavingsGoal with a dynamic goalId */}
+        <Route path="/savingsGoal/:goalId" component={SavingsGoal} exact />
+        <Route exact path="/statistics">
+           <Statistics />
+        </Route>
         <Route exact path="/profile">
-                  <Profile />
+                   <Profile />
                 </Route>
+        <Route exact path="/transactionhistory">
+            <TransactionHistory />
+        </Route>
+        <Route exact path="/budgeting"> {/* Add Budgeting route */}
+          <Budgeting />
+        </Route>
+        <Route path="/userhome" component={UserHome} exact={true} />
         <Route exact path="/">
           <Redirect to="/home" />
         </Route>
-        <Route path="/userhome" component={UserHome} exact={true} />
+
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
 );
 
 export default App;
+

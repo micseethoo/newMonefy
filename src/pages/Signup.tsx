@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import './css/Signup.css';
 import { signUpWithEmail } from '../theme/firebaseConfig';
 import { eyeOffOutline, eyeOutline } from 'ionicons/icons'; // Import eye icons
+import { useHistory } from 'react-router-dom'; // Import useHistory
 
 const SignUp: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -10,8 +11,10 @@ const SignUp: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [phoneNumber, setPhoneNumber] = useState(''); // State for phone number
-  const [passwordVisible, setPasswordVisible] = useState(false);
-  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false); // State for password visibility
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false); // State for confirm password visibility
+
+  const history = useHistory(); // Initialize useHistory
 
   const handleSignUp = () => {
     if (password !== confirmPassword) {
@@ -19,10 +22,10 @@ const SignUp: React.FC = () => {
       return;
     }
 
-    signUpWithEmail(email, password, username, phoneNumber) // Pass phoneNumber
+    signUpWithEmail(email, password, username)
       .then(() => {
         console.log('Sign-up successful!');
-        // Redirect or perform additional actions here
+        history.push('/login'); // Redirect to the login page on successful sign-up
       })
       .catch((error) => {
         console.error('Sign-up failed:', error);
@@ -39,7 +42,7 @@ const SignUp: React.FC = () => {
             <IonInput
               value={username}
               placeholder="Full Name"
-              onIonChange={(e) => setUsername(e.detail.value!)}
+              onIonChange={e => setUsername(e.detail.value!)}
               required
             />
           </IonItem>
@@ -47,21 +50,13 @@ const SignUp: React.FC = () => {
             <IonInput
               value={email}
               placeholder="Email"
-              onIonChange={(e) => setEmail(e.detail.value!)}
+              onIonChange={e => setEmail(e.detail.value!)}
               required
             />
           </IonItem>
           <IonItem className="input-item">
             <IonInput
-              value={phoneNumber}
-              placeholder="Phone Number" // New field
-              onIonChange={(e) => setPhoneNumber(e.detail.value!)}
-              required
-            />
-          </IonItem>
-          <IonItem className="input-item">
-            <IonInput
-              type={passwordVisible ? 'text' : 'password'}
+              type={passwordVisible ? 'text' : 'password'} // Toggle password visibility
               value={password}
               placeholder="Password"
               onIonChange={(e) => setPassword(e.detail.value!)}

@@ -1,0 +1,45 @@
+.statistics-container {
+  padding: 20px;
+  text-align: center;
+}
+
+.chart-container {
+  margin: 20px auto;
+  width: 80%;
+  max-width: 400px;
+  max-height: 30vh;
+  display: flex; /* Enable flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+.tag-totals {
+  margin: 20px auto;
+  text-align: center;
+  max-width: 30%;
+  padding: 10px 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tag-totals h2 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #333;
+}
+
+.tag-totals ul {
+  list-style: none;
+  padding: 0;
+}
+
+.tag-totals li {
+  font-size: 16px;
+  margin: 5px 0;
+  color: #555;
+}
+
+.tag-totals li strong {
+  color: #222;
+}

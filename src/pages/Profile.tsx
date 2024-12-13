@@ -430,5 +430,3 @@ const Profile: React.FC = () => {
 };
 
 export default Profile;
-
-// merging this into master
