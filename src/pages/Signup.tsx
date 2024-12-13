@@ -55,39 +55,31 @@ const SignUp: React.FC = () => {
             />
           </IonItem>
           <IonItem className="input-item">
-                      <IonInput
-                        value={phoneNumber}
-                        placeholder="Phone Number" // New field
-                        onIonChange={(e) => setPhoneNumber(e.detail.value!)}
-                        required
-                      />
-                    </IonItem>
-          <IonItem className="input-item">
             <IonInput
               type={passwordVisible ? 'text' : 'password'} // Toggle password visibility
               value={password}
               placeholder="Password"
-              onIonChange={e => setPassword(e.detail.value!)}
+              onIonChange={(e) => setPassword(e.detail.value!)}
               required
             />
             <IonIcon
-              icon={passwordVisible ? eyeOutline : eyeOffOutline} // Change icon based on visibility
-              onClick={() => setPasswordVisible(!passwordVisible)} // Toggle visibility
+              icon={passwordVisible ? eyeOutline : eyeOffOutline}
+              onClick={() => setPasswordVisible(!passwordVisible)}
               slot="end"
               className="password-icon"
             />
           </IonItem>
           <IonItem className="input-item">
             <IonInput
-              type={confirmPasswordVisible ? 'text' : 'password'} // Toggle confirm password visibility
+              type={confirmPasswordVisible ? 'text' : 'password'}
               value={confirmPassword}
               placeholder="Confirm Password"
-              onIonChange={e => setConfirmPassword(e.detail.value!)}
+              onIonChange={(e) => setConfirmPassword(e.detail.value!)}
               required
             />
             <IonIcon
-              icon={confirmPasswordVisible ? eyeOutline : eyeOffOutline} // Change icon based on visibility
-              onClick={() => setConfirmPasswordVisible(!confirmPasswordVisible)} // Toggle visibility
+              icon={confirmPasswordVisible ? eyeOutline : eyeOffOutline}
+              onClick={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
               slot="end"
               className="password-icon"
             />
