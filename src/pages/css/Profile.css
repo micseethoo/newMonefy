@@ -186,10 +186,9 @@
       color: white;
     }
 
-    .save-button:hover,
-    .cancel-button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    .upload-picture button:hover {
+      background-color: #2a2aff;
+    }*/
     }
 
     .save-button:active,
@@ -226,8 +225,14 @@
       padding: 10px 20px;
       font-size: 16px;
       font-weight: bold;
-      border-radius: 25px;
-      border: none;
+      text-align: center;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Adding shadow for text depth *//*
+    }
+
+    .refresh-icon {
+      position: absolute;
+      right: 0;
+      font-size: 24px;
       cursor: pointer;
       transition: transform 0.2s, box-shadow 0.2s;
     }
@@ -240,6 +245,15 @@
     .upload-button:active {
       transform: scale(0.95);
     }
+
+
+    .profile-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #3333ff; /* Adding a border around the profile image *//*
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Adding shadow for a lifted effect *//*
 
     .edit-button {
       background-color: #28a745; /* Green color */
@@ -259,6 +273,43 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
+
+    /* Styling for the image URL upload section *//*
+    .upload-picture {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .upload-picture input[type="text"] {
+      padding: 8px;
+      width: 80%;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .upload-button {
+      background-color: #3333ff;  /* Purple color for the button *//*
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s;
+      border: none;
+      margin-top: 10px;
+    }
+
+    .upload-button:hover {
+      background-color: #2a2aff;  /* Darker purple on hover *//*
+    }
+
+    /* Styling for the Enter button *//*
+    .upload-picture button {
+      padding: 10px 20px;
+      background-color: #3333ff;  /* Same purple color for Enter button *//*
     .edit-button:active {
       transform: scale(0.95);
     }
@@ -281,6 +332,8 @@
       transition: background-color 0.3s ease;
     }
 
+    .upload-picture button:hover {
+      background-color: #2a2aff;  /* Darker purple on hover for Enter button *//*
     .sign-out-button:hover {
       background-color: #d9363e;
     }
@@ -291,5 +344,173 @@
 
 
 
+    .profile-item p {
+      margin: 5px 0 0;
+      font-size: 14px;
+      color: #666;
+    }*/
 
+.profile-background {
+  background-color: #f9f9f9; /* Light grey background for better contrast */
+  padding: 20px;
+}
 
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+}
+
+.loading-container p {
+  margin-top: 10px;
+  font-size: 18px;
+  color: #333;
+}
+
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
+
+.profile-heading {
+  font-size: 28px;
+  color: #3333ff;
+  margin-bottom: 20px;
+  font-weight: bold;
+  text-align: center;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Adding shadow for text depth */
+}
+
+.refresh-icon {
+  position: absolute;
+  right: 0;
+  font-size: 24px;
+  cursor: pointer;
+  color: #3333ff;
+  transition: transform 0.3s ease-in-out;
+}
+
+.refresh-icon:hover {
+  transform: rotate(360deg);
+}
+
+/* Profile Picture Section */
+.profile-picture {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #3333ff; /* Border for the profile image */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Adding shadow for a lifted effect */
+  margin-bottom: 10px; /* Space below image */
+}
+
+.profile-img-placeholder {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.profile-picture-input {
+  width: 80%; /* Keeps the input centered with profile picture */
+  max-width: 300px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Profile Info Section */
+.profile-info {
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 20px;
+}
+
+.profile-item {
+  background-color: #ffffff;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-item h4 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.profile-item p {
+  margin: 5px 0 0;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Profile Action Buttons */
+.profile-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.edit-button,
+.save-button,
+.cancel-button {
+  background-color: #3333ff; /* Purple color for buttons */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.edit-button:hover,
+.save-button:hover,
+.cancel-button:hover {
+  background-color: #2a2aff; /* Darker purple on hover */
+}
+
+.logout-button {
+  border-radius: 12px; /* Adjust this value for more or less rounding */
+  font-size: 16px;    /* Slightly larger text for better emphasis */
+  padding: 12px 20px; /* Adjust padding to make the button more prominent */
+}
+
+.logout-button:hover {
+  background-color: #e63946; /* Slightly darker red for hover effect */
+  transform: scale(1.05);    /* Slight zoom-in effect */
+  transition: all 0.3s ease; /* Smooth animation */
+}
