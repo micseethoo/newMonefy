@@ -43,3 +43,9 @@
 .tag-totals li strong {
   color: #222;
 }
+
+/* Add this to your Statistics.css file */
+.budgeting-button-container {
+  margin-top: 50px; /* Adjust as necessary for a large margin */
+  padding-bottom: 20px;
+}
