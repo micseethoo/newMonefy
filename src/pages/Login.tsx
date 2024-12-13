@@ -166,8 +166,13 @@ const Home: React.FC = () => {
       const isPhoneNumber = /^\d{10,15}$/.test(emailOrPhone); // Validate phone number format (10-15 digits)
 
       if (isPhoneNumber) {
-        // Sign in with phone number (check Firestore for phone number)
-        await signInWithPhone(emailOrPhone);
+        // Validate password for phone number login
+        if (!password) {
+          throw new Error('Password is required for phone number login.');
+        }
+
+        // Sign in with phone number and password
+        await signInWithPhone(emailOrPhone, password);
         console.log('Phone number sign-in successful');
 
       } else if (emailOrPhone.includes('@')) {
@@ -203,17 +208,15 @@ const Home: React.FC = () => {
             />
           </IonItem>
 
-          {isPhoneLogin || (
-            <IonItem className="input-item">
-              <IonInput
-                type="password"
-                value={password}
-                placeholder="Password"
-                onIonChange={e => setPassword(e.detail.value!)}
-                required
-              />
-            </IonItem>
-          )}
+          <IonItem className="input-item">
+            <IonInput
+              type="password"
+              value={password}
+              placeholder="Password"
+              onIonChange={e => setPassword(e.detail.value!)}
+              required
+            />
+          </IonItem>
 
           <div className="button-container">
             <IonButton expand="full" onClick={handleLogin} className="login-button">
@@ -224,6 +227,7 @@ const Home: React.FC = () => {
           <div className="signup-link">
             Not registered yet? <a href="/signup">Sign up</a>
           </div>
+
           <div>
             <button onClick={() => setIsPhoneLogin(!isPhoneLogin)}>
               Switch to {isPhoneLogin ? "Email" : "Phone"} Login
@@ -236,4 +240,6 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
+
 
