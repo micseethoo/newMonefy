@@ -36,16 +36,43 @@
 
 .tag-totals li {
   font-size: 16px;
-  margin: 5px 0;
+  margin: 10px 0;
   color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .tag-totals li strong {
   color: #222;
 }
 
+.tag-totals ion-icon {
+  margin-right: 10px;
+  font-size: 20px;
+}
+
 /* Add this to your Statistics.css file */
+/* Budgeting Button */
 .budgeting-button-container {
   margin-top: 50px; /* Adjust as necessary for a large margin */
   padding-bottom: 20px;
+}
+
+.budgeting-button {
+  background-color: #4CAF50;
+  color: white;
+  font-size: 14px; /* Smaller font size */
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 10px 20px; /* Reduced padding for a smaller button */
+  width: auto; /* Adjust width to content */
+  max-width: 300px; /* Limit the max width */
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin: 0 auto; /* Center the button */
+}
+
+.budgeting-button:hover {
+  background-color: #45a049;
+  transform: translateY(-3px); /* Smooth hover effect */
 }
