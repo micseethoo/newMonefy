@@ -68,6 +68,22 @@
   text-decoration: underline;
 }
 
+/*forgot password CSS styling*/
+
+.forgot-password-link {
+   margin-top: 10px;
+  text-align: center;
+}
+
+.forgot-password-link a {
+   text-decoration: none;
+  color: #3333ff;
+}
+
+.forgot-password-link a:hover {
+   text-decoration: underline;
+}
+
 /* Dark mode styles */
 @media (prefers-color-scheme: dark) {
   .login-background {
