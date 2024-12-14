@@ -18,7 +18,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 // Sign up with email function
-export const signUpWithEmail = async (email: string, password: string, username: string, phoneNumber: int): Promise<void> => {
+export const signUpWithEmail = async (email: string, password: string, username: string, nickname: string): Promise<void> => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
@@ -28,7 +28,7 @@ export const signUpWithEmail = async (email: string, password: string, username:
     await setDoc(doc(db, 'users', user.uid), {
       username,
       email,
-      phoneNumber, // Save phone number in Firestore
+      nickname,
     });
   } catch (error) {
     console.error('Error signing up:', error);

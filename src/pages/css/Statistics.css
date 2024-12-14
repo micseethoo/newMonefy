@@ -76,3 +76,31 @@
   background-color: #45a049;
   transform: translateY(-3px); /* Smooth hover effect */
 }
+
+.spending-budget-grid .budget-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Align the content horizontally */
+  gap: 8px; /* Adjust the gap between the items */
+}
+
+.spending-budget-grid .category {
+  font-weight: bold;
+}
+
+.spending-budget-grid .actual-amount,
+.spending-budget-grid .budget-amount,
+.spending-budget-grid .percentage {
+  font-size: 14px;
+  margin-left: 4px; /* Adjust the margin to make the text less spaced */
+}
+
+.spending-budget-grid .budget-amount {
+  font-weight: bold; /* Make the budget amount bold */
+}
+
+.spending-budget-grid .percentage {
+  color: #ff0000; /* Optional: Add color to percentage */
+}
+
+

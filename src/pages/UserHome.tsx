@@ -42,7 +42,7 @@
 //
 //         if (userDoc.exists()) {
 //           const userData = userDoc.data();
-//           setUserName(userData?.username || user.displayName || 'User');
+//           setUserName(userData?.nickname || user.displayName || 'User');
 //         } else {
 //           setUserName(user.displayName || 'User');
 //         }
@@ -225,7 +225,7 @@ import {
   IonItem,
   IonButton,
 } from '@ionic/react';
-import { getAuth } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, doc, getDoc, collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 import { useHistory } from 'react-router-dom';
 import './css/UserHome.css';
@@ -238,32 +238,45 @@ const UserHome: React.FC = () => {
   const [incomes, setIncomes] = useState<any[]>([]);
   const [userName, setUserName] = useState('User');
   const [userId, setUserId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const auth = getAuth();
   const db = getFirestore();
   const history = useHistory();
 
+  // Fetch user data on authentication state change
   useEffect(() => {
-    const user = auth.currentUser;
-    if (user) {
-      setUserId(user.uid);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserId(user.uid);
+        const fetchUserName = async () => {
+          const userRef = doc(db, 'users', user.uid);
+          const userDoc = await getDoc(userRef);
 
-      const fetchUserName = async () => {
-        const userRef = doc(db, 'users', user.uid);
-        const userDoc = await getDoc(userRef);
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const name = userData?.nickname || user.displayName || 'User';
+            setUserName(name);
+            localStorage.setItem('userName', name); // Optional persistence
+          } else {
+            const name = user.displayName || 'User';
+            setUserName(name);
+            localStorage.setItem('userName', name); // Optional persistence
+          }
+          setLoading(false);
+        };
+        fetchUserName();
+      } else {
+        setUserId(null);
+        setUserName('User');
+        setLoading(false);
+      }
+    });
 
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          setUserName(userData?.nickname || user.displayName || 'User');
-        } else {
-          setUserName(user.displayName || 'User');
-        }
-      };
-
-      fetchUserName();
-    }
+    return () => unsubscribe();
   }, [auth, db]);
 
+  // Fetch expenses
   useEffect(() => {
     if (!userId) return;
 
@@ -291,6 +304,7 @@ const UserHome: React.FC = () => {
     return () => unsubscribe();
   }, [userId]);
 
+  // Fetch incomes
   useEffect(() => {
     if (!userId) return;
 
@@ -313,9 +327,20 @@ const UserHome: React.FC = () => {
     return () => unsubscribe();
   }, [userId]);
 
+  // Navigate to transaction history
   const handleNavigateToTransactionHistory = () => {
     history.push('/transactionhistory');
   };
+
+  if (loading) {
+    return (
+      <IonPage>
+        <IonContent>
+          <h2>Loading...</h2>
+        </IonContent>
+      </IonPage>
+    );
+  }
 
   return (
     <IonPage>

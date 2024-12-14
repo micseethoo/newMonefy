@@ -7,10 +7,10 @@
 //
 // const SignUp: React.FC = () => {
 //   const [username, setUsername] = useState('');
+//   const [nickname, setNickname] = useState(''); // State for nickname
 //   const [email, setEmail] = useState('');
 //   const [password, setPassword] = useState('');
 //   const [confirmPassword, setConfirmPassword] = useState('');
-//   const [phoneNumber, setPhoneNumber] = useState(''); // State for phone number
 //   const [passwordVisible, setPasswordVisible] = useState(false); // State for password visibility
 //   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false); // State for confirm password visibility
 //
@@ -22,7 +22,7 @@
 //       return;
 //     }
 //
-//     signUpWithEmail(email, password, username)
+//     signUpWithEmail(email, password, username, nickname) // Include nickname in the sign-up process
 //       .then(() => {
 //         console.log('Sign-up successful!');
 //         history.push('/login'); // Redirect to the login page on successful sign-up
@@ -43,6 +43,14 @@
 //               value={username}
 //               placeholder="Full Name"
 //               onIonChange={e => setUsername(e.detail.value!)}
+//               required
+//             />
+//           </IonItem>
+//           <IonItem className="input-item">
+//             <IonInput
+//               value={nickname}
+//               placeholder="Nickname"
+//               onIonChange={e => setNickname(e.detail.value!)}
 //               required
 //             />
 //           </IonItem>
@@ -114,24 +122,33 @@ const SignUp: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState(''); // State for phone number
   const [passwordVisible, setPasswordVisible] = useState(false); // State for password visibility
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false); // State for confirm password visibility
+  const [errorMessage, setErrorMessage] = useState(''); // State for error messages
 
   const history = useHistory(); // Initialize useHistory
 
   const handleSignUp = () => {
-    if (password !== confirmPassword) {
-      console.error("Passwords don't match");
+    // Check if all fields are filled
+    if (!username || !nickname || !email || !password || !confirmPassword) {
+      setErrorMessage("Please fill in all the fields.");
       return;
     }
 
-    signUpWithEmail(email, password, username, nickname) // Include nickname in the sign-up process
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      setErrorMessage("Passwords don't match");
+      return;
+    }
+
+    // Proceed with sign-up if all validations pass
+    signUpWithEmail(email, password, username, nickname)
       .then(() => {
         console.log('Sign-up successful!');
         history.push('/login'); // Redirect to the login page on successful sign-up
       })
       .catch((error) => {
+        setErrorMessage('Sign-up failed: ' + error.message); // Display error message
         console.error('Sign-up failed:', error);
       });
   };
@@ -142,6 +159,9 @@ const SignUp: React.FC = () => {
         <div className="signup-container">
           <h1 className="app-title">Monefy!</h1>
           <h3 className="signup-heading">Register Account</h3>
+
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
+
           <IonItem className="input-item">
             <IonInput
               value={username}

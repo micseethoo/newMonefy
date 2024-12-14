@@ -241,13 +241,12 @@ import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
 import { useHistory } from "react-router-dom";
 import { refreshOutline } from "ionicons/icons";
 import "./css/Profile.css";
-import NavBar from '../components/NavBar';
+import NavBar from "../components/NavBar";
 
 const Profile: React.FC = () => {
   const [username, setUsername] = useState<string>("Loading...");
   const [nickname, setNickname] = useState<string>("No nickname set");
   const [email, setEmail] = useState<string>("Loading...");
-  const [phoneNumber, setPhoneNumber] = useState<string>("Not provided");
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -282,7 +281,6 @@ const Profile: React.FC = () => {
         setUsername(userData.username || "No name available");
         setNickname(userData.nickname || "No nickname set");
         setEmail(userData.email || "No email available");
-        setPhoneNumber(userData.phoneNumber || "Not provided");
         setProfileImageUrl(userData.profileImageUrl || null);
       } else {
         console.error("User data not found");
@@ -306,7 +304,6 @@ const Profile: React.FC = () => {
       await updateDoc(userDocRef, {
         username: username,
         nickname: nickname,
-        phoneNumber: phoneNumber,
         profileImageUrl: newProfileImageUrl || profileImageUrl,
       });
       setProfileImageUrl(newProfileImageUrl || profileImageUrl);
@@ -406,19 +403,6 @@ const Profile: React.FC = () => {
                 <h4>Email</h4>
                 <p>{email}</p>
               </div>
-              <div className="profile-item">
-                <h4>Phone Number</h4>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    placeholder="Enter your phone number"
-                  />
-                ) : (
-                  <p>{phoneNumber}</p>
-                )}
-              </div>
             </div>
             {errorMessage && <p className="error-message">{errorMessage}</p>}
             <div className="profile-actions">
@@ -452,3 +436,4 @@ const Profile: React.FC = () => {
 };
 
 export default Profile;
+
