@@ -332,19 +332,17 @@ const Statistics: React.FC = () => {
         <div className="spending-budget-grid">
           <IonGrid className="center-grid">
             <IonRow>
-              <IonCol size="4" offset="4"> {/* Center the content by adding offset */}
+              <IonCol size="12" md="6" className="center-col">
                 <h2>Budget vs Actual Spending</h2>
                 <IonList>
                   {Object.entries(categoryBudgets).map(([category, budget]) => {
                     const actualSpending = tagTotals[category] || 0;
                     const percentage = (actualSpending / budget) * 100;
-
-                    // Get icon based on category
-                    const icon = getCategoryIcon(category); // A function you should define to match each category with an icon
+                    const icon = getCategoryIcon(category); // Function to get category icon
 
                     return (
                       <IonItem key={category}>
-                        <IonIcon icon={icon} slot="start" /> {/* Add icon to the left side */}
+                        <IonIcon icon={icon} slot="start" />
                         <IonLabel>
                           <div className="budget-item">
                             <span className="category">{category}: </span>

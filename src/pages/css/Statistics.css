@@ -1,6 +1,7 @@
 .statistics-container {
   padding: 20px;
   text-align: center;
+  --ion-background-color: #f9f9f9;
 }
 
 .chart-container {
@@ -56,11 +57,10 @@
 /* Budgeting Button */
 .budgeting-button-container {
   margin-top: 50px; /* Adjust as necessary for a large margin */
-  padding-bottom: 20px;
+  padding-bottom: 24px;
 }
 
 .budgeting-button {
-  background-color: #4CAF50;
   color: white;
   font-size: 14px; /* Smaller font size */
   font-weight: bold;
@@ -103,4 +103,19 @@
   color: #ff0000; /* Optional: Add color to percentage */
 }
 
+h2 {
+    color: #333333;
+}
 
+@media (min-width: 800px) {
+  .spending-budget-grid .center-grid {
+    max-width: 50%;
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+.budgeting-button {
+  margin-bottom: 200px;
+}
+}

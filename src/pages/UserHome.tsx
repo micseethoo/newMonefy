@@ -350,34 +350,27 @@ const UserHome: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen className="home-content">
+
+       <IonGrid className="top-text-container">
+         <IonRow>
+           <IonCol>
+             <h2 className="welcome-text">Welcome, {userName}!</h2>
+           </IonCol>
+         </IonRow>
+
+         <IonRow>
+           <IonCol>
+             <h2 className="balance-amount">Savings: ${totalExpenses.toFixed(2)}</h2>
+           </IonCol>
+         </IonRow>
+       </IonGrid>
+
         <IonGrid className="home-grid">
-          <IonRow>
-            <IonCol size="12">
-              <IonCard className="welcome-card">
-                <IonCardContent>
-                  <h2>Welcome, {userName}!</h2>
-                  <p>Here's an overview of your finances.</p>
-                </IonCardContent>
-              </IonCard>
-            </IonCol>
-          </IonRow>
-
-          <IonRow>
-            <IonCol size="12">
-              <IonCard className="balance-card">
-                <IonCardContent>
-                  <h2>Total Expenses</h2>
-                  <p className="balance-amount">${totalExpenses.toFixed(2)}</p>
-                </IonCardContent>
-              </IonCard>
-            </IonCol>
-          </IonRow>
-
           <IonRow>
             <IonCol size="12">
               <IonCard className="income-card">
                 <IonCardContent>
-                  <h3>Income History</h3>
+                  <h3 className="income-top-text">Income History</h3>
                   {incomes.length > 0 ? (
                     incomes.map((income, index) => (
                       <IonItem key={income.id}>
@@ -437,6 +430,8 @@ const UserHome: React.FC = () => {
             </IonCol>
           </IonRow>
         </IonGrid>
+
+
 
         <FloatingMenuButton />
         <NavBar />

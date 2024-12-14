@@ -3,6 +3,7 @@
     padding: 20px;
     padding-bottom: 400px;
     background-color: #f9f9f9;
+    --ion-background-color: #f9f9f9;
   }
   
   .home-grid {
@@ -14,7 +15,8 @@
   .balance-card, .income-card, .expense-card {
     text-align: center;
     margin: 10px 0;
-    padding: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
   
   .balance-card {
@@ -23,7 +25,7 @@
   }
   
   .income-card {
-    background-color: #2196F3;
+    background-color: #lightcyan;
     color: white;
   }
   
@@ -32,7 +34,7 @@
     color: white;
   }
   
-  .balance-amount, .income-amount, .expense-amount {
+  .balance-amount, .income-amount, .expense-amount, .welcome-text {
     font-size: 1.5rem;
     font-weight: bold;
   }
@@ -42,4 +44,37 @@
     justify-content: center;
     align-items: center;
   }
-  
+
+
+.welcome-text, .balance-amount {
+    color: #333333;
+}
+
+.income-top-text {
+    color: var(--ion-card-color, var(--ion-item-color, var(--ion-color-step-550, var(--ion-text-color-step-450, #737373))));
+}
+
+.transactions-card {
+    margin-bottom: 200px;
+}
+
+@media (min-width: 900px) {
+  .top-text-container {
+    text-align: center;
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+    .top-text-container {
+        margin-left: 1rem;
+    }
+
+    .home-content {
+        padding: 20px;
+        padding-bottom: 900px;
+        background-color: #f9f9f9;
+        --ion-background-color: #f9f9f9;
+      }
+}
+

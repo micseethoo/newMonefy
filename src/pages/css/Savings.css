@@ -16,3 +16,7 @@
   max-width: 350px; /* Optional, to limit the maximum width */
   margin: 0 auto;  /* Ensures it's centered horizontally */
 }
+
+.main-container {
+    --ion-background-color: #f9f9f9;
+}
