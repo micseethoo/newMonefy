@@ -3,6 +3,7 @@ import { IonContent, IonPage, IonHeader, IonToolbar, IonTitle } from '@ionic/rea
 import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonProgressBar } from '@ionic/react';
 import { getFirestore, doc, getDoc } from 'firebase/firestore'; // Import Firestore functions
 import { useParams } from 'react-router-dom'; // For routing and extracting the goal ID
+import { getAuth } from 'firebase/auth'; // Import Firebase Authentication functions
 import './css/SavingsGoal.css'; // Link to CSS file for styling
 import NavBar from '../components/NavBar';
 import FloatingMenuButton from '../components/FloatingMenuButton';
@@ -13,17 +14,24 @@ const SavingsGoal: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true); // Loading state
   const db = getFirestore(); // Initialize Firestore
 
-  // Log the goalId to check if it's being extracted correctly
+  // Get the current authenticated user
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  // Log the goalId and user UID to check if they're correct
   useEffect(() => {
     console.log("Goal ID from URL:", goalId); // Log the goalId
-  }, [goalId]);
+    if (user) {
+      console.log("Authenticated user UID:", user.uid); // Log the authenticated user's UID
+    }
+  }, [goalId, user]);
 
   // Function to fetch data from Firestore based on goalId
   const fetchGoalData = async () => {
-    if (!goalId) return;
+    if (!goalId || !user) return; // Check if goalId or user is not available
 
     try {
-      const goalRef = doc(db, 'users', 'userId', 'savings', goalId); // Specify your Firestore path
+      const goalRef = doc(db, 'users', user.uid, 'savings', goalId); // Correct Firestore path using the authenticated user's UID
       const goalDoc = await getDoc(goalRef);
 
       if (goalDoc.exists()) {
@@ -41,8 +49,8 @@ const SavingsGoal: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchGoalData(); // Call fetchGoalData when the component mounts
-  }, [goalId]); // Run again if goalId changes
+    fetchGoalData(); // Call fetchGoalData when the component mounts or goalId changes
+  }, [goalId, user]); // Re-run when goalId or user changes
 
   if (loading) {
     return <div>Loading...</div>; // Show loading while fetching data
@@ -102,3 +110,4 @@ const SavingsGoal: React.FC = () => {
 };
 
 export default SavingsGoal;
+

@@ -11,11 +11,11 @@
 //   IonCard,
 //   IonCardContent,
 //   IonItem,
-//   IonButton, // Import IonButton for the button
+//   IonButton,
 // } from '@ionic/react';
 // import { getAuth } from 'firebase/auth';
 // import { getFirestore, doc, getDoc, collection, onSnapshot, query, orderBy } from 'firebase/firestore';
-// import { useHistory } from 'react-router-dom'; // Import useHistory for navigation
+// import { useHistory } from 'react-router-dom';
 // import './css/UserHome.css';
 // import FloatingMenuButton from '../components/FloatingMenuButton';
 // import NavBar from '../components/NavBar';
@@ -29,27 +29,26 @@
 //
 //   const auth = getAuth();
 //   const db = getFirestore();
-//   const history = useHistory(); // Initialize the useHistory hook
+//   const history = useHistory();
 //
 //   useEffect(() => {
 //     const user = auth.currentUser;
 //     if (user) {
 //       setUserId(user.uid);
 //
-//       // Fetch the user's username from Firestore
 //       const fetchUserName = async () => {
-//         const userRef = doc(db, 'users', user.uid); // Reference to the user's document
+//         const userRef = doc(db, 'users', user.uid);
 //         const userDoc = await getDoc(userRef);
 //
 //         if (userDoc.exists()) {
 //           const userData = userDoc.data();
-//           setUserName(userData?.username || user.displayName || 'User'); // Set username if available
+//           setUserName(userData?.nickname || user.displayName || 'User');
 //         } else {
-//           setUserName(user.displayName || 'User'); // Fallback to displayName if no username
+//           setUserName(user.displayName || 'User');
 //         }
 //       };
 //
-//       fetchUserName(); // Call the function to fetch the username
+//       fetchUserName();
 //     }
 //   }, [auth, db]);
 //
@@ -74,7 +73,7 @@
 //       });
 //
 //       setTotalExpenses(expensesSum);
-//       setTransactions(expenseList);
+//       setTransactions(expenseList.slice(0, 3));
 //     });
 //
 //     return () => unsubscribe();
@@ -96,14 +95,14 @@
 //         incomeList.push({ id: doc.id, ...incomeData });
 //       });
 //
-//       setIncomes(incomeList);
+//       setIncomes(incomeList.slice(0, 3));
 //     });
 //
 //     return () => unsubscribe();
 //   }, [userId]);
 //
 //   const handleNavigateToTransactionHistory = () => {
-//     history.push('/transactionhistory'); // Navigate to the TransactionHistory page
+//     history.push('/transactionhistory');
 //   };
 //
 //   return (
@@ -119,7 +118,7 @@
 //             <IonCol size="12">
 //               <IonCard className="welcome-card">
 //                 <IonCardContent>
-//                   <h2>Welcome, {userName}!</h2> {/* Display the username here */}
+//                   <h2>Welcome, {userName}!</h2>
 //                   <p>Here's an overview of your finances.</p>
 //                 </IonCardContent>
 //               </IonCard>
@@ -139,9 +138,9 @@
 //
 //           <IonRow>
 //             <IonCol size="12">
-//               <IonCard className="transactions-card">
+//               <IonCard className="income-card">
 //                 <IonCardContent>
-//                   <h3>Income History (Latest)</h3>
+//                   <h3>Income History</h3>
 //                   {incomes.length > 0 ? (
 //                     incomes.map((income, index) => (
 //                       <IonItem key={income.id}>
@@ -170,7 +169,7 @@
 //             <IonCol size="12">
 //               <IonCard className="transactions-card">
 //                 <IonCardContent>
-//                   <h3>Expense History (Latest)</h3>
+//                   <h3>Expense History</h3>
 //                   {transactions.length > 0 ? (
 //                     transactions.map((transaction, index) => (
 //                       <IonItem key={transaction.id}>
@@ -192,23 +191,19 @@
 //                   ) : (
 //                     <p>No expense records.</p>
 //                   )}
+//
+//                   <IonButton size="small" onClick={handleNavigateToTransactionHistory} expand="block">
+//                     View All Transactions
+//                   </IonButton>
 //                 </IonCardContent>
 //               </IonCard>
 //             </IonCol>
 //           </IonRow>
 //         </IonGrid>
 //
-//         {/* Add a button to navigate to the TransactionHistory page */}
-//         <IonRow className="center-button">
-//           <IonCol size="auto">
-//             <IonButton size="small" onClick={handleNavigateToTransactionHistory}>
-//               View Transaction History
-//             </IonButton>
-//           </IonCol>
-//         </IonRow>
+//         <FloatingMenuButton />
+//         <NavBar />
 //       </IonContent>
-//       <FloatingMenuButton />
-//       <NavBar />
 //     </IonPage>
 //   );
 // };
@@ -230,7 +225,7 @@ import {
   IonItem,
   IonButton,
 } from '@ionic/react';
-import { getAuth } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, doc, getDoc, collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 import { useHistory } from 'react-router-dom';
 import './css/UserHome.css';
@@ -243,32 +238,45 @@ const UserHome: React.FC = () => {
   const [incomes, setIncomes] = useState<any[]>([]);
   const [userName, setUserName] = useState('User');
   const [userId, setUserId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const auth = getAuth();
   const db = getFirestore();
   const history = useHistory();
 
+  // Fetch user data on authentication state change
   useEffect(() => {
-    const user = auth.currentUser;
-    if (user) {
-      setUserId(user.uid);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserId(user.uid);
+        const fetchUserName = async () => {
+          const userRef = doc(db, 'users', user.uid);
+          const userDoc = await getDoc(userRef);
 
-      const fetchUserName = async () => {
-        const userRef = doc(db, 'users', user.uid);
-        const userDoc = await getDoc(userRef);
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const name = userData?.nickname || user.displayName || 'User';
+            setUserName(name);
+            localStorage.setItem('userName', name); // Optional persistence
+          } else {
+            const name = user.displayName || 'User';
+            setUserName(name);
+            localStorage.setItem('userName', name); // Optional persistence
+          }
+          setLoading(false);
+        };
+        fetchUserName();
+      } else {
+        setUserId(null);
+        setUserName('User');
+        setLoading(false);
+      }
+    });
 
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          setUserName(userData?.username || user.displayName || 'User');
-        } else {
-          setUserName(user.displayName || 'User');
-        }
-      };
-
-      fetchUserName();
-    }
+    return () => unsubscribe();
   }, [auth, db]);
 
+  // Fetch expenses
   useEffect(() => {
     if (!userId) return;
 
@@ -296,6 +304,7 @@ const UserHome: React.FC = () => {
     return () => unsubscribe();
   }, [userId]);
 
+  // Fetch incomes
   useEffect(() => {
     if (!userId) return;
 
@@ -318,9 +327,20 @@ const UserHome: React.FC = () => {
     return () => unsubscribe();
   }, [userId]);
 
+  // Navigate to transaction history
   const handleNavigateToTransactionHistory = () => {
     history.push('/transactionhistory');
   };
+
+  if (loading) {
+    return (
+      <IonPage>
+        <IonContent>
+          <h2>Loading...</h2>
+        </IonContent>
+      </IonPage>
+    );
+  }
 
   return (
     <IonPage>
@@ -426,3 +446,4 @@ const UserHome: React.FC = () => {
 };
 
 export default UserHome;
+

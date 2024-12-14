@@ -1,22 +1,25 @@
 // import React, { useEffect, useState } from 'react';
-// import { IonPage, IonContent, IonHeader, IonToolbar, IonTitle, IonGrid, IonRow, IonCol, IonCard, IonCardContent, IonItem, IonInput, IonButton, IonModal } from '@ionic/react';
+// import { useHistory } from 'react-router-dom';
+// import { IonPage, IonContent, IonHeader, IonToolbar, IonTitle, IonGrid, IonRow, IonCol, IonCard, IonCardContent, IonItem, IonInput, IonButton, IonModal, IonBackButton, IonButtons, IonRange, IonLabel, IonAlert } from '@ionic/react';
 // import { getAuth } from 'firebase/auth';
-// import { getFirestore, collection, addDoc, onSnapshot, doc, setDoc, getDoc } from 'firebase/firestore';
+// import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot } from 'firebase/firestore';
 // import './css/UserHome.css';
 //
 // const Budgeting: React.FC = () => {
-//   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 //   const [categoryBudgets, setCategoryBudgets] = useState<{ [key: string]: number }>({});
-//   const [totalBudget, setTotalBudget] = useState<number | ''>('');
+//   const [totalBudget, setTotalBudget] = useState<number>(0);
 //   const [incomeTotal, setIncomeTotal] = useState(0);
 //   const [expenseTotal, setExpenseTotal] = useState(0);
 //   const [balance, setBalance] = useState(0);
+//   const [editMode, setEditMode] = useState(false);
+//   const [showAlert, setShowAlert] = useState(false); // Alert for budget exceeding total
 //
 //   const auth = getAuth();
 //   const db = getFirestore();
 //   const userId = auth.currentUser?.uid;
 //
-//   // Load data
+//   const history = useHistory(); // Hook for navigation
+//
 //   useEffect(() => {
 //     if (!userId) return;
 //
@@ -25,7 +28,7 @@
 //       const budgetDoc = await getDoc(budgetDocRef);
 //       if (budgetDoc.exists()) {
 //         const budgetData = budgetDoc.data();
-//         setTotalBudget(budgetData?.totalBudget || '');
+//         setTotalBudget(budgetData?.totalBudget || 0);
 //         setCategoryBudgets(budgetData?.categoryBudgets || {});
 //       }
 //     };
@@ -56,37 +59,54 @@
 //   const handleSaveBudget = async () => {
 //     if (!userId) return;
 //
+//     const totalCategoryBudget = Object.values(categoryBudgets).reduce((sum, value) => sum + value, 0);
+//     if (totalCategoryBudget > totalBudget) {
+//       setShowAlert(true); // Show alert if total exceeds budget
+//       return;
+//     }
+//
 //     const budgetDocRef = doc(db, `users/${userId}/budget`, 'current');
 //     try {
 //       await setDoc(budgetDocRef, {
-//         totalBudget: Number(totalBudget),
+//         totalBudget,
 //         categoryBudgets,
 //       });
 //       alert('Budget saved successfully!');
+//       setEditMode(false); // Close the modal after saving
 //     } catch (error) {
 //       console.error('Error saving budget:', error);
 //     }
 //   };
 //
 //   const handleCategoryBudgetChange = (category: string, amount: number) => {
-//     setCategoryBudgets({
+//     const updatedBudgets = {
 //       ...categoryBudgets,
 //       [category]: amount,
-//     });
-//     setSelectedCategory(null); // Close modal after setting budget
+//     };
+//     setCategoryBudgets(updatedBudgets);
+//   };
+//
+//   const navigateToStatistics = () => {
+//     history.push('/statistics');
 //   };
 //
 //   return (
 //     <IonPage>
 //       <IonHeader>
 //         <IonToolbar color="primary">
+//           <IonButtons slot="start">
+//             <IonBackButton text="Back" />
+//             <IonButton onClick={navigateToStatistics} size="small" style={{ marginLeft: '10px', backgroundColor: 'green', color: 'white' }}>
+//               Go to Statistics page
+//             </IonButton>
+//           </IonButtons>
 //           <IonTitle>Budgeting</IonTitle>
 //         </IonToolbar>
 //       </IonHeader>
 //       <IonContent fullscreen className="budgeting-content">
-//         {/* Balance Display */}
 //         <IonCard color="secondary" className="balance-card">
 //           <IonCardContent>
+//             <h3>Total Budget: <strong>${totalBudget.toFixed(2)}</strong></h3>
 //             <h3>Total Income: <strong>${incomeTotal.toFixed(2)}</strong></h3>
 //             <h3>Total Expenses: <strong>${expenseTotal.toFixed(2)}</strong></h3>
 //             <h2>Balance: <strong>${balance.toFixed(2)}</strong></h2>
@@ -94,76 +114,70 @@
 //         </IonCard>
 //
 //         <IonGrid>
-//           {/* Menu Buttons */}
-//           <IonRow>
-//             {['Food', 'Transport', 'Entertainment', 'Bills', 'Other'].map((category) => (
-//               <IonCol size="6" key={category}>
-//                 <IonButton
-//                   expand="block"
-//                   onClick={() => setSelectedCategory(category)}
-//                 >
-//                   {category}
-//                 </IonButton>
+//           {Object.keys(categoryBudgets).map((category) => (
+//             <IonRow key={category}>
+//               <IonCol size="6">
+//                 <strong>{category}</strong>
 //               </IonCol>
-//             ))}
-//           </IonRow>
-//
-//           {/* Dynamically Display Budgets */}
-//           <IonRow>
-//             {Object.keys(categoryBudgets).map((category) => (
-//               <IonCol size="12" key={category}>
-//                 <IonCard>
-//                   <IonCardContent>
-//                     <h4>
-//                       Budgeting for {category}: <strong>${categoryBudgets[category]}</strong>
-//                     </h4>
-//                   </IonCardContent>
-//                 </IonCard>
+//               <IonCol size="6">
+//                 ${categoryBudgets[category]} ({((categoryBudgets[category] / totalBudget) * 100).toFixed(2)}%)
 //               </IonCol>
-//             ))}
-//           </IonRow>
+//             </IonRow>
+//           ))}
 //         </IonGrid>
 //
+//         <IonButton expand="block" onClick={() => setEditMode(true)}>Edit Budget</IonButton>
 //
-//         {/* Modal for Setting Category Budget */}
-// <IonModal isOpen={!!selectedCategory}>
-//   <IonCard>
-//     <IonCardContent>
-//       <h3>Set Budget for {selectedCategory}</h3>
-//       <IonItem>
-//         <IonInput
-//           type="number"
-//           placeholder="Enter amount"
-//           onIonChange={(e) => setCategoryBudgets({
-//             ...categoryBudgets,
-//             [selectedCategory!]: parseFloat(e.detail.value!) || 0,
-//           })}
+//         <IonModal isOpen={editMode} onDidDismiss={() => setEditMode(false)}>
+//           <IonContent>
+//             <IonCard>
+//               <IonCardContent>
+//                 <h3>Edit Total Budget</h3>
+//                 <IonItem>
+//                   <IonInput
+//                     type="number"
+//                     value={totalBudget}
+//                     onIonChange={(e) => setTotalBudget(parseFloat(e.detail.value!) || 0)}
+//                   />
+//                 </IonItem>
+//
+//                 <h3>Allocate Budget by Category</h3>
+//                 {['Food', 'Transport', 'Entertainment', 'Bills', 'Other'].map((category) => (
+//                   <IonItem key={category}>
+//                     <IonLabel slot="start">{category}</IonLabel>
+//                     <IonInput
+//                       type="number"
+//                       value={categoryBudgets[category] || 0}
+//                       onIonChange={(e) => handleCategoryBudgetChange(category, parseFloat(e.detail.value!) || 0)}
+//                       style={{ width: '60px', textAlign: 'right' }}
+//                     />
+//                     <IonRange
+//                       min={0}
+//                       max={Math.max(0, totalBudget - Object.values(categoryBudgets).reduce((sum, value) => sum + value, 0) + (categoryBudgets[category] || 0))}
+//                       step={10}
+//                       value={categoryBudgets[category] || 0}
+//                       onIonChange={(e) => handleCategoryBudgetChange(category, parseFloat(e.detail.value as string))}
+//                     />
+//                     <div slot="end">
+//                       ${categoryBudgets[category] || 0} ({totalBudget > 0 ? ((categoryBudgets[category] / totalBudget) * 100).toFixed(2) : 0}%)
+//                     </div>
+//                   </IonItem>
+//                 ))}
+//
+//                 <IonButton expand="block" onClick={handleSaveBudget}>Confirm</IonButton>
+//                 <IonButton expand="block" color="light" onClick={() => setEditMode(false)}>Cancel</IonButton>
+//               </IonCardContent>
+//             </IonCard>
+//           </IonContent>
+//         </IonModal>
+//
+//         <IonAlert
+//           isOpen={showAlert}
+//           onDidDismiss={() => setShowAlert(false)}
+//           header="Budget Error"
+//           message="The total of your category budgets exceeds the total budget!"
+//           buttons={["OK"]}
 //         />
-//       </IonItem>
-//       <IonRow>
-//         {/* Save Button */}
-//         <IonCol>
-//           <IonButton
-//             expand="full"
-//             onClick={() => setSelectedCategory(null)}
-//           >
-//             Save
-//           </IonButton>
-//         </IonCol>
-//         {/* Close Button */}
-//         <IonCol>
-//           <IonButton
-//             expand="full"
-//             color="light"
-//             onClick={() => setSelectedCategory(null)}
-//           >
-//             Close
-//           </IonButton>
-//         </IonCol>
-//       </IonRow>
-//     </IonCardContent>
-//   </IonCard>
-// </IonModal>
 //       </IonContent>
 //     </IonPage>
 //   );
@@ -172,31 +186,27 @@
 // export default Budgeting;
 
 import React, { useEffect, useState } from 'react';
-import { IonPage, IonContent, IonHeader, IonToolbar, IonTitle, IonGrid, IonRow, IonCol, IonCard, IonCardContent, IonItem, IonInput, IonButton, IonLabel, IonAlert, IonIcon, IonRange } from '@ionic/react';
+import { useHistory } from 'react-router-dom';
+import { IonPage, IonContent, IonHeader, IonToolbar, IonTitle, IonGrid, IonRow, IonCol, IonCard, IonCardContent, IonItem, IonInput, IonButton, IonModal, IonBackButton, IonButtons, IonRange, IonLabel, IonAlert } from '@ionic/react';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, collection, addDoc, onSnapshot, doc, setDoc, getDoc } from 'firebase/firestore';
-import { Pie } from 'react-chartjs-2';
-import Chart from 'chart.js/auto';
-import { chevronForwardOutline } from 'ionicons/icons';
+import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot } from 'firebase/firestore';
 import './css/UserHome.css';
 
 const Budgeting: React.FC = () => {
-  const [isTotalBudgetSet, setIsTotalBudgetSet] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [categoryBudgets, setCategoryBudgets] = useState<{ [key: string]: number }>({});
-  const [totalBudget, setTotalBudget] = useState<number | ''>('');  // Ensure totalBudget is a number or empty string
+  const [totalBudget, setTotalBudget] = useState<number>(0);
   const [incomeTotal, setIncomeTotal] = useState(0);
   const [expenseTotal, setExpenseTotal] = useState(0);
   const [balance, setBalance] = useState(0);
-  const [showExceedAlert, setShowExceedAlert] = useState(false);
-  const [exceedCategory, setExceedCategory] = useState<string | null>(null);
-  const [sliderValues, setSliderValues] = useState<{ [key: string]: number }>({});
+  const [editMode, setEditMode] = useState(false);
+  const [showAlert, setShowAlert] = useState(false); // Alert for budget exceeding total
 
   const auth = getAuth();
   const db = getFirestore();
   const userId = auth.currentUser?.uid;
 
-  // Load data
+  const history = useHistory(); // Hook for navigation
+
   useEffect(() => {
     if (!userId) return;
 
@@ -205,14 +215,8 @@ const Budgeting: React.FC = () => {
       const budgetDoc = await getDoc(budgetDocRef);
       if (budgetDoc.exists()) {
         const budgetData = budgetDoc.data();
-        setTotalBudget(budgetData?.totalBudget || '');  // Initialize totalBudget as string
+        setTotalBudget(budgetData?.totalBudget || 0);
         setCategoryBudgets(budgetData?.categoryBudgets || {});
-        // Set initial slider values to the category budgets
-        const initialSliderValues = Object.keys(budgetData?.categoryBudgets || {}).reduce((acc, category) => {
-          acc[category] = budgetData.categoryBudgets[category] || 0;
-          return acc;
-        }, {});
-        setSliderValues(initialSliderValues);
       }
     };
 
@@ -243,187 +247,151 @@ const Budgeting: React.FC = () => {
     if (!userId) return;
 
     const totalCategoryBudget = Object.values(categoryBudgets).reduce((sum, value) => sum + value, 0);
-    if (totalCategoryBudget > Number(totalBudget)) {
-      setShowExceedAlert(true);
+    if (totalCategoryBudget > totalBudget) {
+      setShowAlert(true); // Show alert if total exceeds budget
       return;
     }
 
     const budgetDocRef = doc(db, `users/${userId}/budget`, 'current');
     try {
       await setDoc(budgetDocRef, {
-        totalBudget: Number(totalBudget),  // Ensure totalBudget is used as a number
+        totalBudget,
         categoryBudgets,
       });
       alert('Budget saved successfully!');
+      setEditMode(false); // Close the modal after saving
     } catch (error) {
       console.error('Error saving budget:', error);
     }
   };
 
   const handleCategoryBudgetChange = (category: string, amount: number) => {
-    setCategoryBudgets({
+    const updatedBudgets = {
       ...categoryBudgets,
       [category]: amount,
-    });
+    };
+    setCategoryBudgets(updatedBudgets);
   };
 
-  const handleSliderChange = (category: string, value: number) => {
-    setSliderValues({
-      ...sliderValues,
-      [category]: value,
-    });
-    handleCategoryBudgetChange(category, value);
+  const navigateToStatistics = () => {
+    history.push('/statistics');
   };
 
+  // Calculate the outstanding budget (remaining budget after allocating to categories)
+  const getOutstandingBudget = () => {
+    const totalCategoryBudget = Object.values(categoryBudgets).reduce((sum, value) => sum + value, 0);
+    return totalBudget - totalCategoryBudget;
+  };
+
+  // Calculate the percentage for a category
   const calculateCategoryPercentage = (category: string) => {
-    const budgetAmount = categoryBudgets[category] || 0;
-    const totalAmount = Number(totalBudget);  // Ensure totalBudget is a number for calculations
-    return totalAmount > 0 ? (budgetAmount / totalAmount) * 100 : 0;
-  };
-
-  const chartData = {
-    labels: Object.keys(categoryBudgets),
-    datasets: [
-      {
-        data: Object.values(categoryBudgets),
-        backgroundColor: [
-          '#ff9999', '#66b3ff', '#99ff99', '#ffcc99', '#ffb3e6', '#ff6666',
-        ],
-        hoverBackgroundColor: [
-          '#ff6666', '#3399ff', '#66ff66', '#ff9966', '#ff66b3', '#ff3333',
-        ],
-      },
-    ],
-  };
-
-  const handleTotalBudgetChange = (e: any) => {
-    setTotalBudget(e.detail.value);
-  };
-
-  const handleTotalBudgetInputChange = (e: any) => {
-    const value = e.target.value;
-    if (!isNaN(value)) {
-      setTotalBudget(parseFloat(value));
-    }
-  };
-
-  const handleCategoryBudgetInputChange = (category: string, e: any) => {
-    const value = e.target.value;
-    if (!isNaN(value)) {
-      const updatedAmount = parseFloat(value);
-      handleCategoryBudgetChange(category, updatedAmount);
-      setSliderValues({
-        ...sliderValues,
-        [category]: updatedAmount,
-      });
-    }
+    if (totalBudget === 0) return 0;
+    return ((categoryBudgets[category] || 0) / totalBudget) * 100;
   };
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar color="primary">
+          <IonButtons slot="start">
+            <IonBackButton text="Back" />
+            <IonButton onClick={navigateToStatistics} size="small" style={{ marginLeft: '10px', backgroundColor: '#3d9970', color: '#fff' }}>
+              Go to Statistics page
+            </IonButton>
+          </IonButtons>
           <IonTitle>Budgeting</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen className="budgeting-content">
-        {/* Step 1: Set Total Budget */}
-        {!isTotalBudgetSet ? (
-          <IonCard color="secondary" className="total-budget-card" style={{ borderRadius: '15px', boxShadow: '0 5px 15px rgba(0,0,0,0.1)', padding: '15px' }}>
-            <IonCardContent>
-              <h3 style={{ fontSize: '18px', color: '#fff' }}>Set Total Budget</h3>
-              <IonLabel style={{ fontSize: '16px' }}>Total Budget: </IonLabel>
 
-              {/* Slider to set the total budget */}
-              <IonRange
-                min={0}
-                max={10000}
-                step={10}
-                value={totalBudget || 0}
-                onIonChange={handleTotalBudgetChange}
-                style={{ margin: '10px 0' }}
-              />
-              <IonItem>
-                <IonInput
-                  type="number"
-                  value={totalBudget || ''}
-                  onIonInput={handleTotalBudgetInputChange}
-                  placeholder="Enter total budget"
-                />
-              </IonItem>
-              <div style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '10px' }}>
-                ${totalBudget && typeof totalBudget === 'number' ? totalBudget.toFixed(2) : '0.00'}
-              </div>
+      <IonContent fullscreen className="budgeting-content" style={{ backgroundColor: '#f4f7fb' }}>
+        {/* Total Budget Summary */}
+        <IonCard className="balance-card" style={{ borderRadius: '10px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', marginBottom: '20px' }}>
+          <IonCardContent style={{ padding: '20px' }}>
+            <h3 style={{ color: '#2f353f' }}>Total Budget: <strong>${totalBudget.toFixed(2)}</strong></h3>
+            <h3>Total Income: <strong>${incomeTotal.toFixed(2)}</strong></h3>
+            <h3>Total Expenses: <strong>${expenseTotal.toFixed(2)}</strong></h3>
+            <h2>Balance: <strong>${balance.toFixed(2)}</strong></h2>
+            {/* Outstanding Budget */}
+            <h3>Outstanding Budget: <strong>${getOutstandingBudget().toFixed(2)}</strong></h3>
+          </IonCardContent>
+        </IonCard>
 
-              <IonButton expand="full" color="primary" onClick={() => setIsTotalBudgetSet(true)} style={{ marginTop: '15px', padding: '12px', fontSize: '16px' }}>
-                Set Total Budget
-                <IonIcon slot="end" icon={chevronForwardOutline} />
-              </IonButton>
-            </IonCardContent>
-          </IonCard>
-        ) : (
-          // Step 2: Set Category Budgets
-          <>
-            {/* Balance Display */}
-            <IonCard color="secondary" className="balance-card" style={{ borderRadius: '15px', boxShadow: '0 5px 15px rgba(0,0,0,0.1)', padding: '15px' }}>
+        {/* Category Budgets */}
+        <IonGrid>
+          {Object.keys(categoryBudgets).map((category) => (
+            <IonRow key={category}>
+              <IonCol size="6">
+                <strong>{category}</strong>
+              </IonCol>
+              <IonCol size="6" style={{ textAlign: 'right' }}>
+                <span>${categoryBudgets[category]?.toFixed(2) || '0.00'}</span>
+                <span style={{ marginLeft: '10px', fontSize: '14px', color: '#4CAF50' }}>
+                  {((categoryBudgets[category] / totalBudget) * 100).toFixed(0)}%
+                </span>
+              </IonCol>
+            </IonRow>
+          ))}
+        </IonGrid>
+
+        {/* Edit Button */}
+        <IonButton expand="block" onClick={() => setEditMode(true)} style={{ backgroundColor: '#4CAF50', color: '#fff', borderRadius: '8px' }}>
+          Edit Budget
+        </IonButton>
+
+        {/* Edit Budget Modal */}
+        <IonModal isOpen={editMode} onDidDismiss={() => setEditMode(false)}>
+          <IonContent>
+            <IonCard style={{ borderRadius: '10px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
               <IonCardContent>
-                <h3 style={{ fontSize: '18px', color: '#fff' }}>Total Income: <strong>${incomeTotal.toFixed(2)}</strong></h3>
-                <h3 style={{ fontSize: '18px', color: '#fff' }}>Total Expenses: <strong>${expenseTotal.toFixed(2)}</strong></h3>
-                <h3 style={{ fontSize: '18px', color: '#fff' }}>Balance: <strong>${balance.toFixed(2)}</strong></h3>
+                <h3>Edit Total Budget</h3>
+                <IonItem>
+                  <IonInput
+                    type="number"
+                    value={totalBudget}
+                    onIonChange={(e) => setTotalBudget(parseFloat(e.detail.value!) || 0)}
+                    style={{ paddingRight: '10px', fontWeight: 'bold' }}
+                  />
+                </IonItem>
+
+                <h3>Allocate Budget by Category</h3>
+                {['Food', 'Transport', 'Entertainment', 'Bills', 'Other'].map((category) => (
+                  <IonItem key={category}>
+                    <IonLabel slot="start">{category}</IonLabel>
+                    <IonRange
+                      min={0}
+                      max={Math.max(0, totalBudget - Object.values(categoryBudgets).reduce((sum, value) => sum + value, 0) + (categoryBudgets[category] || 0))}
+                      step={10}
+                      value={categoryBudgets[category] || 0}
+                      onIonChange={(e) => handleCategoryBudgetChange(category, parseFloat(e.detail.value as string))}
+                    />
+                    <IonInput
+                      type="number"
+                      slot="end"
+                      value={categoryBudgets[category] || 0}
+                      onIonChange={(e) => handleCategoryBudgetChange(category, parseFloat(e.detail.value!) || 0)}
+                      style={{ textAlign: 'right', maxWidth: '80px', fontWeight: 'bold' }}
+                    />
+                    {/* Display percentage */}
+                    <span style={{ fontSize: '14px', color: '#4CAF50', marginLeft: '10px' }}>
+                      {calculateCategoryPercentage(category).toFixed(0)}%
+                    </span>
+                  </IonItem>
+                ))}
+
+                <IonButton expand="block" onClick={handleSaveBudget} style={{ backgroundColor: '#4CAF50', color: '#fff', borderRadius: '8px', marginTop: '20px' }}>
+                  Save Budget
+                </IonButton>
               </IonCardContent>
             </IonCard>
+          </IonContent>
+        </IonModal>
 
-            {/* Category Budget Inputs */}
-            <IonGrid>
-              <IonRow>
-                {['Food', 'Rent', 'Utilities', 'Entertainment', 'Others'].map((category) => {
-                  const categoryPercentage = calculateCategoryPercentage(category);
-
-                  return (
-                    <IonCol size="12" key={category}>
-                      <IonCard>
-                        <IonCardContent>
-                          <h3>{category}</h3>
-                          <IonLabel>Total: ${categoryBudgets[category]?.toFixed(2)}</IonLabel>
-                          <IonRange
-                            min={0}
-                            max={totalBudget}
-                            step={10}
-                            value={sliderValues[category] || 0}
-                            onIonChange={(e) => handleSliderChange(category, e.detail.value)}
-                          />
-                          <IonItem>
-                            <IonInput
-                              type="number"
-                              value={categoryBudgets[category] || ''}
-                              onIonInput={(e) => handleCategoryBudgetInputChange(category, e)}
-                              placeholder={`Enter ${category} budget`}
-                            />
-                          </IonItem>
-                          <div>
-                            <p>Percentage: {categoryPercentage.toFixed(2)}%</p>
-                          </div>
-                        </IonCardContent>
-                      </IonCard>
-                    </IonCol>
-                  );
-                })}
-              </IonRow>
-            </IonGrid>
-
-            <IonButton expand="full" color="primary" onClick={handleSaveBudget} style={{ marginTop: '15px', padding: '12px', fontSize: '16px' }}>
-              Save Budget
-              <IonIcon slot="end" icon={chevronForwardOutline} />
-            </IonButton>
-          </>
-        )}
-
-        {/* Alert for exceeding budget */}
+        {/* Alert for exceeding total budget */}
         <IonAlert
-          isOpen={showExceedAlert}
-          onDidDismiss={() => setShowExceedAlert(false)}
-          header="Warning"
-          message="The total of your category budgets exceeds your total budget. Please adjust accordingly."
+          isOpen={showAlert}
+          onDidDismiss={() => setShowAlert(false)}
+          header={'Budget Exceeded'}
+          message={`The total budget allocated to categories exceeds the total budget amount of ${totalBudget.toFixed(2)}! Please adjust. `}
           buttons={['OK']}
         />
       </IonContent>
