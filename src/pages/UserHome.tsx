@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { tagIcons } from './TransactionIcons'; // Import the icons
 import {
   IonPage,
   IonContent,
@@ -12,193 +13,265 @@ import {
   IonCardContent,
   IonItem,
   IonButton,
+  IonIcon,
 } from '@ionic/react';
+import { eyeOutline, eyeOffOutline } from 'ionicons/icons';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, doc, getDoc, collection, onSnapshot, query, orderBy } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, collection, onSnapshot, query, orderBy, where } from 'firebase/firestore';
 import { useHistory } from 'react-router-dom';
 import './css/UserHome.css';
 import FloatingMenuButton from '../components/FloatingMenuButton';
 import NavBar from '../components/NavBar';
 
+
 const UserHome: React.FC = () => {
-  const [totalExpenses, setTotalExpenses] = useState(0);
   const [transactions, setTransactions] = useState<any[]>([]);
-  const [incomes, setIncomes] = useState<any[]>([]);
-  const [userName, setUserName] = useState('User');
+  const [totalExpenses, setTotalExpenses] = useState(0);
+  const [totalIncome, setTotalIncome] = useState(0);
   const [userId, setUserId] = useState<string | null>(null);
+  const [userName, setUserName] = useState('User');
+  const [currentSavings, setCurrentSavings] = useState(0);
+  const [isAmountVisible, setIsAmountVisible] = useState(true);
+  const [monthlyExpenses, setMonthlyExpenses] = useState(0);
+  const [monthlyIncome, setMonthlyIncome] = useState(0);
+  const [recentTransactions, setRecentTransactions] = useState<any[]>([]);
+
 
   const auth = getAuth();
   const db = getFirestore();
   const history = useHistory();
 
+ // Function to get greeting based on time of day
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 17) return 'Good afternoon';
+    return 'Good evening';
+  };
+
+    const formatAmount = (amount: number) => {
+      return new Intl.NumberFormat('en-MY', {
+        style: 'currency',
+        currency: 'MYR',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(amount).replace('MYR', 'RM');
+    };
+
+  // Get current month's date range
+  const getCurrentMonthRange = () => {
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    return { startOfMonth, endOfMonth };
+  };
+
   useEffect(() => {
     const user = auth.currentUser;
     if (user) {
       setUserId(user.uid);
-
-      const fetchUserName = async () => {
-        const userRef = doc(db, 'users', user.uid);
-        const userDoc = await getDoc(userRef);
-
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          setUserName(userData?.username || user.displayName || 'User');
-        } else {
-          setUserName(user.displayName || 'User');
-        }
-      };
-
-      fetchUserName();
+      fetchUserData(user.uid);
     }
-  }, [auth, db]);
+  }, [auth]);
 
-  useEffect(() => {
-    if (!userId) return;
+  const fetchUserData = async (uid: string) => {
+    // Fetch user details
+    const userRef = doc(db, 'users', uid);
+    const userDoc = await getDoc(userRef);
+    if (userDoc.exists()) {
+      setUserName(userDoc.data()?.username || 'User');
+    }
 
+    // Set up listeners for transactions
+    const { startOfMonth, endOfMonth } = getCurrentMonthRange();
+
+    // Fetch Expenses
     const expensesRef = query(
-      collection(db, `users/${userId}/expenses`),
+      collection(db, `users/${uid}/expenses`),
       orderBy('date', 'desc')
     );
 
-    const unsubscribe = onSnapshot(expensesRef, (snapshot) => {
-      let expensesSum = 0;
-      const expenseList: any[] = [];
-
-      snapshot.docs.forEach((doc) => {
-        const expenseData = doc.data();
-        if (expenseData.amount) {
-          expensesSum += expenseData.amount;
-        }
-        expenseList.push({ id: doc.id, ...expenseData });
+    const unsubscribeExpenses = onSnapshot(expensesRef, (snapshot) => {
+      let total = 0;
+      const expensesList = snapshot.docs.map(doc => {
+        const data = doc.data();
+        if (data.amount) total += data.amount;
+        return {
+          id: doc.id,
+          ...data,
+          type: 'Expense'
+        };
       });
-
-      setTotalExpenses(expensesSum);
-      setTransactions(expenseList.slice(0, 3));
+      setTotalExpenses(total);
+      updateTransactions([...expensesList]);
     });
 
-    return () => unsubscribe();
-  }, [userId]);
-
-  useEffect(() => {
-    if (!userId) return;
-
+    // Fetch Incomes
     const incomesRef = query(
-      collection(db, `users/${userId}/incomes`),
+      collection(db, `users/${uid}/incomes`),
       orderBy('date', 'desc')
     );
 
-    const unsubscribe = onSnapshot(incomesRef, (snapshot) => {
-      const incomeList: any[] = [];
-
-      snapshot.docs.forEach((doc) => {
-        const incomeData = doc.data();
-        incomeList.push({ id: doc.id, ...incomeData });
+    const unsubscribeIncomes = onSnapshot(incomesRef, (snapshot) => {
+      let total = 0;
+      const incomesList = snapshot.docs.map(doc => {
+        const data = doc.data();
+        if (data.amount) total += data.amount;
+        return {
+          id: doc.id,
+          ...data,
+          type: 'Income'
+        };
       });
-
-      setIncomes(incomeList.slice(0, 3));
+      setTotalIncome(total);
+      updateTransactions(prevTransactions => [...prevTransactions, ...incomesList]);
     });
 
-    return () => unsubscribe();
-  }, [userId]);
-
-  const handleNavigateToTransactionHistory = () => {
-    history.push('/transactionhistory');
+    return () => {
+      unsubscribeExpenses();
+      unsubscribeIncomes();
+    };
   };
+
+  const updateTransactions = (newTransactions: any[]) => {
+    // Sort transactions by date (newest first) and take only the first 3
+    const sortedTransactions = newTransactions
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 3);
+    setTransactions(sortedTransactions);
+  };
+
+  // Transaction item component
+  const TransactionItem: React.FC<{ transaction: any }> = ({ transaction }) => (
+    <IonItem className="transaction-row">
+      <div className="transaction-content">
+        <div className="transaction-left">
+          <h3 className="transaction-title">{transaction.title}</h3>
+          <span className="transaction-date">
+            {new Date(transaction.date).toLocaleDateString()}
+          </span>
+        </div>
+
+        <div className="transaction-right">
+          <span className="transaction-payment">{transaction.paymentMethod}</span>
+          <span className={`transaction-amount ${
+            transaction.type === 'Income' ? 'positive' : 'negative'
+          }`}>
+            {transaction.type === 'Income' ? '+' : '-'}
+            RM{transaction.amount}
+          </span>
+        </div>
+      </div>
+    </IonItem>
+  );
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar color="primary">
-          <IonTitle>Expense Tracker</IonTitle>
+          <IonTitle>Home</IonTitle>
         </IonToolbar>
       </IonHeader>
+
       <IonContent fullscreen className="home-content">
         <IonGrid className="home-grid">
-          <IonRow>
-            <IonCol size="12">
-              <IonCard className="welcome-card">
-                <IonCardContent>
-                  <h2>Welcome, {userName}!</h2>
-                  <p>Here's an overview of your finances.</p>
-                </IonCardContent>
-              </IonCard>
-            </IonCol>
-          </IonRow>
+          {/* Welcome Section with Savings */}
+                    <IonRow>
+                      <IonCol size="12" className="welcome-section">
+                        <div className="greeting-container">
+                           <span className="greeting-text">{getGreeting()},</span>
+                           <span className="user-name"> {userName}!</span>
 
-          <IonRow>
-            <IonCol size="12">
-              <IonCard className="balance-card">
-                <IonCardContent>
-                  <h2>Total Expenses</h2>
-                  <p className="balance-amount">${totalExpenses.toFixed(2)}</p>
-                </IonCardContent>
-              </IonCard>
-            </IonCol>
-          </IonRow>
 
-          <IonRow>
-            <IonCol size="12">
-              <IonCard className="income-card">
-                <IonCardContent>
-                  <h3>Income History</h3>
-                  {incomes.length > 0 ? (
-                    incomes.map((income, index) => (
-                      <IonItem key={income.id}>
-                        <div>
-                          <h4>
-                            {index + 1}. {income.title}
-                          </h4>
-                          <p>Amount: ${income.amount}</p>
-                          <p>Description: {income.description || 'No description provided'}</p>
-                          <p>
-                            Date: {new Date(income.date).toLocaleDateString()} <br />
-                            Time: {new Date(income.date).toLocaleTimeString()}
-                          </p>
+                          <div className="savings-container">
+                            <div className="savings-text">
+                              <span>Current Balance: </span>
+                              <span className={`amount ${!isAmountVisible ? 'blurred' : ''}`}>
+                                {formatAmount(currentSavings)}
+                              </span>
+                              <IonIcon
+                                icon={isAmountVisible ? eyeOutline : eyeOffOutline}
+                                onClick={() => setIsAmountVisible(!isAmountVisible)}
+                                className="eye-icon"
+                              />
+                            </div>
+                          </div>
                         </div>
-                      </IonItem>
-                    ))
-                  ) : (
-                    <p>No income records.</p>
-                  )}
-                </IonCardContent>
-              </IonCard>
-            </IonCol>
-          </IonRow>
+                      </IonCol>
+                    </IonRow>
 
-          <IonRow>
-            <IonCol size="12">
-              <IonCard className="transactions-card">
-                <IonCardContent>
-                  <h3>Expense History</h3>
-                  {transactions.length > 0 ? (
-                    transactions.map((transaction, index) => (
-                      <IonItem key={transaction.id}>
-                        <div>
-                          <h4>
-                            {index + 1}. {transaction.title}
-                          </h4>
-                          <p>Amount: ${transaction.amount}</p>
-                          <p>Tag: {transaction.tag}</p>
-                          <p>Payment Method: {transaction.paymentMethod}</p>
-                          <p>Description: {transaction.description || 'No description provided'}</p>
-                          <p>
-                            Date: {new Date(transaction.date).toLocaleDateString()} <br />
-                            Time: {new Date(transaction.date).toLocaleTimeString()}
-                          </p>
+
+
+           {/* Monthly Summary Card */}
+              <IonRow>
+                <IonCol size="12">
+                  <IonCard className="monthly-summary-card">
+                    <IonCardContent>
+                      <h2>{new Date().toLocaleString('default', { month: 'long' })} {new Date().getFullYear()}</h2>
+                      <div className="summary-grid">
+                        <div className="income-summary">
+                          <h3>Total Income</h3>
+                          <p className="income-amount">{formatAmount(totalIncome)}</p>
                         </div>
-                      </IonItem>
-                    ))
-                  ) : (
-                    <p>No expense records.</p>
-                  )}
+                        <div className="expenses-summary">
+                          <h3>Total Expenses</h3>
+                           <p className="expense-amount">{formatAmount(totalExpenses)}</p>
+                        </div>
+                      </div>
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
+              </IonRow>
 
-                  <IonButton size="small" onClick={handleNavigateToTransactionHistory} expand="block">
-                    View All Transactions
-                  </IonButton>
-                </IonCardContent>
-              </IonCard>
-            </IonCol>
-          </IonRow>
+               {/* Recent Transactions Card */}
+                        <IonRow>
+                          <IonCol size="12">
+                            <IonCard className="transactions-card">
+                              <IonCardContent>
+                                <div className="transactions-header">
+                                  <h2>Recent Transactions</h2>
+                                  <IonButton
+                                    fill="clear"
+                                    onClick={() => history.push('/transactionhistory')}
+                                  >
+                                    View More
+                                  </IonButton>
+                                </div>
+                                {transactions.length > 0 ? (
+                                  transactions.map((transaction) => (
+                                    <IonItem key={transaction.id} className="transaction-row">
+                                      <div className="transaction-icon-wrapper">
+                                        <IonIcon
+                                          icon={transaction.tag ? (tagIcons[transaction.tag] || tagIcons.default) : tagIcons.default}
+                                          className="category-icon"
+                                        />
+                                      </div>
+                                      <div className="transaction-content">
+                                        <div className="transaction-left">
+                                          <h3 className="transaction-title">{transaction.title}</h3>
+                                          <span className="transaction-date">
+                                            {new Date(transaction.date).toLocaleDateString()}
+                                          </span>
+                                        </div>
+                                        <div className="transaction-right">
+                                          <span className="transaction-payment">{transaction.paymentMethod}</span>
+                                          <span className={`transaction-amount ${
+                                            transaction.type === 'Income' ? 'positive' : 'negative'
+                                          }`}>
+                                            {transaction.type === 'Income' ? '+' : '-'}
+                                             {formatAmount(Math.abs(transaction.amount))}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </IonItem>
+                                  ))
+                                ) : (
+                                  <p>No recent transactions</p>
+                                )}
+                              </IonCardContent>
+                            </IonCard>
+                          </IonCol>
+                        </IonRow>
         </IonGrid>
 
         <FloatingMenuButton />
