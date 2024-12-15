@@ -54,6 +54,10 @@ const Home: React.FC = () => {
             </IonButton>
 
           </div>
+
+         <div className="forgot-password-link">
+              <a href="/forgot-password">Forgot Password?</a>
+                    </div>
           <div className="signup-link">
             Not registered yet? <a href="/signup">Sign up</a>
           </div>

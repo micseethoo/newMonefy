@@ -503,6 +503,21 @@
   background-color: #2a2aff; /* Darker purple on hover */
 }
 
+.change-password-button {
+  background-color: #3333ff; /* Purple color for buttons */
+  color: white;
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background-color 0.3s;
+}
+
+.change-password-button:hover {
+  background-color: #2a2aff; /* Darker purple on hover */
+  transform: scale(1.05);    /* Slight zoom-in effect */
+    transition: all 0.3s ease; /* Smooth animation */
+}
+
 .logout-button {
   border-radius: 12px; /* Adjust this value for more or less rounding */
   font-size: 16px;    /* Slightly larger text for better emphasis */
