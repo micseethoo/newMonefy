@@ -79,7 +79,7 @@ const UserHome: React.FC = () => {
     const userRef = doc(db, 'users', uid);
     const userDoc = await getDoc(userRef);
     if (userDoc.exists()) {
-      setUserName(userDoc.data()?.username || 'User');
+      setUserName(userDoc.data()?.nickname || 'User');
     }
 
     // Set up listeners for transactions

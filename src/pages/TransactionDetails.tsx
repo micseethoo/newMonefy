@@ -20,6 +20,15 @@ import {
     onDismiss: () => void;
     transaction: any;
   }
+
+  const formatAmount = (amount: number) => {
+          return new Intl.NumberFormat('en-MY', {
+            style: 'currency',
+            currency: 'MYR',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          }).format(amount).replace('MYR', 'RM');
+        };
   
   const TransactionDetails: React.FC<TransactionDetails> = ({
     isOpen,
@@ -45,7 +54,7 @@ import {
             {/* Amount Section */}
             <div className="amount-section">
               <h1 className={`amount ${transaction.type === 'Income' ? 'positive' : 'negative'}`}>
-                {transaction.type === 'Income' ? '+' : '-'}RM{transaction.amount}
+                {transaction.type === 'Income' ? '+' : '-'}{formatAmount(transaction.amount)}
               </h1>
               <p className="transaction-type">{transaction.type}</p>
             </div>
