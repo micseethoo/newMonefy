@@ -56,11 +56,10 @@
 /* Budgeting Button */
 .budgeting-button-container {
   margin-top: 50px; /* Adjust as necessary for a large margin */
-  padding-bottom: 20px;
+  padding-bottom: 24px;
 }
 
 .budgeting-button {
-  background-color: #4CAF50;
   color: white;
   font-size: 14px; /* Smaller font size */
   font-weight: bold;
@@ -103,4 +102,77 @@
   color: #ff0000; /* Optional: Add color to percentage */
 }
 
+h2 {
+    color: #333333;
+}
 
+@media (min-width: 800px) {
+  .spending-budget-grid .center-grid {
+    max-width: 50%;
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+.budgeting-button {
+  margin-bottom: 200px;
+}
+}
+
+/* Statistics Container Css */
+
+.budget-container {
+  border-radius: 20px; /* Apply rounded corners to the whole container */
+  background-color: #f9f9f9; /* Light background color for visibility */
+  display: grid;
+  grid-template-columns: auto auto auto;
+  overflow: hidden; /* Prevent overflow that would break rounded corners */
+  margin: 10px;
+}
+
+.budget-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #fff; /* Background color for each row */
+  border-bottom: 1px solid #ddd; /* Optional: divider between rows */
+}
+
+.grid-item {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  text-align: center;
+}
+
+.budget-row:last-child {
+  border-bottom: none; /* Remove the divider on the last row */
+}
+
+.icon, .category, .actual-spending {
+    color: black;
+}
+
+.actual-spending {
+  position: relative; /* Allows positioning for the budget text */
+  text-align: center; /* Ensures text is centered if needed */
+  font-size: 16px; /* Adjust as per your design */
+}
+
+.budget-text {
+  position: absolute; /* Position relative to .actual-spending */
+  top: 65%; /* Place it right below the spending text */
+  left: 50%; /* Center align horizontally */
+  transform: translateX(-50%); /* Offset to achieve proper centering */
+  font-size: 12px; /* Smaller font size for budget text */
+  color: gray; /* Optional: Make it visually distinct */
+}
+
+.spending-amount {
+  color: black; /* Default color */
+}
+
+.spending-amount.over-budget {
+  color: red; /* Change to red when over budget */
+}

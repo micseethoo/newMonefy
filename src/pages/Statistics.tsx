@@ -175,42 +175,39 @@ const tagTotals = calculateTagTotals();
           <Pie data={calculateData()} />
         </div>
 
-        {/* Render Spending by Tag and Budget Side by Side */}
-        <div className="spending-budget-grid">
-          <IonGrid className="center-grid">
-            <IonRow>
-              <IonCol size="4" offset="4"> {/* Center the content by adding offset */}
-                <h2>Spending for the Month</h2>
-                <IonList>
-                  {Object.entries(categoryBudgets).map(([category, budget]) => {
-                    const actualSpending = tagTotals[category] || 0;
-                    const percentage = (actualSpending / budget) * 100;
+        <h2>Spending for the Month</h2>
 
-                    // Get icon based on category
-                    const icon = getCategoryIcon(category); // A function you should define to match each category with an icon
+        <div className="budget-container">
+          {Object.entries(categoryBudgets).map(([category, budget]) => {
+            const actualSpending = tagTotals[category] || 0;
+            const percentage = (actualSpending / budget) * 100;
 
-                    return (
-                      <IonItem key={category}>
-                        <IonIcon icon={icon} slot="start" /> {/* Add icon to the left side */}
-                        <IonLabel>
-                          <div className="budget-item">
-                            <span className="category">{category}: </span>
-                            <span className="percentage">
-                              {percentage > 0 ? `- ${percentage.toFixed(2)}%` : ''}
+            // Get icon based on category
+            const icon = getCategoryIcon(category); // A function you should define to match each category with an icon
 
-                            </span>
-                            <span className="category">
-                                <b> RM {actualSpending.toFixed(2)} / RM {budget.toFixed(2)} </b>
-                            </span>
-                          </div>
-                        </IonLabel>
-                      </IonItem>
-                    );
-                  })}
-                </IonList>
-              </IonCol>
-            </IonRow>
-          </IonGrid>
+            // Determine if actualSpending exceeds budget
+            const isOverBudget = actualSpending > budget;
+            console.log(isOverBudget);
+
+            return (
+                <>
+                <div className="icon grid-item">
+                     <IonIcon icon={icon} /> {/* Add icon to the left side */}
+                </div>
+                <div className="category grid-item">{category}</div>
+                <div className="actual-spending grid-item">
+                  <span
+                  className={`spending-amount ${
+                    isOverBudget ? "over-budget" : ""
+                  }`}
+                >
+                  RM {actualSpending.toFixed(2)}
+                </span>
+                  <div className="budget-text">/ RM {budget.toFixed(2)}</div>
+                </div>
+                </>
+            );
+          })}
         </div>
 
 
