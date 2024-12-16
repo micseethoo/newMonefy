@@ -1,3 +1,15 @@
 .text-container{
     text-align: center;
 }
+
+.savings-goal-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.savings-goal {
+  width: 80%;  /* Or any width you prefer */
+  max-width: 350px; /* Optional, to limit the maximum width */
+  margin: 0 auto;  /* Ensures it's centered horizontally */
+}
