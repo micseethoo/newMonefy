@@ -13,6 +13,8 @@ import Budgeting from './pages/Budgeting'; // Import Budgeting
 import Profile from './pages/Profile'; // Import Profile Page
 import SavingsGoal from './pages/SavingsGoal';
 import TransactionHistory from './pages/TransactionHistory';
+import ForgotPassword from './pages/ForgotPassword'; // Import ForgotPassword
+import ChangePassword from './pages/ChangePassword'; // Import ChangePassword
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -64,8 +66,15 @@ const App: React.FC = () => (
         <Route exact path="/transactionhistory">
             <TransactionHistory />
         </Route>
+
         <Route exact path="/budgeting"> {/* Add Budgeting route */}
           <Budgeting />
+        </Route>
+        <Route exact path="/forgot-password">
+            <ForgotPassword />
+        </Route>
+        <Route exact path="/change-password">
+            <ChangePassword />
         </Route>
         <Route path="/userhome" component={UserHome} exact={true} />
         <Route exact path="/">

@@ -334,6 +334,9 @@ const Profile: React.FC = () => {
       });
   };
 
+const navigateToChangePassword = () => {
+    history.push('/change-password'); // Navigate to ChangePassword page
+  };
   return (
     <IonPage>
       <IonContent fullscreen className="profile-background">
@@ -424,6 +427,7 @@ const Profile: React.FC = () => {
                 </button>
               )}
             </div>
+            <IonButton className="change-password-button" onClick={navigateToChangePassword}>Change Password</IonButton>
             <IonButton expand="full" color="danger" className="logout-button" onClick={handleLogout}>
               Logout
             </IonButton>

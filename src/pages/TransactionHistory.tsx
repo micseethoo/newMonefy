@@ -15,8 +15,8 @@
     IonDatetime,
     IonModal,
     IonActionSheet,
-    IonSkeletonText, 
-    IonRefresher, 
+    IonSkeletonText,
+    IonRefresher,
     IonRefresherContent,
     IonIcon,
     IonSelect,
@@ -26,7 +26,7 @@
   import { getAuth, onAuthStateChanged } from 'firebase/auth';
   import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
-  
+
   import './css/TransactionHistory.css';
 
   import TransactionDetails from './TransactionDetails';
@@ -61,7 +61,7 @@ import NavBar from '../components/NavBar';
   const handleTransactionClick = (transaction: any) => {
     setSelectedTransaction(transaction);
   };
-    
+
     const [transactions, setTransactions] = useState<any[]>([]);
     const [filteredTransactions, setFilteredTransactions] = useState<any[]>([]);
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
@@ -75,7 +75,7 @@ import NavBar from '../components/NavBar';
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('all');
   const [selectedTag, setSelectedTag] = useState<string>('all');
   const [selectedType, setSelectedType] = useState<string>('all');
-  
+
 
   const [paymentMethods, setPaymentMethods] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
@@ -117,7 +117,7 @@ import NavBar from '../components/NavBar';
         amount: doc.data().amount || 0, // Default amount to 0 if missing
       }));
 
-      
+
 
       const allTransactions = [...expenses, ...incomes];
 
@@ -160,7 +160,7 @@ import NavBar from '../components/NavBar';
   };
 
 
-    
+
      // Ensure userId is available and fetch data on load
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -174,13 +174,22 @@ import NavBar from '../components/NavBar';
     return () => unsubscribe();
   }, [auth]);
 
-  
+
   // Fetch all data (transactions and filters)
   const fetchAllData = async () => {
     if (userId) {
       await Promise.all([fetchPredefinedFilters(), fetchTransactions(userId)]);
     }
   };
+
+  const formatAmount = (amount: number) => {
+        return new Intl.NumberFormat('en-MY', {
+          style: 'currency',
+          currency: 'MYR',
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }).format(amount).replace('MYR', 'RM');
+      };
 
 
   // Fetch transactions whenever userId changes
@@ -198,7 +207,7 @@ import NavBar from '../components/NavBar';
     if (startDate && endDate) {
       filtered = filtered.filter(transaction => {
         const transactionDate = new Date(transaction.date).getTime();
-        return transactionDate >= new Date(startDate).getTime() && 
+        return transactionDate >= new Date(startDate).getTime() &&
                transactionDate <= new Date(endDate).getTime();
       });
     }
@@ -213,7 +222,7 @@ import NavBar from '../components/NavBar';
       filtered = filtered.filter(t => (t.tag || 'N/A') === selectedTag);
     }
 
-    
+
 
     // Type filter
     if (selectedType !== 'all') {
@@ -241,7 +250,7 @@ import NavBar from '../components/NavBar';
     const handleRefresh = async (event: CustomEvent) => {
       try {
           if (!userId) return;
-          
+
           const expensesRef = collection(db, `users/${userId}/expenses`);
           const incomesRef = collection(db, `users/${userId}/incomes`);
 
@@ -317,7 +326,7 @@ import NavBar from '../components/NavBar';
         Clear All
       </button>
     </div>
-    
+
     <div className="filters-grid">
       {/* Payment Method Filter */}
       <div className="filter-item">
@@ -405,11 +414,11 @@ import NavBar from '../components/NavBar';
   </div>
 </div>
 
-    
+
 {/* Net Transaction Amount with Show/Hide Buttons */}
 <div className="net-amount-container">
-  <button 
-    className="net-amount-toggle-btn" 
+  <button
+    className="net-amount-toggle-btn"
     onClick={() => setShowNetAmount(!showNetAmount)}
     aria-expanded={showNetAmount}
     aria-controls="net-amount-content"
@@ -420,15 +429,14 @@ import NavBar from '../components/NavBar';
     </span>
   </button>
 
-  <div 
+  <div
     id="net-amount-content"
     className={`net-amount ${showNetAmount ? 'show' : 'hide'} ${netAmount >= 0 ? 'positive' : 'negative'}`}
   >
     <div className="net-amount-content">
       <div className="amount-label">Net Transaction Amount</div>
       <div className="amount-value">
-        <span className="currency">RM</span>
-        <span className="value">{Math.abs(netAmount).toFixed(2)}</span>
+        <span className="value">{formatAmount(netAmount)}</span>
         <span className="indicator">{netAmount >= 0 ? '▲' : '▼'}</span>
       </div>
     </div>
@@ -436,7 +444,7 @@ import NavBar from '../components/NavBar';
 </div>
 
 
-        
+
       </IonHeader>
 
       <IonContent>
@@ -471,38 +479,38 @@ import NavBar from '../components/NavBar';
 ) : (
   // Transactions list with new layout
   filteredTransactions.map((transaction, index) => (
-    <IonItem 
-      key={transaction.id || index} 
+    <IonItem
+      key={transaction.id || index}
       className="transaction-row"
       onClick={() => handleTransactionClick(transaction)}
     >
       <div className="transaction-icon-wrapper">
-        <IonIcon 
-          icon={transaction.tag ? (tagIcons[transaction.tag] || tagIcons.default) : tagIcons.default} 
+        <IonIcon
+          icon={transaction.tag ? (tagIcons[transaction.tag] || tagIcons.default) : tagIcons.default}
           className="category-icon"
         />
       </div>
-      
+
       <div className="transaction-content">
         <div className="transaction-left">
           <h3 className="transaction-title">{transaction.title}</h3>
           <span className="transaction-date">{formatDate(transaction.date)}</span>
         </div>
-        
+
         <div className="transaction-right">
         <span className="transaction-payment">{transaction.paymentMethod}</span>
           <span className={`transaction-amount ${
             transaction.type === 'Income' ? 'positive' : 'negative'
           }`}>
             {transaction.type === 'Income' ? '+' : '-'}
-            RM{transaction.amount}
+            {formatAmount(transaction.amount)}
           </span>
         </div>
       </div>
     </IonItem>
   ))
 )}
-        
+
           {/* Modal for Date Range Picker */}
         <IonModal isOpen={isDatePickerOpen} onDidDismiss={() => setIsDatePickerOpen(false)}>
           <IonContent>
@@ -534,7 +542,7 @@ import NavBar from '../components/NavBar';
           </IonContent>
         </IonModal>
 
-           
+
 
 
           {/* Transaction Details Modal */}

@@ -1,181 +1,3 @@
-// import React, { useEffect, useState } from 'react';
-// import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonButton, IonIcon } from '@ionic/react';
-// import { Pie } from 'react-chartjs-2';
-// import 'chart.js/auto';
-// import { getAuth, onAuthStateChanged } from 'firebase/auth';
-// import { getFirestore, collection, onSnapshot, query, orderBy } from 'firebase/firestore';
-// import { useHistory } from 'react-router-dom'; // Added for navigation
-// import { wallet, home, fastFood, carSport, alarm } from 'ionicons/icons'; // Add Ionicons here
-// import FloatingMenuButton from '../components/FloatingMenuButton';
-// import NavBar from '../components/NavBar';
-// import './css/Statistics.css';
-//
-// const Statistics: React.FC = () => {
-//   const [transactions, setTransactions] = useState<any[]>([]);
-//   const [loading, setLoading] = useState(true); // Loading state
-//   const auth = getAuth();
-//   const db = getFirestore();
-//   const history = useHistory(); // Initialize history for navigation
-//
-//   useEffect(() => {
-//     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
-//       if (user) {
-//         const userId = user.uid;
-//
-//         const expensesRef = query(
-//           collection(db, `users/${userId}/expenses`),
-//           orderBy('date', 'desc')
-//         );
-//
-//         const unsubscribe = onSnapshot(expensesRef, (snapshot) => {
-//           const expenseList: any[] = [];
-//           snapshot.docs.forEach((doc) => {
-//             expenseList.push({ id: doc.id, ...doc.data() });
-//           });
-//           setTransactions(expenseList);
-//           setLoading(false); // Stop loading when data is fetched
-//         });
-//
-//         // Cleanup Firestore listener
-//         return () => unsubscribe();
-//       } else {
-//         setLoading(false); // Stop loading if user is not authenticated
-//       }
-//     });
-//
-//     // Cleanup authentication listener
-//     return () => unsubscribeAuth();
-//   }, [auth, db]);
-//
-//   const calculateData = () => {
-//     const tagAmounts: { [key: string]: number } = {};
-//
-//     transactions.forEach((transaction) => {
-//       if (tagAmounts[transaction.tag]) {
-//         tagAmounts[transaction.tag] += transaction.amount;
-//       } else {
-//         tagAmounts[transaction.tag] = transaction.amount;
-//       }
-//     });
-//
-//     const labels = Object.keys(tagAmounts);
-//     const data = Object.values(tagAmounts);
-//
-//     return {
-//       labels,
-//       datasets: [
-//         {
-//           data,
-//           backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
-//           hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
-//         },
-//       ],
-//     };
-//   };
-//
-//   const calculateTagTotals = () => {
-//     const tagAmounts: { [key: string]: number } = {};
-//
-//     transactions.forEach((transaction) => {
-//       if (tagAmounts[transaction.tag]) {
-//         tagAmounts[transaction.tag] += transaction.amount;
-//       } else {
-//         tagAmounts[transaction.tag] = transaction.amount;
-//       }
-//     });
-//
-//     return tagAmounts;
-//   };
-//
-//   const tagTotals = calculateTagTotals();
-//
-//   // Function to return icon based on category/tag
-//   const getCategoryIcon = (tag: string) => {
-//     switch (tag) {
-//       case 'Food':
-//         return fastFood;
-//       case 'Transport':
-//         return carSport;
-//       case 'Housing':
-//         return home;
-//       case 'Entertainment':
-//         return wallet;
-//       default:
-//         return alarm; // Default icon for uncategorized tags
-//     }
-//   };
-//
-//   if (loading) {
-//     return (
-//       <IonPage>
-//         <IonHeader>
-//           <IonToolbar>
-//             <IonTitle>Monthly Spending</IonTitle>
-//           </IonToolbar>
-//         </IonHeader>
-//         <IonContent>
-//           <div className="loading-container">Loading...</div>
-//         </IonContent>
-//       </IonPage>
-//     );
-//   }
-//
-//   // Navigate to budgeting page
-//   const navigateToBudgeting = () => {
-//     history.push('/budgeting');
-//   };
-//
-//   return (
-//     <IonPage>
-//       <IonHeader>
-//         <IonToolbar>
-//           <IonTitle>Monthly Spending</IonTitle>
-//         </IonToolbar>
-//       </IonHeader>
-//
-//       <IonContent fullscreen className="statistics-container">
-//         {/* Render Pie Chart */}
-//         <div className="chart-container">
-//           <Pie data={calculateData()} />
-//         </div>
-//
-//         {/* Render Spending by Tag */}
-//         <div className="tag-totals">
-//           <h2>Spending by Tag</h2>
-//           <IonList>
-//             {Object.entries(tagTotals).map(([tag, total]) => (
-//               <IonItem key={tag}>
-//                 <IonIcon icon={getCategoryIcon(tag)} slot="start" />
-//                 <IonLabel>
-//                   <strong>{tag}:</strong> RM {total.toFixed(2)}
-//                 </IonLabel>
-//               </IonItem>
-//             ))}
-//           </IonList>
-//         </div>
-//
-//         {/* Floating button */}
-//         <FloatingMenuButton />
-//
-//         {/* Budgeting Button at the bottom */}
-//         <div className="budgeting-button-container">
-//           <IonButton
-//             expand="block"
-//             onClick={navigateToBudgeting}
-//             className="budgeting-button"
-//           >
-//             Go to Budgeting
-//           </IonButton>
-//         </div>
-//       </IonContent>
-//
-//       <NavBar />
-//     </IonPage>
-//   );
-// };
-//
-// export default Statistics;
-
 import React, { useEffect, useState } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonButton, IonIcon, IonGrid, IonRow, IonCol } from '@ionic/react';
 import { Pie } from 'react-chartjs-2';
@@ -262,21 +84,46 @@ const Statistics: React.FC = () => {
     };
   };
 
-  const calculateTagTotals = () => {
-    const tagAmounts: { [key: string]: number } = {};
+//   const calculateTagTotals = () => {
+//     const tagAmounts: { [key: string]: number } = {};
+//
+//     transactions.forEach((transaction) => {
+//       if (tagAmounts[transaction.tag]) {
+//         tagAmounts[transaction.tag] += transaction.amount;
+//       } else {
+//         tagAmounts[transaction.tag] = transaction.amount;
+//       }
+//     });
+//
+//     return tagAmounts;
+//   };
+//
+//   const tagTotals = calculateTagTotals();
+const calculateTagTotals = () => {
+  const tagAmounts: { [key: string]: number } = {};
 
-    transactions.forEach((transaction) => {
+  // Get the current date and the start of the current month
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth(); // 0-based index (0 = January, 11 = December)
+  const currentYear = currentDate.getFullYear();
+
+  transactions.forEach((transaction) => {
+    const transactionDate = new Date(transaction.date); // Assuming `transaction.date` is in a valid date format
+
+    // Check if the transaction is in the current month and year
+    if (transactionDate.getMonth() === currentMonth && transactionDate.getFullYear() === currentYear) {
       if (tagAmounts[transaction.tag]) {
         tagAmounts[transaction.tag] += transaction.amount;
       } else {
         tagAmounts[transaction.tag] = transaction.amount;
       }
-    });
+    }
+  });
 
-    return tagAmounts;
-  };
+  return tagAmounts;
+};
 
-  const tagTotals = calculateTagTotals();
+const tagTotals = calculateTagTotals();
 
   // Function to return icon based on category/tag
   const getCategoryIcon = (tag: string) => {
@@ -332,28 +179,28 @@ const Statistics: React.FC = () => {
         <div className="spending-budget-grid">
           <IonGrid className="center-grid">
             <IonRow>
-              <IonCol size="12" md="6" className="center-col">
-                <h2>Budget vs Actual Spending</h2>
+              <IonCol size="4" offset="4"> {/* Center the content by adding offset */}
+                <h2>Spending for the Month</h2>
                 <IonList>
                   {Object.entries(categoryBudgets).map(([category, budget]) => {
                     const actualSpending = tagTotals[category] || 0;
                     const percentage = (actualSpending / budget) * 100;
-                    const icon = getCategoryIcon(category); // Function to get category icon
+
+                    // Get icon based on category
+                    const icon = getCategoryIcon(category); // A function you should define to match each category with an icon
 
                     return (
                       <IonItem key={category}>
-                        <IonIcon icon={icon} slot="start" />
+                        <IonIcon icon={icon} slot="start" /> {/* Add icon to the left side */}
                         <IonLabel>
                           <div className="budget-item">
                             <span className="category">{category}: </span>
-                            <span className="actual-amount">
-                              RM {actualSpending.toFixed(2)} (Actual) /
-                            </span>
-                            <span className="budget-amount">
-                              RM {budget.toFixed(2)} (Budget)
-                            </span>
                             <span className="percentage">
                               {percentage > 0 ? `- ${percentage.toFixed(2)}%` : ''}
+
+                            </span>
+                            <span className="category">
+                                <b> RM {actualSpending.toFixed(2)} / RM {budget.toFixed(2)} </b>
                             </span>
                           </div>
                         </IonLabel>
