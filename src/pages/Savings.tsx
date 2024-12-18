@@ -5,6 +5,7 @@ import { getFirestore, collection, onSnapshot, getDocs, addDoc } from 'firebase/
 import './css/Savings.css';
 import NavBar from '../components/NavBar';
 import SavingsGoalDiv from '../components/SavingsGoalDiv';
+import FloatingSavingsButton from '../components/FloatingSavingsButton';
 
 const Savings: React.FC = () => {
   const [savingsGoals, setSavingsGoals] = useState<any[]>([]);
@@ -131,49 +132,9 @@ const Savings: React.FC = () => {
           </IonCard>
         )}
 
-        {/* Form to Add New Savings Goal */}
-        <IonCard>
-          <IonCardContent>
-            <IonItem>
-              <IonLabel position="stacked">Goal Name</IonLabel>
-              <IonInput
-                value={goalName}
-                onIonChange={(e) => setGoalName(e.detail.value!)}
-                placeholder="Enter goal name"
-              />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Goal Value</IonLabel>
-              <IonInput
-                type="number"
-                value={goalValue}
-                onIonChange={(e) => setGoalValue(Number(e.detail.value))}
-                placeholder="Enter goal value"
-              />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Current Savings</IonLabel>
-              <IonInput
-                type="number"
-                value={currentSavings}
-                onIonChange={(e) => setCurrentSavings(Number(e.detail.value))}
-                placeholder="Enter current savings"
-              />
-            </IonItem>
-            <IonButton expand="full" onClick={addSavingsGoal}>
-              Add Savings Goal
-            </IonButton>
-          </IonCardContent>
-        </IonCard>
 
-        {/* Display Toast Message */}
-        <IonToast
-          isOpen={showToast}
-          message={toastMessage}
-          duration={2000}
-          onDidDismiss={() => setShowToast(false)}
-        />
       </IonContent>
+      <FloatingSavingsButton />
       <NavBar />
     </IonPage>
   );

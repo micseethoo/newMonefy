@@ -1,0 +1,32 @@
+.floating-button-container {
+  position: fixed;
+  bottom: 70px; /* Position above navbar */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+}
+
+.floating-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 24px;
+  color: white;
+  background-color: #3880ff;
+}
+
+.savings-form-container {
+  position: absolute;
+  bottom: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 5px;
+  min-width: 300px;
+}
+
+.savings-form-container .ion-row {
+  margin: 0; /* Remove margin to ensure the content aligns properly */
+}
