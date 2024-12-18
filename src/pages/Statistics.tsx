@@ -175,7 +175,7 @@ const tagTotals = calculateTagTotals();
           <Pie data={calculateData()} />
         </div>
 
-        <h2 style={{ color: 'white' }}>Spending for the Month</h2>
+        <h2 className="h2-text">Spending for the Month</h2>
 
         <div className="budget-container">
           {Object.entries(categoryBudgets).map(([category, budget]) => {

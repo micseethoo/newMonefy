@@ -1,20 +1,32 @@
-.text-container{
-    text-align: center;
+/* Center the text container */
+.text-container {
+  text-align: center;
+  color: var(--ion-text-color); /* Automatically adjusts to light or dark mode */
 }
 
+/* Ensure h2 text inside the text-container adapts to light and dark modes */
+.text-container h2 {
+  color: var(--ion-text-color, #000); /* Fallback to black if the variable is missing */
+}
+
+/* Savings goal container */
 .savings-goal-container {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+/* Style the savings goal section */
 .savings-goal {
-  width: 80%;  /* Or any width you prefer */
+  width: 80%; /* Or any width you prefer */
   max-width: 350px; /* Optional, to limit the maximum width */
-  margin: 0 auto;  /* Ensures it's centered horizontally */
+  margin: 0 auto; /* Ensures it's centered horizontally */
+  background-color: var(--ion-item-background); /* Adapts background to light or dark mode */
+  color: var(--ion-text-color); /* Adapts text color inside the box */
+  padding: 20px; /* Adds padding for a neat layout */
+  border-radius: 8px; /* Rounds the corners for a modern look */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
 }
-
-
 
 /* Center the Edit Button */
 .edit-button-container {
@@ -27,20 +39,22 @@
 .edit-section {
   margin: 20px;
   padding: 20px;
-  background-color: #f4f4f4;
+  background-color: var(--ion-item-background); /* Adapts to light or dark mode */
   border-radius: 8px;
   text-align: center;
 }
 
 .edit-text {
   font-size: 18px;
-  color: black;
+  color: var(--ion-text-color); /* Adapts to light or dark mode */
   margin-bottom: 10px;
 }
 
 .edit-section ion-input {
   width: 100%;
   margin-bottom: 20px;
+  color: var(--ion-text-color); /* Ensures input text adapts */
+  background-color: var(--ion-input-background); /* Input background adjusts */
 }
 
 /* Fix button container alignment */
@@ -56,6 +70,7 @@
   width: 45%; /* Make sure buttons have a similar width */
 }
 
+/* Style the delete button container */
 .delete-button-container {
   display: flex;
   justify-content: center; /* Centers the buttons horizontally */
@@ -64,6 +79,21 @@
   width: 100%;
 }
 
+.text-container {
+  text-align: center;
+  color: var(--text); /* Automatically adjusts to light or dark mode */
+}
 
+// Adaptive Theme Colours
+@media (prefers-color-scheme: light) {
+  :root {
+    --text: black; /* Light background color for light mode */
+  }
+}
 
-
+/* Dark Mode Background */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: white; /* Dark background color for dark mode */
+  }
+}

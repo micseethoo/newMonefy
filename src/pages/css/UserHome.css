@@ -1,10 +1,12 @@
 /* src/pages/css/UserHome.css */
+
+/* General Styling */
 .home-content {
   padding: 20px;
   padding-bottom: 120px; /* Increased padding for more scrolling */
-  background-color: #f9f9f9;
+  background-color: var(--ion-background-color);
+  color: var(--ion-text-color);
   --overflow: scroll;
-  --padding-bottom: 120px;
 }
 
 .welcome-section {
@@ -16,13 +18,13 @@
   font-size: 24px;
   font-weight: bold;
   margin: 20px 0;
-  color: #333;
+  color: var(--ion-text-color);
 }
 
 .greeting-text {
   font-size: 28px;
   font-weight: 600;
-  color: white;
+  color: var(--ion-text-color);
   margin: 0;
   line-height: 1.2;
 }
@@ -30,14 +32,14 @@
 .user-name {
   font-size: 32px;
   font-weight: 700;
-  color: #2196F3; /* Or your primary color */
+  color: var(--ion-color-primary);
   margin: 4px 0;
   line-height: 1.2;
 }
 
 .greeting-message {
   font-size: 16px;
-  color: #666;
+  color: var(--secondary-text-color);
   margin: 8px 0 20px 0;
 }
 
@@ -50,12 +52,12 @@
   align-items: center;
   gap: 8px;
   font-size: 18px;
-  color: white;
+  color: var(--ion-text-color);
 }
 
 .amount {
   font-weight: 600;
-  color: #4CAF50;
+  color: var(--ion-color-success);
   transition: filter 0.3s ease;
 }
 
@@ -66,17 +68,17 @@
 .eye-icon {
   font-size: 20px;
   padding: 8px;
-  color: #666;
+  color: var(--secondary-text-color);
   cursor: pointer;
   transition: color 0.3s ease;
 }
 
 .eye-icon:hover {
-  color: #333;
+  color: var(--ion-text-color);
 }
 
 .savings-card {
-  background: linear-gradient(135deg, #4CAF50, #45a049);
+  background: linear-gradient(135deg, var(--ion-color-success), #45a049);
   color: white;
   border-radius: 15px;
 }
@@ -85,11 +87,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.eye-icon {
-  font-size: 24px;
-  cursor: pointer;
 }
 
 .savings-amount {
@@ -103,8 +100,38 @@
   filter: blur(8px);
 }
 
+/* Blue Card (Income Summary) */
+.income-summary {
+  background-color: #2196F3; /* Fixed blue color */
+  color: white; /* Text remains white */
+  text-align: center;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.income-amount {
+  color: white; /* Text remains white */
+  font-weight: bold;
+  font-size: 20px;
+}
+
+/* Red Card (Expenses Summary) */
+.expenses-summary {
+  background-color: #F44336; /* Fixed red color */
+  color: white; /* Text remains white */
+  text-align: center;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.expense-amount {
+  color: white; /* Text remains white */
+  font-weight: bold;
+  font-size: 20px;
+}
+
 .monthly-summary-card {
-  background: white;
+  background: var(--card-background-color);
   border-radius: 15px;
 }
 
@@ -115,32 +142,6 @@
   margin-top: 15px;
 }
 
-.income-summary, .expenses-summary {
-  text-align: center;
-  padding: 15px;
-  border-radius: 10px;
-}
-
-.income-summary {
-  background-color: rgba(33, 150, 243, 0.1);
-}
-
-.expenses-summary {
-  background-color: rgba(244, 67, 54, 0.1);
-}
-
-.income-amount {
-  color: #2196F3;
-  font-weight: bold;
-  font-size: 20px;
-}
-
-.expense-amount {
-  color: #F44336;
-  font-weight: bold;
-  font-size: 20px;
-}
-
 .transactions-header {
   display: flex;
   justify-content: space-between;
@@ -149,11 +150,9 @@
 }
 
 .transaction-row {
-  /* I don't really like the padding here - Darrell
-  --padding-start: 0;
-  --inner-padding-end: 0;
-  */
   margin-bottom: 8px;
+  background-color: var(--card-background-color);
+  border-radius: 10px;
 }
 
 .transaction-content {
@@ -183,12 +182,12 @@
 
 .transaction-date {
   font-size: 12px;
-  color: #666;
+  color: var(--secondary-text-color);
 }
 
 .transaction-payment {
   font-size: 12px;
-  color: #666;
+  color: var(--secondary-text-color);
 }
 
 .transaction-amount {
@@ -197,24 +196,19 @@
 }
 
 .transaction-amount.positive {
-  color: #4CAF50;
+  color: var(--ion-color-success);
 }
 
 .transaction-amount.negative {
-  color: #F44336;
+  color: var(--ion-color-danger);
 }
 
-/* Add some spacing between major sections */
 ion-card {
   margin: 16px 0;
 }
 
-/* Add some animation to the greeting */
 .greeting-container {
   animation: fadeIn 0.5s ease-in-out;
-}
-
-.greeting-container {
   padding: 0 16px;
 }
 
@@ -229,32 +223,38 @@ ion-card {
   }
 }
 
-/* Make cards more prominent */
-.monthly-summary-card,
 .transactions-card {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px var(--monthly-summary-light-bg);
   border-radius: 16px;
   overflow: hidden;
 }
 
-/* Add some breathing room between elements */
-.summary-grid {
-  margin: 20px 0;
+.monthly-summary-card {
+  background: var(--monthly-summary-light-bg);
+  border-radius: 15px;
+  box-shadow: 0 4px 12px var(--box-shadow-color);
+  padding: 16px;
+  color: var(--ion-text-color);
 }
 
-/* Ensure the page has enough content space */
-.home-grid {
-  min-height: calc(100vh - 56px); /* Subtract header height */
-  padding-bottom: 80px; /* Add space for bottom navigation */
-}
-
-/* Make the icons more visible */
 .category-icon {
   font-size: 24px;
-  color: #2196F3;
-  }
+  color: var(--ion-color-primary);
+}
 
 .transaction-icon-wrapper {
-  background-color: rgba(33, 150, 243, 0.1); /* Light blue background */
+  background-color: var(--ion-color-primary-tint);
 }
+
+// Dark modes for monthly summary card specifically
+@media (prefers-color-scheme: light) {
+  :root {
+    --monthly-summary-light-bg: #e3f2fd;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --monthly-summary-light-bg: var(--ion-card-background);
+  }
 }

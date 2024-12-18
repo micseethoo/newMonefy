@@ -1,6 +1,7 @@
 .statistics-container {
   padding: 20px;
   text-align: center;
+  color: white;
 }
 
 .chart-container {
@@ -132,4 +133,22 @@
 
 .spending-amount.over-budget {
   color: red; /* Change to red when over budget */
+}
+
+.h2-text {
+  color: var(--h2-text);
+  }
+
+// Adaptive Theme Colours
+@media (prefers-color-scheme: light) {
+  :root {
+    --h2-text: black; /* Light background color for light mode */
+  }
+}
+
+/* Dark Mode Background */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --h2-text: white; /* Dark background color for dark mode */
+  }
 }

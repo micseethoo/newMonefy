@@ -116,15 +116,15 @@ const SavingsGoal: React.FC = () => {
       <IonContent fullscreen className="main-container">
         <div className="text-container">
           <h1>
-            <span style={{ color: 'white' }}>{goalName}</span>
+            <span>{goalName}</span>
           </h1>
 
-          <h2 style={{ color: 'white' }}>
+          <h2>
             Current Savings
           </h2>
 
-          <h2 style={{ color: 'white' }}>
-            RM <span style={{ color: 'white' }}>{currentSavings}</span>
+          <h2>
+            RM <span>{currentSavings}</span>
           </h2>
         </div>
 
