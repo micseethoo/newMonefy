@@ -149,8 +149,10 @@
 }
 
 .transaction-row {
+  /* I don't really like the padding here - Darrell
   --padding-start: 0;
   --inner-padding-end: 0;
+  */
   margin-bottom: 8px;
 }
 
