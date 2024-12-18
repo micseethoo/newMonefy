@@ -1,42 +1,11 @@
-// import React from 'react';
-// import { IonContent, IonPage, IonHeader, IonToolbar, IonTitle } from '@ionic/react'; // Import Ionic components
-// import './css/Savings.css'; // Link to CSS file for styling
-// import NavBar from '../components/NavBar';
-// import SavingsGoalDiv from '../components/SavingsGoalDiv'; // Import SavingsGoalDiv component
-// import FloatingMenuButton from '../components/FloatingMenuButton';
-//
-// const Savings: React.FC = () => {
-//   return (
-//     <IonPage>
-//       {/* Header for the Savings page */}
-//       <IonHeader>
-//         <IonToolbar>
-//           <IonTitle className="savings-header">Savings</IonTitle>
-//         </IonToolbar>
-//       </IonHeader>
-//       <IonContent fullscreen className="main-container">
-//         {/* Render SavingsGoalDiv components */}
-//         <SavingsGoalDiv goalName={"Car"} goalValue={10000} currentSavings={5000} />
-//         <SavingsGoalDiv goalName={"House"} goalValue={20000} currentSavings={12000} />
-//         <SavingsGoalDiv goalName={"Phone"} goalValue={15000} currentSavings={7000} />
-//
-//         {/* Navigation bar at the bottom */}
-//         <FloatingMenuButton />
-//         <NavBar />
-//       </IonContent>
-//     </IonPage>
-//   );
-// };
-//
-// export default Savings;
-
 import React, { useEffect, useState } from 'react';
 import { IonPage, IonContent, IonHeader, IonToolbar, IonTitle, IonGrid, IonRow, IonCol, IonCard, IonCardContent, IonItem, IonLabel, IonInput, IonButton, IonToast } from '@ionic/react';
-import { getAuth } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth'; // Import onAuthStateChanged
 import { getFirestore, collection, onSnapshot, getDocs, addDoc } from 'firebase/firestore';
 import './css/Savings.css';
 import NavBar from '../components/NavBar';
 import SavingsGoalDiv from '../components/SavingsGoalDiv';
+import FloatingSavingsButton from '../components/FloatingSavingsButton';
 
 const Savings: React.FC = () => {
   const [savingsGoals, setSavingsGoals] = useState<any[]>([]);
@@ -46,10 +15,10 @@ const Savings: React.FC = () => {
   const [currentSavings, setCurrentSavings] = useState<number>(0);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string>('');
+  const [userId, setUserId] = useState<string | null>(null); // State to hold user ID
 
   const auth = getAuth();
   const db = getFirestore();
-  const userId = auth.currentUser?.uid;
 
   // Function to check if the collection exists
   const checkCollectionExists = async (collectionPath: string) => {
@@ -93,6 +62,20 @@ const Savings: React.FC = () => {
   };
 
   useEffect(() => {
+    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserId(user.uid); // Set the userId when the user is authenticated
+      } else {
+        setUserId(null); // Set userId to null when the user is not authenticated
+      }
+    });
+
+    return () => {
+      unsubscribeAuth(); // Clean up the subscription when the component unmounts
+    };
+  }, [auth]);
+
+  useEffect(() => {
     if (!userId) return;
 
     const savingsRef = collection(db, `users/${userId}/savings`);
@@ -110,7 +93,7 @@ const Savings: React.FC = () => {
     });
 
     return () => unsubscribe();
-  }, [userId]);
+  }, [userId, db]);
 
   return (
     <IonPage>
@@ -149,56 +132,12 @@ const Savings: React.FC = () => {
           </IonCard>
         )}
 
-        {/* Form to Add New Savings Goal */}
-        <IonCard>
-          <IonCardContent>
-            <IonItem>
-              <IonLabel position="stacked">Goal Name</IonLabel>
-              <IonInput
-                value={goalName}
-                onIonChange={(e) => setGoalName(e.detail.value!)}
-                placeholder="Enter goal name"
-              />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Goal Value</IonLabel>
-              <IonInput
-                type="number"
-                value={goalValue}
-                onIonChange={(e) => setGoalValue(Number(e.detail.value))}
-                placeholder="Enter goal value"
-              />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Current Savings</IonLabel>
-              <IonInput
-                type="number"
-                value={currentSavings}
-                onIonChange={(e) => setCurrentSavings(Number(e.detail.value))}
-                placeholder="Enter current savings"
-              />
-            </IonItem>
-            <IonButton expand="full" onClick={addSavingsGoal}>
-              Add Savings Goal
-            </IonButton>
-          </IonCardContent>
-        </IonCard>
 
-        {/* Display Toast Message */}
-        <IonToast
-          isOpen={showToast}
-          message={toastMessage}
-          duration={2000}
-          onDidDismiss={() => setShowToast(false)}
-        />
       </IonContent>
+      <FloatingSavingsButton />
       <NavBar />
     </IonPage>
   );
 };
 
 export default Savings;
-
-
-
-

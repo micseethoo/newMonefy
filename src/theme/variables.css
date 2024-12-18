@@ -10,9 +10,9 @@ http://ionicframework.com/docs/theming/ */
   --ion-toolbar-color: #ffffff; /* White text color on toolbar */
 
   /* Dark Mode Colors (optional, if you want to support dark mode) */
-  --ion-background-color-darker: #ffffff; /* Background for dark mode */
+  --ion-background-color-darker: #000000; /* Background for dark mode */
   --ion-text-color-darker: #ffffff; /* Text color for dark mode */
   --ion-toolbar-background-darker: #c00; /* Dark mode toolbar color */
-  --ion-toolbar-color-darker: #ffffff; /* Dark mode toolbar text color */
+  --ion-toolbar-color-darker: #000000; /* Dark mode toolbar text color */
 }
 

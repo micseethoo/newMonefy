@@ -16,13 +16,12 @@ import {
   IonIcon,
 } from '@ionic/react';
 import { eyeOutline, eyeOffOutline } from 'ionicons/icons';
-import { getAuth } from 'firebase/auth';
-import { getFirestore, doc, getDoc, collection, onSnapshot, query, orderBy, where } from 'firebase/firestore';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';  // Add onAuthStateChanged import
+import { getFirestore, doc, getDoc, collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 import { useHistory } from 'react-router-dom';
 import './css/UserHome.css';
 import FloatingMenuButton from '../components/FloatingMenuButton';
 import NavBar from '../components/NavBar';
-
 
 const UserHome: React.FC = () => {
   const [transactions, setTransactions] = useState<any[]>([]);
@@ -36,12 +35,11 @@ const UserHome: React.FC = () => {
   const [monthlyIncome, setMonthlyIncome] = useState(0);
   const [recentTransactions, setRecentTransactions] = useState<any[]>([]);
 
-
   const auth = getAuth();
   const db = getFirestore();
   const history = useHistory();
 
- // Function to get greeting based on time of day
+  // Function to get greeting based on time of day
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return 'Good morning';
@@ -49,14 +47,14 @@ const UserHome: React.FC = () => {
     return 'Good evening';
   };
 
-    const formatAmount = (amount: number) => {
-      return new Intl.NumberFormat('en-MY', {
-        style: 'currency',
-        currency: 'MYR',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      }).format(amount).replace('MYR', 'RM');
-    };
+  const formatAmount = (amount: number) => {
+    return new Intl.NumberFormat('en-MY', {
+      style: 'currency',
+      currency: 'MYR',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(amount).replace('MYR', 'RM');
+  };
 
   // Get current month's date range
   const getCurrentMonthRange = () => {
@@ -67,11 +65,25 @@ const UserHome: React.FC = () => {
   };
 
   useEffect(() => {
-    const user = auth.currentUser;
-    if (user) {
-      setUserId(user.uid);
-      fetchUserData(user.uid);
-    }
+    // Listen for authentication state changes
+    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserId(user.uid);
+        fetchUserData(user.uid);
+      } else {
+        setUserId(null);
+        setUserName('User');
+        setTransactions([]);
+        setTotalExpenses(0);
+        setTotalIncome(0);
+        setCurrentSavings(0);
+      }
+    });
+
+    // Cleanup on component unmount
+    return () => {
+      unsubscribeAuth();
+    };
   }, [auth]);
 
   const fetchUserData = async (uid: string) => {
@@ -199,8 +211,6 @@ const UserHome: React.FC = () => {
                         </div>
                       </IonCol>
                     </IonRow>
-
-
 
            {/* Monthly Summary Card */}
               <IonRow>
