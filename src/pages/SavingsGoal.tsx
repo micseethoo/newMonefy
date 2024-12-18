@@ -1,80 +1,98 @@
 import React, { useEffect, useState } from 'react';
-import { IonContent, IonPage, IonHeader, IonToolbar, IonTitle } from '@ionic/react'; // Import Ionic components
-import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonProgressBar } from '@ionic/react';
-import { getFirestore, doc, getDoc } from 'firebase/firestore'; // Import Firestore functions
-import { useParams } from 'react-router-dom'; // For routing and extracting the goal ID
-import { getAuth, onAuthStateChanged } from 'firebase/auth'; // Import Firebase Authentication functions
-import './css/SavingsGoal.css'; // Link to CSS file for styling
+import { IonContent, IonPage, IonCard, IonCardContent, IonProgressBar, IonInput, IonButton } from '@ionic/react';
+import { getFirestore, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { useParams } from 'react-router-dom';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import './css/SavingsGoal.css';
 import NavBar from '../components/NavBar';
 import FloatingMenuButton from '../components/FloatingMenuButton';
 
 const SavingsGoal: React.FC = () => {
-  const { goalId } = useParams<{ goalId: string }>(); // Extract goalId from the URL params
-  const [goalData, setGoalData] = useState<any>(null); // Store goal data here
-  const [loading, setLoading] = useState<boolean>(true); // Loading state
-  const db = getFirestore(); // Initialize Firestore
-  const [userId, setUserId] = useState<string | null>(null); // Track the authenticated user's UID
+  const { goalId } = useParams<{ goalId: string }>();
+  const [goalData, setGoalData] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const db = getFirestore();
+  const [userId, setUserId] = useState<string | null>(null);
+  const [newCurrentSavings, setNewCurrentSavings] = useState<number | string>('');
+  const [isEditing, setIsEditing] = useState<boolean>(false);
 
   useEffect(() => {
     const auth = getAuth();
-
-    // Use onAuthStateChanged to listen for authentication state changes
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log('Authenticated user UID:', user.uid);
-        setUserId(user.uid); // Update the userId state when a user is authenticated
+        setUserId(user.uid);
       } else {
-        console.warn('No authenticated user');
-        setUserId(null); // Reset userId if no user is authenticated
+        setUserId(null);
       }
     });
 
-    // Clean up the onAuthStateChanged listener on unmount
     return () => unsubscribeAuth();
   }, []);
 
-  // Function to fetch data from Firestore based on goalId and userId
   const fetchGoalData = async () => {
-    if (!goalId || !userId) return; // Ensure both goalId and userId are available
+    if (!goalId || !userId) return;
 
     try {
-      const goalRef = doc(db, 'users', userId, 'savings', goalId); // Firestore path using authenticated user's UID
+      const goalRef = doc(db, 'users', userId, 'savings', goalId);
       const goalDoc = await getDoc(goalRef);
 
       if (goalDoc.exists()) {
-        setGoalData(goalDoc.data()); // Set goal data from Firestore
+        setGoalData(goalDoc.data());
+        setNewCurrentSavings(goalDoc.data()?.currentSavings || '');
       } else {
         console.error('Goal not found');
-        setGoalData(null); // Set data to null if goal is not found
+        setGoalData(null);
       }
     } catch (error) {
       console.error('Error fetching goal data:', error);
-      setGoalData(null); // Set data to null on error
+      setGoalData(null);
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     if (userId) {
-      fetchGoalData(); // Call fetchGoalData when userId changes
+      fetchGoalData();
     }
-  }, [goalId, userId]); // Re-run when goalId or userId changes
+  }, [goalId, userId]);
 
   if (loading) {
-    return <div>Loading...</div>; // Show loading while fetching data
+    return <div>Loading...</div>;
   }
 
   if (!goalData) {
-    return <div>No goal data found</div>; // Handle no data found
+    return <div>No goal data found</div>;
   }
 
-  // Destructure goal data
   const { goalName, currentSavings, goalValue } = goalData;
 
-  // Calculate progress
   const progress = currentSavings / goalValue;
-  const progressPercentage = Math.min(Math.max(progress * 100, 0), 100).toFixed(0); // Ensure progress is between 0-100
+  const progressPercentage = Math.min(Math.max(progress * 100, 0), 100).toFixed(0);
+
+  const handleSaveCurrentSavings = async () => {
+    if (newCurrentSavings && newCurrentSavings !== currentSavings) {
+      try {
+        const goalRef = doc(db, 'users', userId, 'savings', goalId);
+        await updateDoc(goalRef, {
+          currentSavings: Number(newCurrentSavings),
+        });
+        setGoalData((prevState: any) => ({
+          ...prevState,
+          currentSavings: Number(newCurrentSavings),
+        }));
+        setIsEditing(false);
+        console.log('Current savings updated');
+      } catch (error) {
+        console.error('Error updating current savings:', error);
+      }
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false); // Close the editing mode without saving changes
+    setNewCurrentSavings(currentSavings); // Reset the input value
+  };
 
   return (
     <IonPage>
@@ -99,6 +117,31 @@ const SavingsGoal: React.FC = () => {
             <p>Current Savings: RM {currentSavings.toFixed(2)} / RM {goalValue.toFixed(2)}</p>
           </IonCardContent>
         </IonCard>
+
+        {/* Edit Button - Centered */}
+        <div className="edit-button-container">
+          <IonButton onClick={() => setIsEditing(!isEditing)}>
+            Edit
+          </IonButton>
+        </div>
+
+        {/* Editing Section */}
+        {isEditing && (
+          <div className="edit-section">
+            <p className="edit-text">Change Savings Value</p>
+            <IonInput
+              value={newCurrentSavings}
+              onIonChange={(e) => setNewCurrentSavings(e.detail.value!)}
+              placeholder="Enter new savings"
+              type="number"
+              style={{ color: 'black' }}
+            />
+            <div className="button-container">
+              <IonButton onClick={handleSaveCurrentSavings}>Save</IonButton>
+              <IonButton onClick={handleCancelEdit} color="light">Cancel</IonButton>
+            </div>
+          </div>
+        )}
 
         <FloatingMenuButton />
         <NavBar />

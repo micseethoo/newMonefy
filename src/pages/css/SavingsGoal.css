@@ -13,3 +13,48 @@
   max-width: 350px; /* Optional, to limit the maximum width */
   margin: 0 auto;  /* Ensures it's centered horizontally */
 }
+
+
+
+/* Center the Edit Button */
+.edit-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* Style the edit section */
+.edit-section {
+  margin: 20px;
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.edit-text {
+  font-size: 18px;
+  color: black;
+  margin-bottom: 10px;
+}
+
+.edit-section ion-input {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+/* Fix button container alignment */
+.button-container {
+  display: flex;
+  justify-content: center; /* Centers the buttons horizontally */
+  gap: 10px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.button-container ion-button {
+  width: 45%; /* Make sure buttons have a similar width */
+}
+
+
+
