@@ -56,5 +56,14 @@
   width: 45%; /* Make sure buttons have a similar width */
 }
 
+.delete-button-container {
+  display: flex;
+  justify-content: center; /* Centers the buttons horizontally */
+  gap: 10px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+
 
 

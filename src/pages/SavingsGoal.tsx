@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { IonContent, IonPage, IonCard, IonCardContent, IonProgressBar, IonInput, IonButton } from '@ionic/react';
-import { getFirestore, doc, getDoc, updateDoc } from 'firebase/firestore';
-import { useParams } from 'react-router-dom';
+import { IonContent, IonPage, IonCard, IonCardContent, IonProgressBar, IonInput, IonButton, IonAlert } from '@ionic/react';
+import { getFirestore, doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { useParams, useHistory } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import './css/SavingsGoal.css';
 import NavBar from '../components/NavBar';
@@ -15,6 +15,8 @@ const SavingsGoal: React.FC = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [newCurrentSavings, setNewCurrentSavings] = useState<number | string>('');
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false); // For confirmation alert
+  const history = useHistory(); // For navigating back
 
   useEffect(() => {
     const auth = getAuth();
@@ -94,6 +96,21 @@ const SavingsGoal: React.FC = () => {
     setNewCurrentSavings(currentSavings); // Reset the input value
   };
 
+  // Handle delete goal
+  const handleDeleteGoal = async () => {
+    if (!goalId || !userId) return;
+
+    try {
+      const goalRef = doc(db, 'users', userId, 'savings', goalId);
+      await deleteDoc(goalRef);
+      console.log('Goal deleted');
+      // Redirect to the Savings page after deletion
+      history.push('/savings'); // Navigate to Savings page
+    } catch (error) {
+      console.error('Error deleting goal:', error);
+    }
+  };
+
   return (
     <IonPage>
       <IonContent fullscreen className="main-container">
@@ -125,6 +142,13 @@ const SavingsGoal: React.FC = () => {
           </IonButton>
         </div>
 
+        {/* Delete Goal Button */}
+        <div className="delete-button-container">
+          <IonButton color="danger" onClick={() => setShowDeleteAlert(true)}>
+            Delete Goal
+          </IonButton>
+        </div>
+
         {/* Editing Section */}
         {isEditing && (
           <div className="edit-section">
@@ -134,7 +158,6 @@ const SavingsGoal: React.FC = () => {
               onIonChange={(e) => setNewCurrentSavings(e.detail.value!)}
               placeholder="Enter new savings"
               type="number"
-              style={{ color: 'black' }}
             />
             <div className="button-container">
               <IonButton onClick={handleSaveCurrentSavings}>Save</IonButton>
@@ -142,6 +165,31 @@ const SavingsGoal: React.FC = () => {
             </div>
           </div>
         )}
+
+        {/* Delete Confirmation Alert */}
+        <div className="button-container">
+            <IonAlert
+              isOpen={showDeleteAlert}
+              onDidDismiss={() => setShowDeleteAlert(false)}
+              header="Delete Goal"
+              message="Are you sure you want to delete this goal? This action cannot be undone."
+              buttons={[
+                {
+                  text: 'Cancel',
+                  role: 'cancel',
+                  handler: () => {
+                    setShowDeleteAlert(false);
+                  },
+                },
+                {
+                  text: 'Delete',
+                  role: 'destructive',
+                  handler: handleDeleteGoal,
+                },
+              ]}
+            />
+        </div>
+
 
         <FloatingMenuButton />
         <NavBar />
