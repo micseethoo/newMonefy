@@ -8,3 +8,4 @@ Hello there, this is a guide on how to access this application through android e
 3. To open the android build of this application, do the following CLI command: ionic cap open android
 4. To run the web build of this application, do the following CLI command: ionic serve
 
+BIG NOTE: There may be an issue if you attempt to run the android application for the first time using the ionic cap run android command. To solve this, you have to go into the android build and update your AGP version to the latest verison in Android Studio (it should be an obvious blue button below for you to update)
