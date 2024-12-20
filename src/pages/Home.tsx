@@ -212,7 +212,7 @@ const Home: React.FC = () => {
 </div>
 
 
-          {/* Track Your Income & Expenses Section */}
+          {/* Track Your Income & Expenses*/}
 
           <section ref={trackSectionRef} id="track" className="feature-section-start">
           <div className={`section-content animate-children ${isTrackVisible ? "is-visible" : ""}`}>
@@ -317,16 +317,16 @@ const Home: React.FC = () => {
         </p>
       </div>
       <div className="social-links">
-        <IonButton fill="clear" href="https://www.facebook.com/eugene.chongjieshan/" target="_blank">
+        <IonButton fill="clear" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&pp=ygUJcmljayByb2xs" target="_blank">
           <IonIcon icon={logoFacebook} />
         </IonButton>
-        <IonButton fill="clear" href="https://x.com/home" target="_blank">
+        <IonButton fill="clear" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&pp=ygUJcmljayByb2xs" target="_blank">
           <IonIcon icon={logoTwitter} />
         </IonButton>
-        <IonButton fill="clear" href="https://www.instagram.com/gnohc_enegue/" target="_blank">
+        <IonButton fill="clear" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&pp=ygUJcmljayByb2xs" target="_blank">
           <IonIcon icon={logoInstagram} />
         </IonButton>
-        <IonButton fill="clear" href="https://www.linkedin.com/in/eugene-jieshan/" target="_blank">
+        <IonButton fill="clear" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&pp=ygUJcmljayByb2xs" target="_blank">
           <IonIcon icon={logoLinkedin} />
         </IonButton>
       </div>

@@ -25,12 +25,12 @@
 .login-heading {
   margin-bottom: 20px;
   font-size: 22px;
-  color: #000; /* Black color for heading */
+  color: #000;
 }
 
 .input-item {
-  margin: 10px 0; /* Space between input items */
-  width: 90%; /* Full width of the container */
+  margin: 10px 0;
+  width: 90%;
   max-width: 400px;
 }
 
@@ -45,23 +45,23 @@
 
 .login-button {
   width: 48%;
-  background-color: #3333ff; /* Bright blue button color */
-  color: white; /* Button text color */
+  background-color: #3333ff;
+  color: white;
 }
 
 .login-button:hover {
-  background-color: #2a2aff; /* Darker blue on hover */
+  background-color: #2a2aff;
 }
 
 .signup-link {
   margin-top: 20px;
   text-align: center;
-  color: #000; /* Black color for visibility */
+  color: #000;
 }
 
 .signup-link a {
   text-decoration: none;
-  color: #3333ff; /* Match the color of the title or the button */
+  color: #3333ff;
 }
 
 .signup-link a:hover {
