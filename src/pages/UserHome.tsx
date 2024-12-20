@@ -74,6 +74,11 @@ const UserHome: React.FC = () => {
     }
   }, [auth]);
 
+  // Recalculate current savings whenever totalIncome or totalExpenses changes
+    useEffect(() => {
+      setCurrentSavings(totalIncome - totalExpenses);
+    }, [totalIncome, totalExpenses]);
+
   const fetchUserData = async (uid: string) => {
     // Fetch user details
     const userRef = doc(db, 'users', uid);

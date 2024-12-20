@@ -14,7 +14,25 @@
   --success-color-dark-shade: #1b5e20;
   --danger-color-dark: #c62828;
   --danger-color-dark-shade: #b71c1c;
+
 }
+
+ion-content {
+  --padding-top: 20px; /* Add some padding at the top */
+  --padding-bottom: 20px; /* Add some padding at the bottom */
+  --overflow: scroll; /* Ensures the content scrolls */
+}
+
+.scrollable-container {
+  height: 100%; /* Take up full height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding-bottom: 50px; /* Ensure bottom spacing to scroll over */
+}
+
+.transaction-row:last-child {
+  margin-bottom: 50px; /* Additional bottom margin for scrolling effect */
+}
+
 
 
 .date-range-container {
@@ -32,130 +50,12 @@ ion-datetime {
   --inner-padding-end: 0;
   --background: transparent;
 }
-/* Hover and Active States */
-.transaction-row:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-/* Transaction Styling */
-
-.transaction-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 1px 10px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: var(--shadow-sm);
-  transition: all var(--transition-speed) ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.transaction-content {
-  display: flex;
-  justify-content: space-between; /* This ensures space between left and right content */
-  align-items: flex-start; /* Aligns items to the top */
-  width: 100%;
-  padding: 5px 5px;
-}
-
-.transaction-row:active {
-  transform: translateY(0);
-  background-color: var(--gray-light);
-}
-
-
-.transaction-icon-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  background: var(--ion-color-light);
-  border-radius: 12px;
-  margin-right: 16px;
-  flex-shrink: 0;
-}
-
-.category-icon {
-  font-size: 30px;
-  color: var(--ion-color-medium);
-}
-
-.transaction-details {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex: 1;
-}
-
-.transaction-info {
-  display: flex;
-  flex-direction: column;
-}
-
-
-.transaction-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--primary-color);
-  margin: 4px 0;
-  text-align: left;
-  transition: color var(--transition-speed) ease;
-}
-
-.transaction-metadata {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-top: 4px;
-}
-
-
-
-
-/* Date Styling */
-.transaction-date {
-  font-size: 0.9rem;
-  color: var(--gray-dark);
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.transaction-date::before {
-  content: '';
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  background-color: var(--gray-medium);
-  border-radius: 50%;
-}
-
-
-/* Amount Styling */
-
-
-.transaction-amount {
-  font-size: 20px;
-  font-weight: 600;
-  transition: transform var(--transition-speed) ease;
-}
-
-.transaction-left {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
 
 .transaction-right {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  margin-left: 16px; /* Adds some space between left content and amount */
+  margin-left: 20px; /* Adds some space between left content and amount */
   flex-shrink: 0; /* Prevents the right side from shrinking */
   gap: 10px;
 }
@@ -170,41 +70,264 @@ ion-datetime {
   max-width: fit-content;
 }
 
+
+.amount-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.transaction-category {
+  font-size: 13px;
+  color: var(--ion-color-medium);
+  text-transform: capitalize;
+}
+
+.transaction-amount {
+  font-size: 24px; /* Increased from 16px */
+  font-weight: 700; /* Made slightly bolder */
+  line-height: 1.2;
+}
+
 .transaction-amount.positive {
-  color: var(--success-color);
+  color: var(--ion-color-success);
 }
 
 .transaction-amount.negative {
-  color: var(--danger-color);
-}
-
-/* Category Tag */
-.transaction-category {
-  font-size: 0.8rem;
-  padding: 2px 8px;
-  border-radius: 12px;
-  background-color: var(--gray-light);
-  color: var(--gray-dark);
-}
-
-/* Animation for new transactions */
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  color: var(--ion-color-danger);
 }
 
 .transaction-row {
-  animation: slideIn 0.3s ease-out;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1px 10px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-speed) ease;
+  position: relative;
+  overflow: hidden;
+
+}
+
+.transaction-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: left;
+  padding: 16px;
+  width: 100%;
+}
+
+.transaction-left {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+}
+
+.transaction-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: var(--ion-color-light);
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.category-icon {
+  font-size: 40px;
+  color: var(--ion-color-primary);
+
+}
+
+.transaction-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.transaction-title {
+  font-size: 16px;
+  font-weight: 600;
+  text-align: left;
+  color: var(--ion-color-dark);
+  overflow:hidden;
+  margin: 0;
+}
+
+.transaction-date {
+  font-size: 13px;
+  color: var(--ion-color-medium);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+  background: var(--ion-color-light);
+}
+
+.action-btn.edit {
+  color: var(--ion-color-primary);
+}
+
+.action-btn.delete {
+  color: var(--ion-color-danger);
+}
+
+/* Modal Styling */
+ion-modal {
+  --height: 90%;
+  --border-radius: 20px 20px 0 0;
+}
+
+/* Content Container */
+ion-content {
+  --padding-top: 20px;
+  --padding-bottom: 20px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+}
+
+/* Modal Title */
+h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ion-color-dark);
+  margin: 0 0 24px 0;
+  padding: 0 16px;
+  text-align: center;
+}
+
+/* Form Items */
+ion-item {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  --background: transparent;
+  margin-bottom: 16px;
+  --border-color: transparent;
+  --highlight-height: 0;
+}
+
+/* Labels */
+ion-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ion-color-medium) !important;
+  margin-bottom: 8px !important;
 }
 
 
+
+/* Date Picker */
+ion-datetime {
+  background: var(--ion-color-light);
+  border-radius: 12px;
+  margin-top: 8px;
+  padding: 12px;
 }
+
+/* Buttons Container */
+ion-button {
+  margin: 8px 16px;
+  --border-radius: 12px;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+}
+
+/* Save Button */
+ion-button[expand="full"]:not([color="danger"]) {
+  --background: var(--ion-color-primary);
+  margin-top: 24px;
+}
+
+/* Cancel Button */
+ion-button[color="danger"] {
+  --background: transparent;
+  --color: var(--ion-color-danger);
+  --border-color: var(--ion-color-danger);
+  --border-style: solid;
+  --border-width: 1px;
+}
+
+/* Select Options */
+ion-select-option {
+  font-size: 16px;
+}
+
+/* Description Input */
+ion-item:has(ion-input[value*="description"]) ion-input {
+  min-height: 100px;
+  --padding-top: 16px;
+  align-items: flex-start;
+}
+
+/* Add animation */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+ion-modal {
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 360px) {
+  h2 {
+    font-size: 20px;
+  }
+
+  ion-button {
+    margin: 6px 12px;
+    --padding-top: 14px;
+    --padding-bottom: 14px;
+  }
+}
+
+ion-input, ion-select, ion-datetime {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --border-radius: 8px;
+}
+
+.input-space
+{
+  margin-left: 10px;
+
+}
+/* Optional: Add hover states */
+ion-button:hover {
+  opacity: 0.9;
+}
+
+ion-input:hover, ion-select:hover {
+  --background: var(--ion-color-light-shade);
+}
+
+ion-input.has-error {
+  --background: var(--ion-color-danger-tint);
+  --color: var(--ion-color-danger);
+}
+
 
 /* Loading Skeleton Animation */
 @keyframes shimmer {
@@ -227,16 +350,16 @@ ion-datetime {
   .transaction-row {
     margin: 1px 12px;
   }
-  
+
   .transaction-title {
-    font-size: 20px;
+    font-size: 18px;
   }
-  
+
   .transaction-amount {
     font-size: 1.1rem;
   }
 
- 
+
 }
 
 /* Dark Mode Support */
@@ -253,7 +376,7 @@ ion-datetime {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   }
 
-  
+
 }
 /* Enhanced CSS */
 .net-amount-container {
@@ -492,6 +615,10 @@ ion-datetime {
   color: var(--ion-color-medium);
 }
 
+.select-option
+{
+  padding-left: 10px;
+}
 
 
 /* Custom Select Styling */
