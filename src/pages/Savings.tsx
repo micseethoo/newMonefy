@@ -132,6 +132,9 @@ const Savings: React.FC = () => {
           </IonCard>
         )}
 
+        {savingsGoals.length > 4 && <div className="extra-scroll-space"></div>}
+
+
         <FloatingSavingsButton />
         <NavBar />
       </IonContent>
