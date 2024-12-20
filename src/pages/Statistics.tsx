@@ -84,21 +84,7 @@ const Statistics: React.FC = () => {
     };
   };
 
-//   const calculateTagTotals = () => {
-//     const tagAmounts: { [key: string]: number } = {};
-//
-//     transactions.forEach((transaction) => {
-//       if (tagAmounts[transaction.tag]) {
-//         tagAmounts[transaction.tag] += transaction.amount;
-//       } else {
-//         tagAmounts[transaction.tag] = transaction.amount;
-//       }
-//     });
-//
-//     return tagAmounts;
-//   };
-//
-//   const tagTotals = calculateTagTotals();
+
 const calculateTagTotals = () => {
   const tagAmounts: { [key: string]: number } = {};
 

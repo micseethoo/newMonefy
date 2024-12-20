@@ -1,9 +1,7 @@
-/* src/pages/css/UserHome.css */
 
-/* General Styling */
 .home-content {
   padding: 20px;
-  padding-bottom: 120px; /* Increased padding for more scrolling */
+  padding-bottom: 120px;
   background-color: var(--ion-background-color);
   color: var(--ion-text-color);
   --overflow: scroll;
@@ -100,32 +98,32 @@
   filter: blur(8px);
 }
 
-/* Blue Card (Income Summary) */
+
 .income-summary {
-  background-color: #2196F3; /* Fixed blue color */
-  color: white; /* Text remains white */
+  background-color: #2196F3;
+  color: white;
   text-align: center;
   padding: 15px;
   border-radius: 10px;
 }
 
 .income-amount {
-  color: white; /* Text remains white */
+  color: white;
   font-weight: bold;
   font-size: 20px;
 }
 
-/* Red Card (Expenses Summary) */
+
 .expenses-summary {
-  background-color: #F44336; /* Fixed red color */
-  color: white; /* Text remains white */
+  background-color: #F44336;
+  color: white;
   text-align: center;
   padding: 15px;
   border-radius: 10px;
 }
 
 .expense-amount {
-  color: white; /* Text remains white */
+  color: white;
   font-weight: bold;
   font-size: 20px;
 }

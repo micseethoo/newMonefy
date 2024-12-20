@@ -1,4 +1,3 @@
-/* Savings.css */
 .savings-header {
   text-align: center;
   margin: 20px;
@@ -11,8 +10,8 @@
 }
 
 .savings-goal {
-  width: 80%;  /* Or any width you prefer */
-  max-width: 350px; /* Optional, to limit the maximum width */
-  margin: 0 auto;  /* Ensures it's centered horizontally */
+  width: 80%;
+  max-width: 350px;
+  margin: 0 auto;
 }
 

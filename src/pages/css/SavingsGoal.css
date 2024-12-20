@@ -1,79 +1,77 @@
-/* Center the text container */
 .text-container {
   text-align: center;
-  color: var(--ion-text-color); /* Automatically adjusts to light or dark mode */
+  color: var(--ion-text-color);
 }
 
-/* Ensure h2 text inside the text-container adapts to light and dark modes */
+
 .text-container h2 {
-  color: var(--ion-text-color, #000); /* Fallback to black if the variable is missing */
+  color: var(--ion-text-color, #000);
 }
 
-/* Savings goal container */
+
 .savings-goal-container {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* Style the savings goal section */
+
 .savings-goal {
-  width: 80%; /* Or any width you prefer */
-  max-width: 350px; /* Optional, to limit the maximum width */
-  margin: 0 auto; /* Ensures it's centered horizontally */
-  background-color: var(--ion-item-background); /* Adapts background to light or dark mode */
-  color: var(--ion-text-color); /* Adapts text color inside the box */
-  padding: 20px; /* Adds padding for a neat layout */
-  border-radius: 8px; /* Rounds the corners for a modern look */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+  width: 80%;
+  max-width: 350px;
+  margin: 0 auto;
+  background-color: var(--ion-item-background);
+  color: var(--ion-text-color);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Center the Edit Button */
+
 .edit-button-container {
   display: flex;
   justify-content: center;
   margin-top: 20px;
 }
 
-/* Style the edit section */
+
 .edit-section {
   margin: 20px;
   padding: 20px;
-  background-color: var(--ion-item-background); /* Adapts to light or dark mode */
+  background-color: var(--ion-item-background);
   border-radius: 8px;
   text-align: center;
 }
 
 .edit-text {
   font-size: 18px;
-  color: var(--ion-text-color); /* Adapts to light or dark mode */
+  color: var(--ion-text-color);
   margin-bottom: 10px;
 }
 
 .edit-section ion-input {
   width: 100%;
   margin-bottom: 20px;
-  color: var(--ion-text-color); /* Ensures input text adapts */
-  background-color: var(--ion-input-background); /* Input background adjusts */
+  color: var(--ion-text-color);
+  background-color: var(--ion-input-background);
 }
 
-/* Fix button container alignment */
+
 .button-container {
   display: flex;
-  justify-content: center; /* Centers the buttons horizontally */
+  justify-content: center;
   gap: 10px;
   margin-top: 10px;
   width: 100%;
 }
 
 .button-container ion-button {
-  width: 45%; /* Make sure buttons have a similar width */
+  width: 45%;
 }
 
-/* Style the delete button container */
 .delete-button-container {
   display: flex;
-  justify-content: center; /* Centers the buttons horizontally */
+  justify-content: center;
   gap: 10px;
   margin-top: 10px;
   width: 100%;
@@ -81,19 +79,18 @@
 
 .text-container {
   text-align: center;
-  color: var(--text); /* Automatically adjusts to light or dark mode */
+  color: var(--text);
 }
 
 // Adaptive Theme Colours
 @media (prefers-color-scheme: light) {
   :root {
-    --text: black; /* Light background color for light mode */
+    --text: black;
   }
 }
 
-/* Dark Mode Background */
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: white; /* Dark background color for dark mode */
+    --text: white;
   }
 }

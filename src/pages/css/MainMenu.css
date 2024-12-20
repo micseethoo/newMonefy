@@ -1,39 +1,28 @@
-/* Home.css */
-.main-container {
-  /* Remove text-align: center; to prevent it from affecting other elements */
-}
-
-/* Name and Savings Container */
 .name-savings-container {
     padding: 20px;
-    text-align: left; /* Keeps the text aligned to the left */
+    text-align: left;
 }
 
-/* Monthly and Summary Container */
 .monthly-summary-container {
     text-align: center;
     padding-left: 1em;
     padding-right: 1em;
     width: 90%;
-    border: 2px solid black; /* Adds a thin black border */
-    border-radius: 20px;     /* Rounds the corners of the border */
-    margin-left: auto; /* Center the container */
-    margin-right: auto; /* Center the container */
+    border: 2px solid black;
+    border-radius: 20px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-/* Income and Expense Container */
+
 .income-expense-container {
   display: flex;
-  justify-content: space-between; /* Places items on the left and right */
-  align-items: center;            /* Centers items vertically, if they have different heights */
-}
-
-.left-item {
-  /* Styles for the left item */
+  justify-content: space-between;
+  align-items: center;
 }
 
 .right-item {
-  /* Styles for the right item */
+
   text-align: right;
 }
 
@@ -53,8 +42,6 @@
     text-align: center;
 }
 
-/* Transaction Container */
-
 .transaction-h3 {
     text-align: center;
 }
@@ -68,7 +55,6 @@
     border: 2px solid black;
     border-radius: 20px;
     padding: 0;
-    /* Remove padding so borders reach edge */
     max-width: 400px;
     margin: 0 auto;
 }
@@ -78,20 +64,17 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    /* Add padding to space out content */
     border-bottom: 1px solid black;
 }
 
 .transaction-row:last-child {
     border-bottom: none;
-    /* Remove line after last row */
 }
 
 .icon,
 .name,
 .amount {
     padding: 0 10px;
-    /* Add padding inside each cell */
 }
 
 .icon {

@@ -1,14 +1,11 @@
-/* src/pages/SignUp.css */
-
-/* Base styles for light mode */
 .signup-background {
-  background-color: #f9f9f9; /* Light grey background for better contrast */
+  background-color: #f9f9f9;
 }
 
 .app-title {
   text-align: center;
   font-size: 28px;
-  color: #3333ff; /* Bright blue for the title */
+  color: #3333ff;
   margin-top: 40px;
   font-weight: bold;
 }
@@ -25,12 +22,12 @@
 .signup-heading {
   margin-bottom: 20px;
   font-size: 22px;
-  color: #000; /* Black color for heading */
+  color: #000;
 }
 
 .input-item {
-  margin: 10px 0; /* Space between input items */
-  width: 90%; /* Full width of the container */
+  margin: 10px 0;
+  width: 90%;
   max-width: 400px;
 }
 
@@ -45,58 +42,57 @@
 
 .signup-button {
   width: 48%;
-  background-color: #3333ff; /* Bright blue button color */
-  color: white; /* Button text color */
+  background-color: #3333ff;
+  color: white;
 }
 
 .signup-button:hover {
-  background-color: #2a2aff; /* Darker blue on hover */
+  background-color: #2a2aff;
 }
 
 .login-link {
   margin-top: 20px;
   text-align: center;
-  color: #000; /* Black color for visibility */
+  color: #000;
 }
 
 .login-link a {
   text-decoration: none;
-  color: #3333ff; /* Match the color of the title or the button */
+  color: #3333ff;
 }
 
 .login-link a:hover {
   text-decoration: underline;
 }
 
-/* Dark mode styles */
 @media (prefers-color-scheme: dark) {
   .signup-background {
-    background-color: #1a1a1a; /* Dark background for dark mode */
+    background-color: #1a1a1a;
   }
 
   .signup-heading {
-    color: #ffffff; /* White color for heading in dark mode */
+    color: #ffffff;
   }
 
   .input-item {
-    background-color: #333332; /* Darker background for input items */
-    color: #ffffff; /* White text color for input items */
+    background-color: #333332;
+    color: #ffffff;
   }
 
   .signup-button {
-    background-color: #007bff; /* Different blue color for buttons in dark mode */
+    background-color: #007bff;
   }
 
   .signup-button:hover {
-    background-color: #0056b3; /* Darker blue on hover in dark mode */
+    background-color: #0056b3;
   }
 
   .login-link {
-    color: #ffffff; /* White color for login link in dark mode */
+    color: #ffffff;
   }
 
   .login-link a {
-    color: #007bff; /* Blue color for links in dark mode */
+    color: #007bff;
   }
 
   .login-link a:hover {

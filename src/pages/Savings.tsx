@@ -132,11 +132,11 @@ const Savings: React.FC = () => {
           </IonCard>
         )}
 
-
+        <FloatingSavingsButton />
+        <NavBar />
       </IonContent>
-      <FloatingSavingsButton />
-      <NavBar />
     </IonPage>
+
   );
 };
 
