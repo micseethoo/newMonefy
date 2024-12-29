@@ -145,6 +145,10 @@ const UserHome: React.FC = () => {
     };
   };
 
+  useEffect(() => {
+      setCurrentSavings(totalIncome - totalExpenses);
+    }, [totalIncome, totalExpenses]);
+
   const updateTransactions = (newTransactions: any[]) => {
     // Sort transactions by date (newest first) and take only the first 3
     const sortedTransactions = newTransactions
